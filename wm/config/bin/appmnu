@@ -1,0 +1,14 @@
+#!/bin/bash
+
+rofi -no-lazy-grab \
+-modi "drun" -show drun \
+-theme ~/.config/rofi/appmnu.rasi \
+#-font "JetBrainsMono Nerd Font 8.2" \
+#-disable-history \
+#-columns 1 \
+#-lines 8 \
+#-line-padding 10 \
+#-padding 20 \
+#-width 27 \
+#-location 1 \
+#-xoffset 15 -yoffset +53 \

@@ -1,0 +1,129 @@
+:root {
+  --bg: #1d2021;
+  --bgAlt: #282828;
+  --fg: #fbf1c7;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  49% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@font-face {
+  font-family: "Iosevka";
+  src: url("../fonts/Iosevka Medium Nerd Font Complete.ttf") format("truetype");
+}
+* {
+  margin: 0px;
+  padding: 0px;
+  color: var(--fg);
+  font-family: "Iosevka", monospace;
+}
+
+html {
+  display: block;
+}
+
+body {
+  background-color: var(--bgAlt);
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  height: 100vh;
+}
+
+.outer-container, .container {
+  background-color: var(--bg);
+  border: 8px solid var(--bgAlt);
+}
+
+.outer-container {
+  height: 76% !important;
+  width: 60% !important;
+  border: 8px solid var(--bg) !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.container {
+  height: 94%;
+  margin: 0 auto;
+  padding: 10px;
+  display: flex;
+  position: relative;
+  align-self: center;
+  justify-self: center;
+}
+
+.sidebar {
+  background-color: var(--bgAlt);
+  margin: 10px;
+  width: 2.5%;
+}
+
+.bookmarks {
+  margin: auto;
+  margin-top: 35px !important;
+  margin-left: 25px !important;
+  width: 85%;
+  height: 60%;
+}
+
+p #prompt {
+  color: #a9b665;
+}
+p #ps1 {
+  color: #89b482;
+}
+p #command {
+  font-weight: bold !important;
+}
+
+nav {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  padding: 10px 2em;
+}
+
+a {
+  color: #a9b665;
+  text-decoration: none;
+  font-weight: bold;
+}
+a #url {
+  padding: 5px !important;
+}
+a:focus {
+  color: #a9b665;
+  font-weight: bold;
+}
+a:hover {
+  color: #a9b665;
+  font-weight: bold;
+}
+
+input {
+  background-color: inherit;
+  border: none;
+  font-weight: bold !important;
+  font-size: 16px;
+  pointer-events: none;
+  outline: none;
+}
+input:focus {
+  background-color: inherit;
+  border: none;
+  font-weight: bold !important;
+  font-size: 16px;
+  pointer-events: none;
+  outline: none;
+}
+
+/*# sourceMappingURL=style.css.map */

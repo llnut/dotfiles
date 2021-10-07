@@ -1,0 +1,24 @@
+#!/bin/bash
+#brightnessctl -m -d intel_backlight | awk -F, '{print substr($4, 0, length($4)-1)}' | tr -d '%'
+
+## Get Brightness
+get_blight() {
+	CARD=`ls /sys/class/backlight | head -n 1`
+
+	if [[ "$CARD" == *"intel_"* ]]; then
+		BNESS=`xbacklight -get`
+		LIGHT=${BNESS%.*}
+    elif [[ "$CARD" == *"amdgpu_"* ]]; then
+        #BNESS=`cat /sys/class/backlight/amdgpu_bl0/brightness`
+        BNESS=`xfpm-power-backlight-helper --get-brightness`
+        PERC="$((BNESS*100/255))"
+		LIGHT=${PERC%.*}
+	else
+		BNESS=`blight -d $CARD get brightness`
+		PERC="$(($BNESS*100/255))"
+		LIGHT=${PERC%.*}
+	fi
+
+	echo "$LIGHT"
+}
+get_blight

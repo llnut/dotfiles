@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =0
+let g:netrw_dirhist_0='/pubdisk/tool/docker-wine-linux/deb'
+let g:netrw_dirhist_9='/usr/include/php'
+let g:netrw_dirhist_8='/root/.dotfiles/.config/nvim'
+let g:netrw_dirhist_7='/root/.dotfiles/.config'

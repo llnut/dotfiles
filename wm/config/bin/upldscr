@@ -1,0 +1,22 @@
+#!/bin/bash
+# Deps: curl, jq, xclip, imagemagick
+
+_notify() {
+    notify-send "$1" "$2"
+}
+
+# Voidchan is dead. Use p3ac CDN instead.
+# Discord Invite: https://discord.gg/7PAuNhQGGJ
+key=""
+url=""
+
+if [[ $(file --mime-type -b $1) != "image/png" ]]; then
+	rm $1
+    _notify "screenshot aborted." && exit 1
+fi
+
+image=$(convert "$1" \( +clone -background "#1d2021" -shadow 65x10+0+0+0 \) +swap -bordercolor none -border 0 -background "#00000000" -layers merge +repage "$1" | echo "$1")
+imageURL=$(curl -X POST -H "Content-Type: multipart/form-data" -H "Authorization: $key" -H "Embedded: true" -F "file=@$image" "$url" | jq -r '.files[].url')
+echo -n $imageURL | xclip -sel c
+rm $1
+_notify "url copied." "$imageURL"
