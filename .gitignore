@@ -1,0 +1,6 @@
+/wm/config/.config/ncmpcpp/lyrics
+/common/config/.config/coc/*
+/common/config/.config/nvim/undo/*
+/common/config/.config/nvim/swaps/*
+/common/config/.config/nvim/plugged/*
+/common/config/.config/nvim/vimspector-config/*
