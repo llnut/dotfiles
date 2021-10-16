@@ -11,6 +11,7 @@ COMMON=$DOTFILES/common
 WM=$DOTFILES/wm
 INSTALLWM=0
 SETUP_SCRIPT=$HOME/.setup-script
+AUR_HELPER=paru
 
 lnbk() {
     rm -rf $2.bak
@@ -39,22 +40,33 @@ installNeeded() {
         echo -e "[*] cargo detected. Installing dependencies..."
         useCargo
 
-        if [[ -e /usr/bin/paru ]]; then
-            echo -e "[*] paru detected. Installing dependencies..."
-            useParu
+        if [[ -e /usr/bin/paru ]] || [[ -e $HOME/.cargo/bin/paru ]]; then
+            $AUR_HELPER=paru
         elif [[ -e /usr/bin/yay ]]; then
-            echo -e "[*] yay detected. Installing dependencies..."
-            useYay
+            $AUR_HELPER=yay
         else
-            installPackageManager
-            useYay
+            installAurHelper
         fi
+        installNeeded
     else
         echo "[x] Not on a Arch based system. Failed to download dependencies. Please manually install it."
         exit
     fi
 
     installOptional
+}
+
+installNeeded() {
+    if [[ $AUR_HELPER -eq paru ]]; then
+        echo -e "[*] paru detected. Installing dependencies..."
+        useParu
+    elif [[ $AUR_HELPER -eq yay ]]; then
+        echo -e "[*] yay detected. Installing dependencies..."
+        useYay
+    else
+        echo "[x] An error occured."
+        exit
+    fi
 }
 
 usePacman() {
@@ -82,15 +94,15 @@ useYay() {
 }
 
 useCargo() {
-    cargo install -q `cat ./common/package/cargo`
+    cargo install `cat ./common/package/cargo`
     if [[ $INSTALLWM -eq 1 ]]; then
-        cargo install -q `cat ./wm/package/cargo`
+        cargo install `cat ./wm/package/cargo`
     fi
 }
 
-installPackageManager() {
-    optionals=$(whiptail --title "Install package manager" --radiolist \
-        "Choose your favourite aur package manager" 10 102 2 \
+installAurHelper() {
+    optionals=$(whiptail --title "Install aur helper" --radiolist \
+        "Choose your favourite aur helper" 10 102 2 \
         "paru" "Feature packed AUR helper writen in Rust." ON \
         "yay" "An AUR Helper Written in Go." OFF \
         3>&1 1>&2 2>&3
@@ -125,6 +137,7 @@ installOptional() {
         "Choose optionals" 10 102 2 \
         "du-dust" "A more intuitive version of du." OFF \
         "termusic" "Terminal Music Player written in Rust." OFF \
+        "v2raya & xray" "A web GUI client to bypass network restrictions." OFF \
         "double borders" "From \"https://github.com/wmutils/opt.git\"" OFF \
         3>&1 1>&2 2>&3
     )
@@ -137,10 +150,10 @@ installOptional() {
             echo "[*] Installing $optional..."
             case $optional in
                 $optionals | "du-dust")
-                    cargo install -q du-dust
+                    cargo install du-dust
                     ;;
                 "termusic")
-                    cargo install -q termusic
+                    cargo install termusic
                     ;;
                 "double borders")
                     git clone https://github.com/wmutils/opt.git $SETUP_SCRIPT
@@ -169,11 +182,14 @@ commonFiles() {
     lnbk $COMMON/config/.zshrc $HOME/.zshrc
     lnbk $COMMON/config/.gitconfig $HOME/.gitconfig
     lnbk $COMMON/config/.pam_environment $HOME/.pam_environment
-    lnbk $COMMON/config/.cargo/config.toml $HOME/.cargo/confit.toml
+    lnbk $COMMON/config/.cargo/config.toml $HOME/.cargo/config.toml
 
+    mkdir -p $LOCAL/bin
     cp -rf $COMMON/config/bin/* $LOCAL/bin
     cp -rf $COMMON/config/oh-my-zsh-plugins/plugins/* $HOME/.oh-my-zsh/plugins
+    mkdir -p $LOCAL/share/fonts
     cp -rf $COMMON/etc/fonts/* $LOCAL/share/fonts
+    sudo cp -f $COMMON/config/paru/paru.conf /etc
 
     echo "[*] Apply common files successfully."
 }
@@ -193,8 +209,11 @@ wmFiles() {
         lnbk $WM/config/.config/polybar $CONFIG/polybar
         lnbk $WM/config/.config/sxhkd $CONFIG/sxhkd
 
+        mkdir -p $LOCAL/bin
         cp -rf $WM/config/bin/* $LOCAL/bin
+        mkdir -p $LOCAL/share/fonts
         cp -rf $WM/etc/fonts/* $LOCAL/share/fonts
+        mkdir -p $HOMW/Pictures/Wallpapers
         cp -rf $WM/etc/walls/* $HOME/Pictures/Wallpapers
         echo "[*] Apply wm files successfully."
     else

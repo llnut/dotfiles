@@ -1,8 +1,9 @@
+htop
 rofi
 alacritty
 jq
 xclip
 fzf
-dust
 ranger
-neovim-nightly-bin
+v2raya-bin
+xray-bin
