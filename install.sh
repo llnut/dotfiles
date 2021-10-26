@@ -137,6 +137,7 @@ installOptional() {
         "Choose optionals" 10 102 2 \
         "du-dust" "A more intuitive version of du." OFF \
         "termusic" "Terminal Music Player written in Rust." OFF \
+        "himalaya" "CLI email client." OFF \
         "v2raya & xray" "A web GUI client to bypass network restrictions." OFF \
         "double borders" "From \"https://github.com/wmutils/opt.git\"" OFF \
         3>&1 1>&2 2>&3
@@ -154,6 +155,12 @@ installOptional() {
                     ;;
                 "termusic")
                     cargo install termusic
+                    ;;
+                "himalaya")
+                    paru -S --noconfirm himalaya
+                    ;;
+                "v2raya & xray")
+                    paru -S --noconfirm v2raya-bin xray-bin
                     ;;
                 "double borders")
                     git clone https://github.com/wmutils/opt.git $SETUP_SCRIPT
