@@ -178,6 +178,7 @@ commonFiles() {
     lnbk $COMMON/config/.config/alacritty $CONFIG/alacritty
     lnbk $COMMON/config/.config/rofi $CONFIG/rofi
     lnbk $COMMON/config/.config/ranger $CONFIG/ranger
+    lnbk $COMMON/config/.config/himalaya $CONFIG/himalaya
     lnbk $COMMON/config/.tmux.conf $HOME/.tmux.conf
     lnbk $COMMON/config/.zshrc $HOME/.zshrc
     lnbk $COMMON/config/.gitconfig $HOME/.gitconfig

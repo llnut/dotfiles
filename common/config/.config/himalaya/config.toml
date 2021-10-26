@@ -1,0 +1,21 @@
+name = "jcsora"
+downloads-dir = "~/.config/himalaya/downloads"
+signature = """
+--
+Regards,
+"""
+
+[outlook]
+default = true
+email = "jcsora@outlook.com"
+
+imap-host = "outlook.office365.com"
+imap-port = 993
+imap-login = "jcsora@outlook.com"
+imap-passwd-cmd = "~/.local/bin/mail-pwd"
+
+smtp-host = "smtp.office365.com"
+smtp-port = 587
+smtp-login = "jcsora@outlook.com"
+smtp-passwd-cmd = "~/.local/bin/mail-pwd"
+smtp-starttls = true
