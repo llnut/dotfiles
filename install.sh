@@ -135,10 +135,13 @@ installAurHelper() {
 installOptional() {
     optionals=$(whiptail --title "Checklist optional apps" --checklist \
         "Choose optionals" 10 102 2 \
-        "du-dust" "A more intuitive version of du." OFF \
-        "termusic" "Terminal Music Player written in Rust." OFF \
-        "himalaya" "CLI email client." OFF \
-        "v2raya & xray" "A web GUI client to bypass network restrictions." OFF \
+        "du-dust" "A more intuitive version of du" OFF \
+        "termusic" "Terminal Music Player written in Rust" OFF \
+        "exa" "A modern replacement for ‘ls’"
+        "RustScan" "The Modern Port Scanner"
+        "hyperfine" "A command-line benchmarking tool"
+        "himalaya" "CLI email client" OFF \
+        "v2raya & xray" "A web GUI client to bypass network restrictions" OFF \
         "double borders" "From \"https://github.com/wmutils/opt.git\"" OFF \
         3>&1 1>&2 2>&3
     )
@@ -155,6 +158,18 @@ installOptional() {
                     ;;
                 "termusic")
                     cargo install termusic
+                    ;;
+                "exa")
+                    cargo install exa
+                    ;;
+                "RustScan")
+                    cargo install rustscan
+                    ;;
+                "hyperfine")
+                    cargo install hyperfine
+                    ;;
+                "fd")
+                    paru -S --noconfirm fd
                     ;;
                 "himalaya")
                     paru -S --noconfirm himalaya
@@ -186,6 +201,7 @@ commonFiles() {
     lnbk $COMMON/config/.config/rofi $CONFIG/rofi
     lnbk $COMMON/config/.config/ranger $CONFIG/ranger
     lnbk $COMMON/config/.config/himalaya $CONFIG/himalaya
+    lnbk $COMMON/config/.config/bottom $CONFIG/bottom
     lnbk $COMMON/config/.tmux.conf $HOME/.tmux.conf
     lnbk $COMMON/config/.zshrc $HOME/.zshrc
     lnbk $COMMON/config/.gitconfig $HOME/.gitconfig
