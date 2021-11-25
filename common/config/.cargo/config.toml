@@ -1,6 +1,13 @@
 [source.crates-io]
 registry = "https://github.com/rust-lang/crates.io-index"
-replace-with = 'ustc'
+replace-with = 'rsproxy'
+
+# 字节跳动
+[source.rsproxy]
+registry = "https://rsproxy.cn/crates.io-index"
+
+[registries.rsproxy]
+index = "https://rsproxy.cn/crates.io-index"
 
 # 中国科学技术大学
 [source.ustc]
