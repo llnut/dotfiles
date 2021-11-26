@@ -195,6 +195,7 @@ commonFiles() {
     echo "[*] Apply common files..."
     sed -i "s|^DOTFILES=.*$|DOTFILES=$DOTFILES|g" ./common/config/.zshrc
 
+    lnbk $COMMON/config/.config/nu $CONFIG/nu
     lnbk $COMMON/config/.config/nvim $CONFIG/nvim
     lnbk $COMMON/config/.config/gitui $CONFIG/gitui
     lnbk $COMMON/config/.config/alacritty $CONFIG/alacritty
