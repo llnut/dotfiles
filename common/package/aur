@@ -5,3 +5,5 @@ jq
 xclip
 fzf
 ranger
+podman
+podman-compose

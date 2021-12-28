@@ -11,7 +11,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'easymotion/vim-easymotion'
 Plug 'mhinz/vim-signify'
 Plug 'godlygeek/tabular'
-Plug 'christoomey/vim-tmux-navigator'
+" Plug 'christoomey/vim-tmux-navigator'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'rhysd/git-messenger.vim'
 Plug 'morhetz/gruvbox'

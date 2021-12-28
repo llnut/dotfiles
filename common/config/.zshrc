@@ -230,7 +230,7 @@ source /usr/share/fzf/key-bindings.zsh
 
 #export FZF_DEFAULT_COMMAND='fd --type f'
 
-#if [ -e /home/sora/.nix-profile/etc/profile.d/nix.sh ]; then . /home/sora/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+cowsay -f $(cowsay -l | tail -n +2 | xargs -n1 | shuf -n 1) $(/usr/bin/whatis $(ls /usr/share/man/man1 | shuf -n 1 | cut -d. -f1) 2>/dev/null)
 
-#cowsay -f $(cowsay -l | tail -n +2 | xargs -n1 | shuf -n 1) $(/usr/bin/whatis $(ls /usr/share/man/man1 | shuf -n 1 | cut -d. -f1) 2>/dev/null)
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+eval "$(zoxide init zsh)"
+alias cd=z
