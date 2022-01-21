@@ -84,7 +84,7 @@ ZSH_CUSTOM=$DOTFILES/common/config/oh-my-zsh-plugins
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git zsh-autosuggestions docker vi-mode httpie helm cargo
+  git zsh-autosuggestions docker vi-mode rust
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -230,7 +230,7 @@ source /usr/share/fzf/key-bindings.zsh
 
 #export FZF_DEFAULT_COMMAND='fd --type f'
 
-cowsay -f $(cowsay -l | tail -n +2 | xargs -n1 | shuf -n 1) $(/usr/bin/whatis $(ls /usr/share/man/man1 | shuf -n 1 | cut -d. -f1) 2>/dev/null)
+#cowsay -f $(cowsay -l | tail -n +2 | xargs -n1 | shuf -n 1) $(/usr/bin/whatis $(ls /usr/share/man/man1 | shuf -n 1 | cut -d. -f1) 2>/dev/null)
 
 eval "$(zoxide init zsh)"
 alias cd=z
