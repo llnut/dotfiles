@@ -27,8 +27,6 @@ Plug 'puremourning/vimspector'
 
 call plug#end()
 
-" let g:completion_enable_snippet = 'UltiSnips'
-" let g:completion_matching_smart_case = 1
 let g:python_host_prog  = '/usr/bin/python2'
 let g:python3_host_prog = '/usr/bin/python'
 
@@ -249,6 +247,8 @@ noremap <silent> <leader>hs :nohlsearch<CR>
 " nnoremap <leader>cw :close<CR>
 " Delete current buffer
 nnoremap <leader>q :Bclose<cr>
+
+nnoremap <leader>Q :%bdelete<cr>
 
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()

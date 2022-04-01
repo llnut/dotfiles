@@ -1,5 +1,10 @@
 {
-    "http.proxy": "http://127.0.0.1:20171",
+    "translator.engines": [
+        "bing",
+        "youdao",
+        "haici"
+    ],
+    "rust-analyzer.rustfmt.enableRangeFormatting": true,
     "clangd.path": "/home/sora/.config/coc/extensions/coc-clangd-data/install/clangd_12.0.1/bin/clangd",
     "go.checkForUpdates": "ask",
     "go.goplsOptions": {

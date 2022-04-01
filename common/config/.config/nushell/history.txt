@@ -1,0 +1,170 @@
+nvim
+ls
+cd 
+ls
+cd .dotfiles
+nvim
+ls
+cd 
+cd .config
+ls
+cd ./nu.bak/ls
+ls
+cd 
+ls
+cd .config
+ls
+cd ./nu.bak/
+ls
+cd ..
+ls
+cd ./nu/
+ls
+cd ..
+ls
+cd nu
+ls
+nvim
+cd 
+ls
+cd .config
+ls
+cd nu
+ls
+cd ..
+ls
+cd nushell
+cd 
+ls
+cd .config
+cd ./nushell/
+ls
+nvim
+ls
+$env.PATH
+s
+ls
+ls | select readme
+ls | select readme.md
+ls
+ls | select name
+ls
+ls | select size
+ls | select size | get 1
+ls | select size | get 0
+ls | select size.0
+ls | select size.1
+ls | get size.1
+ls
+cat ./readme.md | complete
+cat ./readme.md
+nvim
+tmux
+ls
+cd 
+ls
+cd dotfiles
+nvim
+cd 
+ls
+cd .dotfiles
+nvim
+tmux
+nvim
+tmux
+cd 
+ks
+ls
+cd .dotfiles
+tmux
+find / -name nu
+zsh
+ls
+cd .
+cd .dotfiles
+cd .config
+ls
+cd ./nushell/
+ls
+cd ..
+ls
+./install.sh
+ls
+cd /etc
+cd /usr/bin
+ls
+cd /bin
+ls
+ls | grep nu
+cd ~/bin
+cd 
+ls
+cd bin
+ls
+cd .config
+cd bin
+cd ..
+ls
+cd local
+ls
+cd .local/bin
+ls
+fd nu ~/
+cd 
+ls
+cd .config
+ls
+cd ..
+ls
+cd .cargo
+ls
+cd bin
+ls
+echo $env
+echo $path
+echo $PATH
+echo $env.path
+config set path $nu.path
+echo $config
+env
+echo $nu.config-path
+cat /etc/shells
+sudo nvim /etc/shells
+sudo chsh sora
+ls
+cd .do
+cd ./.dotfiles/
+nvim
+ls
+sudo chsh sora
+nvim
+ls
+cd 
+cd ./.dotfiles/.git/
+nvim
+ls
+sudo chsh sora
+nvim
+cd 
+cd ./.dotfiles/
+ls
+cd 
+cd ./.config/
+ls
+cd nvim
+nvim
+nvim
+cd ./swaps/
+rm -rf *
+ls -a
+rm -rf *
+ls -a
+paru -Rns nushell
+paru -Rns nu
+zsh
+sudo chsh 
+sudo chsh
+ls
+echo $nu.config-path
+$env.PATH
+ls -la

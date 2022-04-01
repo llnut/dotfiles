@@ -3,17 +3,29 @@
 set -x
 
 CONFIG=${HOME}/.config
+LOCAL=$HOME/.local
 CURDIR=$(cd $(dirname $0);pwd)
 
 function doIt() {
-    lnbk ${CURDIR}/.config/nvim ${CONFIG}/nvim
-    lnbk ${CURDIR}/.config/gitui ${CONFIG}/gitui
-    lnbk ${CURDIR}/.config/alacritty ${CONFIG}/alacritty
-    lnbk ${CURDIR}/.tmux.conf ${HOME}/.tmux.conf
-    lnbk ${CURDIR}/.zshrc ${HOME}/.zshrc
-    lnbk ${CURDIR}/.gitconfig ${HOME}/.gitconfig
+    lnbk $CURDIR/.config/nu $CONFIG/nu
+    lnbk $CURDIR/.config/nushell $CONFIG/nushell
+    lnbk $CURDIR/.config/nvim $CONFIG/nvim
+    lnbk $CURDIR/.config/gitui $CONFIG/gitui
+    lnbk $CURDIR/.config/alacritty $CONFIG/alacritty
+    lnbk $CURDIR/.config/rofi $CONFIG/rofi
+    lnbk $CURDIR/.config/ranger $CONFIG/ranger
+    lnbk $CURDIR/.config/himalaya $CONFIG/himalaya
+    lnbk $CURDIR/.config/bottom $CONFIG/bottom
+    lnbk $CURDIR/.tmux.conf $HOME/.tmux.conf
+    lnbk $CURDIR/.zshrc $HOME/.zshrc
+    lnbk $CURDIR/.gitconfig $HOME/.gitconfig
+    lnbk $CURDIR/.pam_environment $HOME/.pam_environment
+    lnbk $CURDIR/.cargo/config.toml $HOME/.cargo/config.toml
 
-    cp -rf ${CURDIR}/oh-my-zsh-plugins/plugins/* ${HOME}/.oh-my-zsh/plugins/
+    mkdir -p $LOCAL/bin
+    cp -rf $CURDIR/bin/* $LOCAL/bin
+    cp -rf $CURDIR/oh-my-zsh-plugins/plugins/* $HOME/.oh-my-zsh/plugins
+    sudo cp -f $CURDIR/paru/paru.conf /etc
 }
 
 function lnbk() {
