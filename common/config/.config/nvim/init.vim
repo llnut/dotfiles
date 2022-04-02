@@ -24,6 +24,7 @@ Plug 'edkolev/tmuxline.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install()} }
 Plug 'junegunn/fzf.vim'
 Plug 'puremourning/vimspector'
+Plug 'soywod/himalaya', {'rtp': 'vim'}
 
 call plug#end()
 
@@ -635,3 +636,8 @@ vmap <Leader>tr <Plug>(coc-translator-rv)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:vimspector_enable_mappings = 'HUMAN'
 let g:vimspector_base_dir=expand('~/.config/nvim/vimspector-config')
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => himalaya
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <Leader>em :Himalaya<CR>
