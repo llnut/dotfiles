@@ -1,0 +1,24 @@
+[submodule "tmux-plugins/tpm"]
+	path = tmux-plugins/tpm
+	url = https://github.com/tmux-plugins/tpm.git
+	ignore = dirty
+[submodule "tmux-plugins/tmux-sensible"]
+	path = tmux-plugins/tmux-sensible
+	url = https://github.com/tmux-plugins/tmux-sensible.git
+	ignore = dirty
+[submodule "tmux-plugins/tmux-cpu"]
+	path = tmux-plugins/tmux-cpu
+	url = https://github.com/tmux-plugins/tmux-cpu.git
+	ignore = dirty
+[submodule "tmux-plugins/tmux-yank"]
+	path = tmux-plugins/tmux-yank
+	url = https://github.com/tmux-plugins/tmux-yank.git
+	ignore = dirty
+[submodule "tmux-plugins/vim-tmux-navigator"]
+	path = tmux-plugins/vim-tmux-navigator
+	url = https://github.com/christoomey/vim-tmux-navigator.git
+	ignore = dirty
+[submodule "oh-my-zsh-plugins/plugins/zsh-autosuggestions"]
+	path = oh-my-zsh-plugins/plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions.git
+	ignore = dirty
