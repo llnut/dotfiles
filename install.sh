@@ -8,8 +8,6 @@ CONFIG=$HOME/.config
 LOCAL=$HOME/.local
 DOTFILES=$(cd $(dirname $0);pwd)
 COMMON=$DOTFILES/common
-WM=$DOTFILES/wm
-INSTALLWM=0
 SETUP_SCRIPT=$HOME/.setup-script
 AUR_HELPER=paru
 
@@ -23,10 +21,6 @@ lnbk() {
 
 installNeeded() {
     if grep "Arch\|Artix\|EndeavourOS\|Manjaro" /etc/*-release ; then
-        if (whiptail --title "Dependencies confirm" --yesno "Install wm?" 7 30); then
-            echo "[*] You chose Yes. Will install wm dependencies."
-            INSTALLWM=1
-        fi
         usePacman
 
         mkdir -p $SETUP_SCRIPT
@@ -142,7 +136,6 @@ installOptional() {
         "hyperfine" "A command-line benchmarking tool"
         "himalaya" "CLI email client" OFF \
         "v2raya & xray" "A web GUI client to bypass network restrictions" OFF \
-        "double borders" "From \"https://github.com/wmutils/opt.git\"" OFF \
         3>&1 1>&2 2>&3
     )
 
