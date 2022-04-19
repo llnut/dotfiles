@@ -7,7 +7,6 @@ LOCAL=$HOME/.local
 CURDIR=$(cd $(dirname $0);pwd)
 
 function doIt() {
-    lnbk $CURDIR/.config/nu $CONFIG/nu
     lnbk $CURDIR/.config/nushell $CONFIG/nushell
     lnbk $CURDIR/.config/nvim $CONFIG/nvim
     lnbk $CURDIR/.config/gitui $CONFIG/gitui

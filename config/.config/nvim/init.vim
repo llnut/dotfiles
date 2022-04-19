@@ -5,11 +5,11 @@ call plug#begin()
 
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'kyazdani42/nvim-web-devicons' " for file icons
+Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-nvim-lsp' " LSP source for nvim-cmp
+Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'akinsho/bufferline.nvim'
 Plug 'tpope/vim-fugitive'
@@ -18,11 +18,10 @@ Plug 'feline-nvim/feline.nvim'
 Plug 'easymotion/vim-easymotion'
 Plug 'godlygeek/tabular'
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'ellisonleao/gruvbox.nvim'
+Plug 'morhetz/gruvbox'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'mbbill/undotree'
 Plug 'lambdalisue/suda.vim'
-Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'puremourning/vimspector'
 Plug 'soywod/himalaya', {'rtp': 'vim'}
 
@@ -219,8 +218,8 @@ noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
 
-" no highlighting temporary with <leader>hs
-noremap <silent> <leader>hs :nohlsearch<CR>
+" no highlighting temporary with <leader>ht
+noremap <silent> <leader>ht :nohlsearch<CR>
 
 " Close the current window.
 " nnoremap <leader>cw :close<CR>
@@ -390,7 +389,6 @@ noremap <leader>b <cmd>Telescope buffers<CR>
 noremap <leader>tg <cmd>Telescope treesitter<CR>
 noremap <leader>m <cmd>Telescope oldfiles<CR>
 nnoremap <leader>rg <cmd>Telescope live_grep<CR>
-nnoremap <leader>ht <cmd>Telescope help_tags<CR>
 
 noremap <leader>d :NvimTreeToggle<CR>
 noremap <leader>ff :NvimTreeFindFile<CR>
@@ -455,8 +453,6 @@ function! QuickfixFilenames()
 endfunction
 
 lua << EOF
-local nvim_lsp = require('lspconfig')
-
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap=true, silent=true }
@@ -491,11 +487,13 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
+local lspconfig = require('lspconfig')
+
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = { "rust_analyzer", "gopls", "denols", "clangd" }
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
+local servers = { "rust_analyzer", "clangd" }
+for _, lsp in pairs(servers) do
+  lspconfig[lsp].setup {
     on_attach = on_attach,
     flags = {
       debounce_text_changes = 150,
@@ -515,18 +513,16 @@ cmp.setup {
     ['<C-e>'] = cmp.mapping.close(),
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
+      select = true
+    }
   },
   sources = {
-    { name = 'nvim_lsp' },
-  },
+    { name = 'nvim_lsp' }
+  }
 }
 
 require 'nvim-tree'.setup {
-  git = {
-    ignore = false,
-  },
+  git = { ignore = false }
 }
 require('gitsigns').setup{
   on_attach = function(bufnr)
@@ -552,12 +548,12 @@ require('gitsigns').setup{
     end, {expr=true})
 
     -- Actions
-    map({'n', 'v'}, '<leader>hs', ':Gitsigns stage_hunk<CR>')
-    map({'n', 'v'}, '<leader>hr', ':Gitsigns reset_hunk<CR>')
-    map('n', '<leader>hS', gs.stage_buffer)
-    map('n', '<leader>hu', gs.undo_stage_hunk)
-    map('n', '<leader>hR', gs.reset_buffer)
-    map('n', '<leader>hp', gs.preview_hunk)
+    -- map({'n', 'v'}, '<leader>hs', ':Gitsigns stage_hunk<CR>')
+    -- map({'n', 'v'}, '<leader>hr', ':Gitsigns reset_hunk<CR>')
+    -- map('n', '<leader>hS', gs.stage_buffer)
+    -- map('n', '<leader>hu', gs.undo_stage_hunk)
+    -- map('n', '<leader>hR', gs.reset_buffer)
+    -- map('n', '<leader>hp', gs.preview_hunk)
     map('n', '<leader>hb', function() gs.blame_line{full=true} end)
     map('n', '<leader>tb', gs.toggle_current_line_blame)
     map('n', '<leader>hd', gs.diffthis)
@@ -571,12 +567,14 @@ require('gitsigns').setup{
 require('feline').setup()
 require("bufferline").setup{}
 require('telescope').setup{
-  -- ...
-}
-require("indent_blankline").setup {
-    -- for example, context is off by default, use this to turn it on
-    show_current_context = true,
-    show_current_context_start = true,
+  defaults = {
+    layout_config = {
+      horizontal = {
+        height = 0.8,
+        width = 0.9
+      }
+    }
+  }
 }
 EOF
 
