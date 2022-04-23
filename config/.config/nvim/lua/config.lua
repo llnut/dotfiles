@@ -1,3 +1,5 @@
+local home_dir = os.getenv("HOME")
+
 local options = {
   clipboard      = "unnamed,unnamedplus",   --- Copy-paste between vim and everything else
   cmdheight      = 1,                       --- Give more space for displaying messages
@@ -27,7 +29,7 @@ local options = {
   tabstop        = 4,                       --- Insert 4 spaces for a tab
   termguicolors  = true,                    --- Correct terminal colors
   timeoutlen     = 500,                     --- Faster completion
-  undodir        = os.getenv("HOME") .. "/.config/nvim/undo",
+  undodir        = home_dir .. "/.config/nvim/undo",
   undofile       = true,                    --- Sets undo to file
   updatetime     = 100,                     --- Faster completion
   viminfo        = "'1000",                 --- Increase the size of file history
@@ -41,8 +43,8 @@ local options = {
   backspace      = "indent,eol,start",      --- Making sure backspace works
   backup         = false,                   --- Recommended by coc
   backupskip     = "/tmp/*,/private/tmp/*",
-  backupdir      = os.getenv("HOME") .. "/.config/nvim/backups",
-  directory      = os.getenv("HOME") .. "/.config/nvim/swaps",
+  backupdir      = home_dir .. "/.config/nvim/backups",
+  directory      = home_dir .. "/.config/nvim/swaps",
   conceallevel   = 0,                       --- Show `` in markdown files
   encoding       = "utf-8",                 --- The encoding displayed
   errorbells     = false,                   --- Disables sound effect for errors
