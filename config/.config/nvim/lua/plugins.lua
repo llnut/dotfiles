@@ -14,8 +14,8 @@ return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
   use {
-      'neovim/nvim-lspconfig',
-      config = "require('plugin_config.lsp')"
+    'neovim/nvim-lspconfig',
+    config = "require('plugin_config.lsp')"
   }
 
   use { 'nvim-lua/plenary.nvim' }
@@ -24,9 +24,9 @@ return require('packer').startup(function(use)
   use { 'morhetz/gruvbox' }
 
   use {
-      'kyazdani42/nvim-tree.lua',
-      config = "require('plugin_config.tree')",
-      requires = { 'kyazdani42/nvim-web-devicons' }
+    'kyazdani42/nvim-tree.lua',
+    config = "require('plugin_config.tree')",
+    requires = { 'kyazdani42/nvim-web-devicons' }
   }
 
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }

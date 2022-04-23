@@ -15,8 +15,9 @@ vim.cmd('autocmd Filetype ' .. ft_str .. ' setlocal foldmethod=expr foldexpr=nvi
 -- Exported functions
 local M = {}
 
-M.align = function() local p = '^\\s*|\\s.*\\s|\\s*$'
-  if vim.fn.exists(':Tabularize') and vim.fn.getline('.') == "~# '^\\s*|'" and (vim.fn.getline(vim.fn.line('.') - 1) == "~# p" or vim.fn.getline(vim.fn.line('.')+1 == "~# p")) then
+M.align = function()
+  local p = '^\\s*|\\s.*\\s|\\s*$'
+  if vim.fn.exists(':Tabularize') and vim.fn.getline('.') == "~# '^\\s*|'" and (vim.fn.getline(vim.fn.line('.') - 1) == "~# " .. p or vim.fn.getline(vim.fn.line('.')+1 == "~# " .. p)) then
     -- local column = vim.fn.strlen(vim.fn.substitute(vim.fn.getline('.')[0:vim.fn.col('.')], '[^|]','','g'))
     -- local position = vim.fn.strlen(vim.fn.matchstr(vim.fn.getline('.')[0:vim.fn.col('.')], '.*|\s*\zs.*'))
     vim.cmd([[
