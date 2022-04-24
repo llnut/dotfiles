@@ -1,28 +1,41 @@
--- This file can be loaded by calling `lua require('plugins')` from your init.vim
---
-local fn = vim.fn
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-  packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+local packer = nil
+local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
+  if vim.fn.input("Install packer.nvim? (y for yes) ") == "y" then
+    --vim.api.nvim_command("!git clone --depth 1 https://github.com/wbthomason/packer.nvim " .. install_path)
+    packer_bootstrap = vim.fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    vim.api.nvim_command("packadd packer.nvim")
+    for i, v in ipairs(vim.api.nvim_get_runtime_file("lua/", "v:true")) do
+      print(i, v)
+    end
+    print("Installed packer.nvim.")
+  else
+    return nil
+  end
+else
+  require('impatient')
 end
 
--- Only required if you have packer configured as `opt`
-vim.cmd [[packadd packer.nvim]]
+local function init()
+  if packer == nil then
+    packer = require('packer')
+    packer.init({ disable_commands = true })
+  end
 
-return require('packer').startup(function(use)
+  local use = packer.use
+  packer.reset()
+
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
+  use {'lewis6991/impatient.nvim'}
 
   use {
     'neovim/nvim-lspconfig',
     config = "require('plugin_config.lsp')"
   }
-
   use { 'nvim-lua/plenary.nvim' }
   use { 'kyazdani42/nvim-web-devicons' }
-
   use { 'morhetz/gruvbox' }
-
   use {
     'kyazdani42/nvim-tree.lua',
     config = "require('plugin_config.tree')",
@@ -30,14 +43,11 @@ return require('packer').startup(function(use)
   }
 
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-
-  ----use 'nvim-telescope/telescope-file-browser.nvim'
   use {
     'nvim-telescope/telescope.nvim',
     config = "require('plugin_config.telescope')",
     requires = {'nvim-lua/plenary.nvim'}
   }
-
 
   use {
     'hrsh7th/nvim-cmp',
@@ -62,11 +72,9 @@ return require('packer').startup(function(use)
 
   -- use { 'akinsho/bufferline.nvim', config = function() require("bufferline").setup {} end }
   use { 'tpope/vim-fugitive' }
-  -- use { 'tpope/vim-surround' }
   use { 'feline-nvim/feline.nvim', config = function() require("feline").setup() end }
   use { 'easymotion/vim-easymotion' }
   use { 'godlygeek/tabular' }
-
   use { 'mg979/vim-visual-multi', branch = 'master' }
   use { 'mbbill/undotree' }
   use {
@@ -81,15 +89,18 @@ return require('packer').startup(function(use)
     config = "require('plugin_config.vimspector')",
   }
   use { 'soywod/himalaya', rtp = 'vim' }
-
-  ---- Use dependency and run lua function after load
   use {
     'lewis6991/gitsigns.nvim',
     after = 'plenary.nvim',
     config = "require('plugin_config.gitsigns')",
   }
-  if packer_bootstrap then
-    require('packer').sync()
-  end
+end
 
-end)
+local plugins = setmetatable({}, {
+  __index = function(_, key)
+    init()
+    return packer[key]
+  end,
+})
+
+return plugins

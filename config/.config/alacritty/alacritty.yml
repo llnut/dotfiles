@@ -976,7 +976,7 @@ bell:
   duration: 0
   color: '#ffffff'
 
-background_opacity: 1.0
+opacity: 1.0
 
 cursor:
   style:
