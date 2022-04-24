@@ -6,7 +6,6 @@ keymap("n", "<leader>w", ":w<CR>", { noremap = true, silent = false })
 -- Save a file as root (,W)
 keymap("n", "<leader>W", ":w suda://%<CR>", { noremap = true, silent = false })
 
-
 --------------------------------------------------------------
 -- => Tabular
 --------------------------------------------------------------
@@ -16,23 +15,12 @@ keymap("i", "<Bar>", "<Bar><Esc>:<CMD>lua require('function').align()<CR>a", { n
 -- => Visual mode related
 --------------------------------------------------------------
 -- Visual star search
--- keymap("x", "*", ": <C-u>call expand('<SID>')VSetSearch() <CR>/<C-R>=@/<CR><CR>", { noremap = true, silent = false })
--- keymap("x", "#", ": <C-u>call expand('<SID>')VSetSearch() <CR>?<C-R>=@/<CR><CR>", { noremap = true, silent = false })
---
---xnoremap *         : <C-u>call <SID>VSetSearch() <CR>/<C-R>=@/<CR><CR>
---xnoremap #         : <C-u>call <SID>VSetSearch() <CR>?<C-R>=@/<CR><CR>
-
--- local function v_set_search()
--- 
--- end
--- 
 keymap("x", "*", ": <C-u><CMD>lua require('function').v_set_search() <CR>/<C-R>=@/<CR><CR>", { noremap = true, silent = false })
 keymap("x", "#", ": <C-u><CMD>lua require('function').v_set_search() <CR>?<C-R>=@/<CR><CR>", { noremap = true, silent = false })
 
 --------------------------------------------------------------
 -- => Moving around, tabs, windows and buffers
 --------------------------------------------------------------
--- keymap("", "<bs>", "<C-w>h", { noremap = true, silent = false })
 keymap("", "<C-h>", "<C-w>h", { noremap = true, silent = false })
 keymap("", "<C-j>", "<C-w>j", { noremap = true, silent = false })
 keymap("", "<C-k>", "<C-w>k", { noremap = true, silent = false })

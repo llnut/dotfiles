@@ -1,6 +1,7 @@
+require('packer_command')
+require('plugins')
 require('color')
 require('config')
-require('plugins')
 require('function')
 require('autocmd')
 require('keymap')

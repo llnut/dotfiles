@@ -24,6 +24,8 @@ function doIt() {
     mkdir -p $LOCAL/bin
     cp -rf $CURDIR/bin/* $LOCAL/bin
     cp -rf $CURDIR/oh-my-zsh-plugins/plugins/* $HOME/.oh-my-zsh/plugins
+    mkdir -p $LOCAL/share/fonts
+    cp -rf $CURDIR/../etc/fonts/* $LOCAL/share/fonts
     sudo cp -f $CURDIR/paru/paru.conf /etc
 }
 
