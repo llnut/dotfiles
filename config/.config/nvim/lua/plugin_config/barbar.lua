@@ -15,7 +15,7 @@ vim.g.bufferline = {
   -- Enables/disable clickable tabs
   --  - left-click: go to buffer
   --  - middle-click: delete buffer
-  clickable = true,
+  clickable = false,
 
   -- Excludes buffers from the tabline
   -- exclude_ft = ['javascript'],
