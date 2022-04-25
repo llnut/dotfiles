@@ -12,8 +12,6 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   else
     return nil
   end
-else
-  require('impatient')
 end
 
 local function init()
@@ -72,7 +70,10 @@ local function init()
 
   -- use { 'akinsho/bufferline.nvim', config = function() require("bufferline").setup {} end }
   use { 'tpope/vim-fugitive' }
-  use { 'feline-nvim/feline.nvim', config = function() require("feline").setup() end }
+  use { 
+    'feline-nvim/feline.nvim',
+    config = "require('plugin_config.feline')"
+  }
   use { 'easymotion/vim-easymotion' }
   use { 'godlygeek/tabular' }
   use { 'mg979/vim-visual-multi', branch = 'master' }

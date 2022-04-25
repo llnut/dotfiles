@@ -948,7 +948,10 @@ schemes:
 
   gruvbox_dark: &dark
     primary:
-      background: '#282828'
+      # hard contrast: background: '#1d2021'
+      # normal contrast background: '#282828'
+      # soft contrast: background = '#32302f'
+      background: '#32302f'
       foreground: '#ebdbb2'
     normal:
       black:   '#282828'
