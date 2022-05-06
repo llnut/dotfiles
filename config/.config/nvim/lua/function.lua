@@ -9,7 +9,6 @@ endfunction
 local parsers = require'nvim-treesitter.parsers'
 local configs = parsers.get_parser_configs()
 local ft_str = table.concat(vim.tbl_map(function(ft) return configs[ft].filetype or ft end, parsers.available_parsers()), ',')
-print()
 vim.cmd('autocmd Filetype ' .. ft_str .. ' setlocal foldmethod=expr foldexpr=nvim_treesitter#foldexpr()')
 
 -- Exported functions
@@ -40,7 +39,7 @@ M.v_set_search = function()
 end
 
 M.return_last_pos = function()
-  print(vim.fn.line("'\""))
+  --print(vim.fn.line("'\""))
   --command = "if line(\"'\\\"\") > 1 && line(\"'\\\"\") <= line(\"$\") | exe \"normal! g'\\\"\" | endif",
   if vim.fn.line("'\"") > 1 and vim.fn.line("'\"") <= vim.fn.line("$") then
     vim.cmd("normal! g'\"")

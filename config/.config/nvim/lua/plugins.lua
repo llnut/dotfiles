@@ -31,6 +31,11 @@ local function init()
     'neovim/nvim-lspconfig',
     config = "require('plugin_config.lsp')"
   }
+  use {
+    'williamboman/nvim-lsp-installer',
+    config = "require('plugin_config.lsp_installer')"
+  }
+
   use { 'nvim-lua/plenary.nvim' }
   use { 'kyazdani42/nvim-web-devicons' }
   use { 'morhetz/gruvbox' }
