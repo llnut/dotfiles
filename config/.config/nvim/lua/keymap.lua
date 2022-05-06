@@ -41,10 +41,10 @@ keymap("n", "<leader>tn", ":tabnew<CR>", { noremap = true, silent = false })
 -- Close Location panel
 keymap("n", "<leader>ce", ":lclose<CR>", { noremap = true, silent = false })
 -- Switch buffers
-keymap("n", "[b", ":bprevious<CR>", { noremap = true, silent = true })
-keymap("n", "]b", ":bnext<CR>", { noremap = true, silent = true })
-keymap("n", "[B", ":bfirst<CR>", { noremap = true, silent = true })
-keymap("n", "]B", ":blast<CR>", { noremap = true, silent = true })
+keymap("n", "[b", ":BufferPrevious<CR>", { noremap = true, silent = true })
+keymap("n", "]b", ":BufferNext<CR>", { noremap = true, silent = true })
+keymap("n", "[B", ":BufferGoto 1<CR>", { noremap = true, silent = true })
+keymap("n", "]B", ":BufferLast<CR>", { noremap = true, silent = true })
 
 -- Buffers
 keymap("n", "<Tab>", ":BufferNext<CR>", { noremap = true, silent = true })
