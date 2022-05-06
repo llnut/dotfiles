@@ -20,13 +20,13 @@ cmp.setup {
     }
   },
   sources = {
-    { name = 'calc', priority = 3 },
-    { name = 'path',priority = 4 },
-    { name = 'nvim_lua', priority = 5 },
-    { name = 'crates', priority = 6 },
-    { name = 'buffer', priority = 7, keyword_length = 5 },
-    { name = 'vsnip', priority = 8 },
-    { name = 'nvim_lsp', priority = 9 },
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+    { name = 'buffer' },
+    { name = 'path' },
+    { name = 'nvim_lua' },
+    { name = 'calc' },
+    { name = 'crates' },
   },
   sorting = {
     priority_weight = 1.0,
