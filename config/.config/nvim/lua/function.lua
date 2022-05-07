@@ -93,5 +93,42 @@ M.show_documentation = function()
   end
 end
 
+-- callback args changed in Neovim 0.5.1/0.6. See:
+-- https://github.com/neovim/neovim/pull/15504
+M.mk_handler = function(fn)
+  return function(...)
+    local config_or_client_id = select(4, ...)
+    local is_new = type(config_or_client_id) ~= "number"
+    if is_new then
+      fn(...)
+    else
+      local err = select(1, ...)
+      local method = select(2, ...)
+      local result = select(3, ...)
+      local client_id = select(4, ...)
+      local bufnr = select(5, ...)
+      local config = select(6, ...)
+      fn(
+        err,
+        result,
+        { method = method, client_id = client_id, bufnr = bufnr },
+        config
+      )
+    end
+  end
+end
+
+-- from mfussenegger/nvim-lsp-compl@29a81f3
+M.request = function(bufnr, method, params, handler)
+  return vim.lsp.buf_request(bufnr, method, params, M.mk_handler(handler))
+end
+
+local function get_params()
+  local params = vim.lsp.util.make_given_range_params()
+  params["range"]["start"]["line"] = 0
+  params["range"]["end"]["line"] = vim.api.nvim_buf_line_count(0) - 1
+  return params
+end
+
 
 return M
