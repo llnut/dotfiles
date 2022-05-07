@@ -32,8 +32,6 @@ keymap("", "<leader>ht", ":nohlsearch<CR>", { noremap = true, silent = true })
 -- Close the current window.
 keymap("n", "<leader>cw", ":close<CR>", { noremap = true, silent = false })
 
-keymap("n", "<C-p>", "<CMD>lua require('plugins.telescope').project_files()<CR>", { noremap = true })
-
 -- Close current tab
 keymap("n", "<leader>ct", ":tabclose<CR>", { noremap = true, silent = false })
 -- New tab
@@ -94,11 +92,12 @@ keymap("", "<leader>x", ":e ~/buffer.md<cr>", { noremap = false, silent = false 
 -- Quickly open README.md
 keymap("", "<leader>c", ":e ~/README.md<cr>", { noremap = false, silent = false })
 
-keymap("", "<C-p>", "<cmd>Telescope find_files<CR>", { noremap = false, silent = false })
-keymap("", "<leader>b", "<cmd>Telescope buffers<CR>", { noremap = false, silent = false })
-keymap("", "<leader>tg", "<cmd>Telescope treesitter<CR>", { noremap = false, silent = false })
-keymap("", "<leader>m", "<cmd>Telescope oldfiles<CR>", { noremap = false, silent = false })
-keymap("", "<leader>rg", "<cmd>Telescope live_grep<CR>", { noremap = true, silent = false })
+keymap("", "<C-p>", "<cmd>lua require('telescope.builtin').find_files({hidden=false})<CR>", { noremap = false, silent = false })
+keymap("", "<leader>b", "<cmd>lua require('telescope.builtin').buffers()<CR>", { noremap = false, silent = false })
+keymap("", "<leader>tg", "<cmd>lua require('telescope.builtin').treesitter()<CR>", { noremap = false, silent = false })
+keymap("", "<leader>m", "<cmd>lua require('telescope.builtin').oldfiles()<CR>", { noremap = false, silent = false })
+keymap("", "<leader>rg", "<cmd>lua require('telescope.builtin').live_grep()<CR>", { noremap = true, silent = false })
+keymap("", "<leader>eg", "<cmd>lua require('telescope.builtin').live_grep({prompt_title = 'find in open buffers', grep_open_files = true})<CR>", { noremap = true, silent = false })
 
 keymap("", "<leader>d", ":NvimTreeToggle<CR>", { noremap = true, silent = false })
 keymap("", "<leader>ff", ":NvimTreeFindFile<CR>", { noremap = true, silent = false })
@@ -149,3 +148,5 @@ keymap("n", "<leader><leader>fn", "<CMD>lua require('function').quick_fix_file_n
 
 keymap("n", "<leader>em", ":Himalaya<CR>", { noremap = false, silent = false })
 
+-- type inlay hints
+keymap("", "<leader>ty", "<cmd>lua require('plugin_config.inlay-hints').toggle_inlay_hints()<CR>", { noremap = true, silent = false })

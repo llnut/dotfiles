@@ -33,7 +33,7 @@ local function init()
   }
   use {
     'williamboman/nvim-lsp-installer',
-    config = "require('plugin_config.lsp_installer')"
+    config = "require('plugin_config.lsp-installer')"
   }
 
   use { 'nvim-lua/plenary.nvim' }
@@ -41,7 +41,7 @@ local function init()
   use { 'morhetz/gruvbox' }
   use {
     'kyazdani42/nvim-tree.lua',
-    config = "require('plugin_config.tree')",
+    config = "require('plugin_config.nvim-tree')",
     requires = { 'kyazdani42/nvim-web-devicons' }
   }
 
@@ -50,6 +50,10 @@ local function init()
     'nvim-telescope/telescope.nvim',
     config = "require('plugin_config.telescope')",
     requires = {'nvim-lua/plenary.nvim'}
+  }
+  use {
+    'nvim-telescope/telescope-ui-select.nvim',
+    requires = { "nvim-telescope/telescope.nvim" },
   }
 
   use {
@@ -90,9 +94,8 @@ local function init()
   }
   use { 'lambdalisue/suda.vim' }
   use { 
-    'puremourning/vimspector',
-
-    config = "require('plugin_config.vimspector')",
+    'mfussenegger/nvim-dap',
+    config = "require('plugin_config.nvim-dap')",
   }
   use { 'soywod/himalaya', rtp = 'vim' }
   use {
