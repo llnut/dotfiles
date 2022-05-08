@@ -11,10 +11,11 @@ function doIt() {
     lnbk $CURDIR/.config/nvim $CONFIG/nvim
     lnbk $CURDIR/.config/gitui $CONFIG/gitui
     lnbk $CURDIR/.config/alacritty $CONFIG/alacritty
-    lnbk $CURDIR/.config/rofi $CONFIG/rofi
     lnbk $CURDIR/.config/ranger $CONFIG/ranger
     lnbk $CURDIR/.config/himalaya $CONFIG/himalaya
     lnbk $CURDIR/.config/bottom $CONFIG/bottom
+    lnbk $CURDIR/.config/leftwm $CONFIG/leftwm
+    lnbk $CURDIR/.config/eww $CONFIG/eww
     lnbk $CURDIR/.tmux.conf $HOME/.tmux.conf
     lnbk $CURDIR/.zshrc $HOME/.zshrc
     lnbk $CURDIR/.gitconfig $HOME/.gitconfig
@@ -25,7 +26,7 @@ function doIt() {
     cp -rf $CURDIR/bin/* $LOCAL/bin
     cp -rf $CURDIR/oh-my-zsh-plugins/plugins/* $HOME/.oh-my-zsh/plugins
     mkdir -p $LOCAL/share/fonts
-    cp -rf $CURDIR/../etc/fonts/* $LOCAL/share/fonts
+    cp -rf $CURDIR/../etc/fonts/* $LOCAL/share/fonts && fc-cache -fv
     sudo cp -f $CURDIR/paru/paru.conf /etc
 }
 
