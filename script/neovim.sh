@@ -4,7 +4,7 @@ set -x
 echo "Installing neovim-nightly..."
 
 CURDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-BIN_PATH="$CURDIR/../bin"
+BIN_PATH="$CURDIR/../bin" && mkdir -p $BIN_PATH && mkdir -p $HOME/.local/bin
 FILE="nvim-linux64.tar.gz"
 
 rm -rf $BIN_PATH/nvim-linux64
