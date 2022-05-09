@@ -11,7 +11,6 @@ function doIt() {
     lnbk $CURDIR/.config/nvim $CONFIG/nvim
     lnbk $CURDIR/.config/gitui $CONFIG/gitui
     lnbk $CURDIR/.config/alacritty $CONFIG/alacritty
-    lnbk $CURDIR/.config/ranger $CONFIG/ranger
     lnbk $CURDIR/.config/himalaya $CONFIG/himalaya
     lnbk $CURDIR/.config/bottom $CONFIG/bottom
     lnbk $CURDIR/.config/leftwm $CONFIG/leftwm
