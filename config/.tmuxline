@@ -1,50 +1,61 @@
-## COLORSCHEME: gruvbox dark (medium)
+BG1="#a89984"
+BG2="#504945"
+BG3="#3c3836"
+FG1="#a89984"
+FG2="#ebdbb2"
+FG3="#ebdbb2"
+
+black='#282828'
+white='#ebdbb2'
+red='#fb4934'
+green='#b8bb26'
+blue='#83a598'
+yellow='#fe8019'
+gray='#a89984'
+darkgray='#3c3836'
+lightgray='#504945'
+inactivegray='#7c6f64'
+
 set-option -g status "on"
 
-# default statusbar color
-set-option -g status-style bg=colour237,fg=colour223 # bg=bg1, fg=fg1
+# default statusbar colors
+set -g status-bg $darkgray
+set -g status-fg $white
 
 # default window title colors
-set-window-option -g window-status-style bg=colour214,fg=colour237 # bg=yellow, fg=bg1
-
-# default window with an activity alert
-set-window-option -g window-status-activity-style bg=colour237,fg=colour248 # bg=bg1, fg=fg3
+set-window-option -g window-status-style bg=$gray,fg=$darkgray
+set-window-option -g window-status-activity-style bg=$lightgray,fg=$white
 
 # active window title colors
-set-window-option -g window-status-current-style bg=red,fg=colour237 # fg=bg1
+set-window-option -g window-status-current-style bg=$lightgray,fg=$gray
 
 # pane border
-set-option -g pane-active-border-style fg=colour250 #fg2
-set-option -g pane-border-style fg=colour237 #bg1
+set-option -g pane-active-border-style fg=$gray
+set-option -g pane-border-style fg=$gray
 
 # message infos
-set-option -g message-style bg=colour239,fg=colour223 # bg=bg2, fg=fg1
+set-option -g message-style bg=$lightgray,fg=$white
 
-# writing commands inactive
-set-option -g message-command-style bg=colour239,fg=colour223 # bg=fg3, fg=bg1
+# commands
+set-option -g message-command-style bg=$gray,fg=$gray
 
 # pane number display
-set-option -g display-panes-active-colour colour250 #fg2
-set-option -g display-panes-colour colour237 #bg1
+set-option -g display-panes-active-colour $white
+set-option -g display-panes-colour $lightgray
 
 # clock
-set-window-option -g clock-mode-colour colour109 #blue
+set-window-option -g clock-mode-colour $lightgray
 
 # bell
-set-window-option -g window-status-bell-style bg=colour167,fg=colour235 # bg=red, fg=bg
+set-window-option -g window-status-bell-style fg=$white,bg=$black
 
-## Theme settings mixed with colors (unfortunately, but there is no cleaner way)
 set-option -g status-justify "left"
-set-option -g status-left-style none
 set-option -g status-left-length "80"
-set-option -g status-right-style none
 set-option -g status-right-length "80"
 set-window-option -g window-status-separator ""
 
-set-option -g status-left "#[bg=colour241,fg=colour248] #S #[bg=colour237,fg=colour241,nobold,noitalics,nounderscore]"
-set-option -g status-right "#[bg=colour237,fg=colour239 nobold, nounderscore, noitalics]#[bg=colour239,fg=colour246] C:#{cpu_percentage} R:#{ram_percentage}  %m-%d %H:%M #[bg=colour239,fg=colour248,nobold,noitalics,nounderscore]#[bg=colour248,fg=colour237] #h "
+set-option -g status-left "#[bg=$darkgray,fg=$yellow] #S "
+set-option -g status-right "#[fg=$gray,bg=$darkgray] C:#{cpu_percentage} R:#{ram_percentage} #[fg=$gray,bg=$darkgray] %Y-%m-%d %H:%M #[fg=$gray, bg=$lightgray] #h "
 
-set-window-option -g window-status-current-format "#[bg=colour214,fg=colour237,nobold,noitalics,nounderscore]#[bg=colour214,fg=colour239] #I #[bg=colour214,fg=colour239,bold] #W #[bg=colour237,fg=colour214,nobold,noitalics,nounderscore]"
-set-window-option -g window-status-format "#[bg=colour239,fg=colour237,noitalics]#[bg=colour239,fg=colour223] #I #[bg=colour239,fg=colour223] #W #[bg=colour237,fg=colour239,noitalics]"
-
-# vim: set ft=tmux tw=0 nowrap:
+set-window-option -g window-status-current-format "#[fg=$gray, bg=$lightgray] #I:#[fg=$gray, bg=$lightgray, bold] #W "
+set-window-option -g window-status-format "#[fg=$gray,bg=$darkgray] #I: #W "
