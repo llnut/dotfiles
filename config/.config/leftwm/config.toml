@@ -39,26 +39,26 @@ key = "f"
 [[keybind]]
 command = "FocusPreviousTag"
 value = ""
-modifier = ["modkey", "Ctrl"]
+modifier = ["modkey"]
 key = "p"
 
 [[keybind]]
 command = "FocusNextTag"
 value = ""
-modifier = ["modkey", "Ctrl"]
+modifier = ["modkey"]
 key = "n"
 
 [[keybind]]
 command = "MoveWindowToPreviousWorkspace"
 value = ""
 modifier = ["modkey", "Shift"]
-key = "p"
+key = "h"
 
 [[keybind]]
 command = "MoveWindowToNextWorkspace"
 value = ""
 modifier = ["modkey", "Shift"]
-key = "n"
+key = "l"
 
 [[keybind]]
 command = "FloatingToTile"
@@ -83,6 +83,12 @@ command = "CloseWindow"
 value = ""
 modifier = ["modkey", "Shift"]
 key = "q"
+
+[[keybind]]
+command = "HardReload"
+value = ""
+modifier = ["modkey", "Shift"]
+key = "b"
 
 [[keybind]]
 command = "SoftReload"

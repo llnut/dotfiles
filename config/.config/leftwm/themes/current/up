@@ -28,9 +28,9 @@ fi
 leftwm-command "LoadTheme $SCRIPTPATH/theme.toml"
 
 # Set background
-if [ -x "$(command -v feh)" ]; then
-  feh --bg-scale $SCRIPTPATH/background.jpg
-fi
+#if [ -x "$(command -v feh)" ]; then
+#  feh --bg-scale $SCRIPTPATH/background.jpg
+#fi
 
 #open eww 'bar' windows
 #this is a bit of an uggly hack, a more elegant way will hopefully be possible with a future `eww` version
