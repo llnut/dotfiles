@@ -77,12 +77,12 @@ local function init()
   use {'hrsh7th/cmp-vsnip', after = 'cmp-nvim-lsp'}
   use {'hrsh7th/vim-vsnip', after = 'cmp-nvim-lsp'}
 
+  use {
+    'nvim-lualine/lualine.nvim',
+    config = "require('plugin_config.lualine')"
+  }
   -- use { 'akinsho/bufferline.nvim', config = function() require("bufferline").setup {} end }
   use { 'tpope/vim-fugitive' }
-  use { 
-    'feline-nvim/feline.nvim',
-    config = "require('plugin_config.feline')"
-  }
   use { 'easymotion/vim-easymotion' }
   use { 'godlygeek/tabular' }
   use { 'mg979/vim-visual-multi', branch = 'master' }
