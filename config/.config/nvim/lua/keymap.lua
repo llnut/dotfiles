@@ -7,11 +7,6 @@ keymap("n", "<leader>w", ":w<CR>", { noremap = true, silent = false })
 keymap("n", "<leader>W", ":w suda://%<CR>", { noremap = true, silent = false })
 
 --------------------------------------------------------------
--- => Tabular
---------------------------------------------------------------
-keymap("i", "<Bar>", "<Bar><Esc>:<CMD>lua require('function').align()<CR>a", { noremap = true, silent = true })
-
---------------------------------------------------------------
 -- => Visual mode related
 --------------------------------------------------------------
 -- Visual star search

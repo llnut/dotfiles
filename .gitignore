@@ -4,6 +4,7 @@
 /config/.config/nvim/vimspector-config/*
 /config/.config/nvim/plugin/*
 /config/.config/himalaya/downloads/*
+/config/.config/nushell/history.txt
 /bin
 .netrwhist
 

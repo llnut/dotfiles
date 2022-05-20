@@ -7,6 +7,7 @@ layout_mode = "Workspace"
 insert_behavior = "Bottom"
 scratchpad = []
 window_rules = []
+disable_window_snap = false
 disable_current_tag_swap = false
 disable_tile_drag = false
 focus_behaviour = "Sloppy"

@@ -45,7 +45,11 @@ local function init()
     requires = { 'kyazdani42/nvim-web-devicons' }
   }
 
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    run = ':TSUpdate',
+    config = "require('plugin_config.nvim-treesitter')",
+  }
   use {
     'nvim-telescope/telescope.nvim',
     config = "require('plugin_config.telescope')",
@@ -83,7 +87,6 @@ local function init()
   }
   -- use { 'akinsho/bufferline.nvim', config = function() require("bufferline").setup {} end }
   use { 'tpope/vim-fugitive' }
-  use { 'easymotion/vim-easymotion' }
   use { 'godlygeek/tabular' }
   use { 'mg979/vim-visual-multi', branch = 'master' }
   use { 'mbbill/undotree' }
@@ -102,6 +105,15 @@ local function init()
     'lewis6991/gitsigns.nvim',
     after = 'plenary.nvim',
     config = "require('plugin_config.gitsigns')",
+  }
+  use {
+    'phaazon/hop.nvim',
+    branch = 'v1', -- optional but strongly recommended
+    config = "require('plugin_config.hop')",
+  }
+  use {
+    'simrat39/symbols-outline.nvim',
+    config = "require('plugin_config.symbols-outline')",
   }
 end
 
