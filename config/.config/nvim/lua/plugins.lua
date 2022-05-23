@@ -38,7 +38,7 @@ local function init()
 
   use { 'nvim-lua/plenary.nvim' }
   use { 'kyazdani42/nvim-web-devicons' }
-  use { 'morhetz/gruvbox' }
+  use { "ellisonleao/gruvbox.nvim" }
   use {
     'kyazdani42/nvim-tree.lua',
     config = "require('plugin_config.nvim-tree')",
@@ -112,8 +112,8 @@ local function init()
     config = "require('plugin_config.hop')",
   }
   use {
-    'simrat39/symbols-outline.nvim',
-    config = "require('plugin_config.symbols-outline')",
+    'sidebar-nvim/sidebar.nvim',
+    config = "require('plugin_config.sidebar')",
   }
 end
 
