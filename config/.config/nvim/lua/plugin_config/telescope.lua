@@ -6,7 +6,7 @@ require('telescope').setup{
         width = 0.9
       }
     },
-    border = false,
+    border = true,
     vimgrep_arguments = {
       "rg",
       "--color=never",
