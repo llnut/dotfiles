@@ -85,8 +85,6 @@ local function init()
     'nvim-lualine/lualine.nvim',
     config = "require('plugin_config.lualine')"
   }
-  -- use { 'akinsho/bufferline.nvim', config = function() require("bufferline").setup {} end }
-  use { 'tpope/vim-fugitive' }
   use { 'godlygeek/tabular' }
   use { 'mg979/vim-visual-multi', branch = 'master' }
   use { 'mbbill/undotree' }
@@ -110,10 +108,6 @@ local function init()
     'phaazon/hop.nvim',
     branch = 'v1', -- optional but strongly recommended
     config = "require('plugin_config.hop')",
-  }
-  use {
-    'sidebar-nvim/sidebar.nvim',
-    config = "require('plugin_config.sidebar')",
   }
 end
 

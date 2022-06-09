@@ -25,8 +25,6 @@ M.v_set_search = function()
 end
 
 M.return_last_pos = function()
-  --print(vim.fn.line("'\""))
-  --command = "if line(\"'\\\"\") > 1 && line(\"'\\\"\") <= line(\"$\") | exe \"normal! g'\\\"\" | endif",
   if vim.fn.line("'\"") > 1 and vim.fn.line("'\"") <= vim.fn.line("$") then
     vim.cmd("normal! g'\"")
   end
