@@ -4,29 +4,30 @@ set -x
 
 CONFIG=${HOME}/.config
 LOCAL=$HOME/.local
-CURDIR=$(cd $(dirname $0);pwd)
+SCRIPT_DIR="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
 
 function doIt() {
-    lnbk $CURDIR/.config/nushell $CONFIG/nushell
-    lnbk $CURDIR/.config/nvim $CONFIG/nvim
-    lnbk $CURDIR/.config/gitui $CONFIG/gitui
-    lnbk $CURDIR/.config/alacritty $CONFIG/alacritty
-    lnbk $CURDIR/.config/himalaya $CONFIG/himalaya
-    lnbk $CURDIR/.config/bottom $CONFIG/bottom
-    lnbk $CURDIR/.config/leftwm $CONFIG/leftwm
-    lnbk $CURDIR/.config/eww $CONFIG/eww
-    lnbk $CURDIR/.tmux.conf $HOME/.tmux.conf
-    lnbk $CURDIR/.zshrc $HOME/.zshrc
-    lnbk $CURDIR/.gitconfig $HOME/.gitconfig
-    lnbk $CURDIR/.pam_environment $HOME/.pam_environment
-    lnbk $CURDIR/.cargo/config.toml $HOME/.cargo/config.toml
+    lnbk $SCRIPT_DIR/.config/nushell $CONFIG/nushell
+    lnbk $SCRIPT_DIR/.config/nvim $CONFIG/nvim
+    lnbk $SCRIPT_DIR/.config/gitui $CONFIG/gitui
+    lnbk $SCRIPT_DIR/.config/alacritty $CONFIG/alacritty
+    lnbk $SCRIPT_DIR/.config/himalaya $CONFIG/himalaya
+    lnbk $SCRIPT_DIR/.config/bottom $CONFIG/bottom
+    lnbk $SCRIPT_DIR/.config/leftwm $CONFIG/leftwm
+    lnbk $SCRIPT_DIR/.config/zellij $CONFIG/zellij
+    lnbk $SCRIPT_DIR/.config/eww $CONFIG/eww
+    lnbk $SCRIPT_DIR/.tmux.conf $HOME/.tmux.conf
+    lnbk $SCRIPT_DIR/.zshrc $HOME/.zshrc
+    lnbk $SCRIPT_DIR/.gitconfig $HOME/.gitconfig
+    lnbk $SCRIPT_DIR/.pam_environment $HOME/.pam_environment
+    lnbk $SCRIPT_DIR/.cargo/config.toml $HOME/.cargo/config.toml
 
     mkdir -p $LOCAL/bin
-    cp -rf $CURDIR/bin/* $LOCAL/bin
-    cp -rf $CURDIR/oh-my-zsh-plugins/plugins/* $HOME/.oh-my-zsh/plugins
+    cp -rf $SCRIPT_DIR/bin/* $LOCAL/bin
+    cp -rf $SCRIPT_DIR/oh-my-zsh-plugins/plugins/* $HOME/.oh-my-zsh/plugins
     mkdir -p $LOCAL/share/fonts
-    cp -rf $CURDIR/../etc/fonts/* $LOCAL/share/fonts && fc-cache -fv
-    sudo cp -f $CURDIR/paru/paru.conf /etc
+    cp -rf $SCRIPT_DIR/../etc/fonts/* $LOCAL/share/fonts && fc-cache -fv
+    sudo cp -f $SCRIPT_DIR/paru/paru.conf /etc
 }
 
 function lnbk() {

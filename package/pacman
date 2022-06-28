@@ -1,5 +1,6 @@
 core/base-devel
 core/curl
+core/usbutils
 community/libnewt
 extra/wget
 extra/git
