@@ -6,5 +6,7 @@ xclip
 fzf
 ranger
 perf
-podman
-podman-compose
+containerd
+nerdctl
+cni-plugins
+buildkit
