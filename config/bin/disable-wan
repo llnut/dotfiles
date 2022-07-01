@@ -1,0 +1,21 @@
+#!/bin/bash
+
+SUBNET=`route -n | grep UG | awk -F " " '{print $2}'` | sed "s/.1$/.0\/24/"
+SSH_PORT=sudo netstat -atlunp | grep sshd | grep 0.0.0.0: | awk -F " " '{print $4}' | awk -F ":" '{print $NF}'
+if [ -z $SSH_PORT ]; then
+  echo "get ssh port failed."
+  exit 1
+fi
+
+if [ $1 == "on" ]; then
+    sudo iptables -I OUTPUT 1 -p tcp --sport $SSH_PORT -j ACCEPT
+    sudo iptables -I OUTPUT 2 -d $SUBNET -j ACCEPT
+    sudo iptables -I OUTPUT 3 -s $SUBNET -m state --state NEW,INVALID -j REJECT
+    sudo iptables -I OUTPUT 4 -s $SUBNET -m state --state RELATED,ESTABLISHED -j ACCEPT
+elif [ $1 == "off" ]; then
+    sudo iptables -D OUTPUT -p tcp --sport $SSH_PORT -j ACCEPT
+    sudo iptables -D OUTPUT -d $SUBNET -j ACCEPT
+    sudo iptables -D OUTPUT -s $SUBNET -m state --state NEW,INVALID -j REJECT
+    sudo iptables -D OUTPUT -s $SUBNET -m state --state RELATED,ESTABLISHED -j ACCEPT
+fi
+
