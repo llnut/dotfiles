@@ -38,7 +38,10 @@ local function init()
 
   use { 'nvim-lua/plenary.nvim' }
   use { 'kyazdani42/nvim-web-devicons' }
-  use { "ellisonleao/gruvbox.nvim" }
+  use {
+    'ellisonleao/gruvbox.nvim',
+    config = "require('plugin_config.gruvbox')"
+  }
   use {
     'kyazdani42/nvim-tree.lua',
     config = "require('plugin_config.nvim-tree')",
