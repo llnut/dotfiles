@@ -1,15 +1,24 @@
 #!/bin/bash
-set -x
 
 echo "Installing rust-analyzer..."
-CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-SCRIPT_DIR="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
-BIN_PATH="$CUR_DIR/../bin" && mkdir -p $BIN_PATH && mkdir -p $HOME/.local/bin
-FILE="rust-analyzer-x86_64-unknown-linux-gnu.gz"
 
-source $SCRIPT_DIR/util.sh
-bk $BIN_PATH/rust-analyzer-x86_64-unknown-linux-gnu
-curl -o $BIN_PATH/$FILE --proto '=https' --tlsv1.2 -SLf https://github.com/rust-lang/rust-analyzer/releases/download/nightly/$FILE
-cd $BIN_PATH && gzip -d $FILE
-chmod +x $BIN_PATH/rust-analyzer-x86_64-unknown-linux-gnu
-ln -sf $BIN_PATH/rust-analyzer-x86_64-unknown-linux-gnu $HOME/.local/bin/rust-analyzer
+SCRIPT_PATH="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
+source $SCRIPT_PATH/util.sh
+
+SAVE_DIR="rust-analyzer"
+SAVE_FILE_PREFIX="$SAVE_DIR"
+SAVE_FILE_SUFFIX=".gz"
+BIN_PATH="$SAVE_PATH/$SAVE_DIR"
+BIN=("rust-analyzer")
+
+backup $SAVE_PATH/$SAVE_DIR
+
+LATEST_URL="https://github.com/rust-lang/rust-analyzer/releases/download/nightly"
+REMOTE_FILE_PREFIX="rust-analyzer-x86_64-unknown-linux-gnu"
+download "$SAVE_PATH/$SAVE_FILE_PREFIX$SAVE_FILE_SUFFIX" "$LATEST_URL/$REMOTE_FILE_PREFIX$SAVE_FILE_SUFFIX"
+
+cd $SAVE_PATH && wrap_decompress $SAVE_DIR $SAVE_FILE_PREFIX$SAVE_FILE_SUFFIX
+circulate_ln "$BIN_PATH" "${BIN[*]}" "$LOCAL_BIN_PATH"
+rm -f $SAVE_PATH/$SAVE_FILE_PREFIX$SAVE_FILE_SUFFIX
+
+
