@@ -1,35 +1,18 @@
 local dap = require('dap')
-
--- Neovim Lua
-dap.adapters.nlua = function(callback, config)
-  callback { type = 'server', host = config.host, port = config.port }
-end
-
-dap.configurations.lua = {
-  {
-    type = 'nlua',
-    request = 'attach',
-    name = 'Attach to running Neovim instance',
-    host = function()
-      local value = vim.fn.input 'Host [127.0.0.1]: '
-      if value ~= '' then
-        return value
-      end
-      return '127.0.0.1'
-    end,
-    port = function()
-      local val = tonumber(vim.fn.input 'Port: ')
-      assert(val, 'Please provide a port number')
-      return val
-    end,
-  },
-}
+local home_dir = os.getenv("HOME")
 
 -- lldb
 dap.adapters.lldb = {
-  type = 'executable',
-  command = '/usr/bin/lldb-vscode',
-  name = 'lldb',
+  type = 'server',
+  port = "${port}",
+  executable = {
+    -- CHANGE THIS to your path!
+    command = home_dir .. '/.local/bin/codelldb',
+    args = {"--port", "${port}"},
+
+    -- On windows you may have to uncomment this:
+    -- detached = false,
+  }
 }
 
 dap.configurations.cpp = {
@@ -67,36 +50,24 @@ dap.configurations.cpp = {
   },
 }
 
+dap.configurations.cpp = {
+    {
+      -- If you get an "Operation not permitted" error using this, try disabling YAMA:
+      --  echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+      name = "Attach to process",
+      type = 'cpp',  -- Adjust this to match your adapter name (`dap.adapters.<name>`)
+      request = 'attach',
+      pid = require('dap.utils').pick_process,
+      args = {},
+    },
+}
+
 
 -- If you want to use this for rust and c, add something like this:
 
 dap.configurations.c = dap.configurations.cpp
---dap.configurations.rust = dap.configurations.cpp
+dap.configurations.rust = dap.configurations.cpp
 
-
--- Debugpy
-dap.adapters.python = {
-  type = 'executable',
-  command = 'python',
-  args = { '-m', 'debugpy.adapter' },
-}
-
-dap.configurations.python = {
-  {
-    type = 'python',
-    request = 'launch',
-    name = 'Launch file',
-    program = '${file}',
-    pythonPath = function()
-      local venv_path = vim.fn.getenv 'VIRTUAL_ENVIRONMENT'
-      if venv_path ~= vim.NIL and venv_path ~= '' then
-        return venv_path .. '/bin/python'
-      else
-        return '/usr/bin/python'
-      end
-    end,
-  },
-}
 
 vim.cmd [[command! BreakpointToggle lua require('dap').toggle_breakpoint()]]
 vim.cmd [[command! Debug lua require('dap').continue()]]

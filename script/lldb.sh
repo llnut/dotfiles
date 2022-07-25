@@ -1,15 +1,25 @@
 #!/bin/bash
-set -x
 
 echo "Installing vscode-lldb..."
 
-CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-SCRIPT_DIR="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
-BIN_PATH="$CUR_DIR/../bin" && mkdir -p $BIN_PATH
-FILE="codelldb-x86_64-linux.vsix"
+SCRIPT_PATH="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
+source $SCRIPT_PATH/util.sh
 
-source $SCRIPT_DIR/util.sh
-bk $BIN_PATH/codelldb-x86_64-linux
-curl -o $BIN_PATH/$FILE --proto '=https' --tlsv1.2 -SLf https://github.com/vadimcn/vscode-lldb/releases/download/v1.7.0/$FILE
-cd $BIN_PATH && unzip $FILE -d codelldb-x86_64-linux
-rm -f $BIN_PATH/$FILE
+SAVE_DIR="codelldb"
+SAVE_FILE_PREFIX="$SAVE_DIR"
+SAVE_FILE_SUFFIX=".vsix"
+BIN_PATH="$SAVE_PATH/$SAVE_DIR/extension/adapter"
+BIN=("codelldb")
+
+backup $SAVE_PATH/$SAVE_DIR
+
+#LATEST_URL="https://github.com/vadimcn/vscode-lldb/releases/latest"
+#LATEST_URL=`github_latest_url "$LATEST_URL"`
+#LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
+#REMOTE_FILE_PREFIX="codelldb-x86_64-linux"
+#download "$SAVE_PATH/$SAVE_FILE_PREFIX$SAVE_FILE_SUFFIX" "$LATEST_URL/$REMOTE_FILE_PREFIX$SAVE_FILE_SUFFIX"
+
+cd $SAVE_PATH && wrap_decompress $SAVE_DIR $SAVE_FILE_PREFIX$SAVE_FILE_SUFFIX
+circulate_ln "$BIN_PATH" "${BIN[*]}" "$LOCAL_BIN_PATH"
+#rm -f $SAVE_PATH/$SAVE_FILE_PREFIX$SAVE_FILE_SUFFIX
+

@@ -8,7 +8,8 @@ DOTFILES=/home/sora/.dotfiles
 chmod -R 755 $DOTFILES
 export DOTFILES=$DOTFILES
 # If you come from bash you might have to change your $PATH.
-export PATH=$DOTFILES/config/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/.composer/vendor/bin/:$HOME/go/bin:$PATH
+export PATH=$DOTFILES/config/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/go/bin:$HOME/.cargo/bin:$PATH
+export MANPATH=$HOME/.man:`manpath`
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -89,8 +90,6 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
-
 # Preferred editor for local and remote sessions
 if hash nvim 2>/dev/null; then
     if [[ -n $SSH_CONNECTION ]]; then
@@ -103,50 +102,17 @@ fi
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
 # Source all .zsh files inside the zsh/ directory
 for config ($DOTFILES/config/zsh/*.zsh) source $config
 
-# Base16 Shell
-# BASE16_SHELL="$HOME/.config/base16-shell/base16-solarized.dark.sh"
-# [[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
-# BASE16_SHELL="$HOME/.config/base16-shell/"
-# [ -n "$PS1" ] && \
-    # [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-        # eval "$("$BASE16_SHELL/profile_helper.sh")"
-
-# export TERM=xterm-256color
-
-# install rbenv
-# if hash rbenv 2>/dev/null; then
-#     eval "$(rbenv init -)"
-# fi
-
-# if [[ -d ~/.rvm ]]; then
-#     PATH=$HOME/.rvm/bin:$PATH # Add RVM to PATH for scripting
-#     source ~/.rvm/scripts/rvm
-# fi
-
-# Add RUST GOPATH
-export PATH="$HOME/.cargo/bin:$PATH"
-#export PATH="/usr/bin/go:$PATH"
+# Source autocomplete
+#if [ -d $HOME/.zsh-autocomplete ]; then
+#    for config ($HOME/.zsh-autocomplete/*.zsh) source $config
+#fi
 
 #export GOROOT=/usr/bin/go
 export GO111MODULE=on
 #export GOPATH=/pubdisk/code/go/
-
-#export PATH="$HOME/.gem/ruby/2.7.0/bin:$PATH"
 
 function proxy_on() {
     export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
@@ -205,33 +171,15 @@ fpath=($DOTFILES/config/oh-my-zsh-plugins/functions/ $fpath)
 
 autoload -Uz compinit
 compinit
-# End of lines added by compinstall
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-#export KUBECONFIG=~/.kube/config
-#kubectl completion bash
-
-# Use fd (https://github.com/sharkdp/fd) instead of the default find
-# command for listing path candidates.
-# - The first argument to the function ($1) is the base path to start traversal
-# - See the source code (completion.{bash,zsh}) for the details.
-_fzf_compgen_path() {
-  fd --hidden --exclude ".git" . "$1"
-}
-
-# Use fd to generate the list for directory completion
-_fzf_compgen_dir() {
-  fd --type d --hidden --exclude ".git" . "$1"
-}
-
 source /usr/share/fzf/key-bindings.zsh
 
-#export FZF_DEFAULT_COMMAND='fd --type f'
-
-#cowsay -f $(cowsay -l | tail -n +2 | xargs -n1 | shuf -n 1) $(/usr/bin/whatis $(ls /usr/share/man/man1 | shuf -n 1 | cut -d. -f1) 2>/dev/null)
+# rg bash_completion
+[ -f "$DOTFILES/bin/ripgrep/complete/rg.bash" ] && \. "$DOTFILES/bin/ripgrep/complete/rg.bash"
 
 eval "$(zoxide init zsh)"
-alias cd=z
+
