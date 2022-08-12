@@ -4,3 +4,5 @@ core/usbutils
 community/libnewt
 extra/wget
 extra/git
+extra/numactl
+extra/hwloc

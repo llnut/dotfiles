@@ -2,7 +2,7 @@ border_width = 2
 margin = 0
 default_border_color = "#32302f"
 floating_border_color = "#32302f"
-focused_border_color = "#d65d0e"
+focused_border_color = "#698B22"
 
 [[gutter]]
 side = "Top"
