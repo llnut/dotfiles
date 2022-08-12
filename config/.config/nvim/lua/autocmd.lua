@@ -24,11 +24,11 @@ vim.api.nvim_create_autocmd("BufRead",
   command = "setlocal filetype=markdown",
 })
 
--- Get the 2-space YAML,yml,lua as the default when hit carriage return after the colon
+-- Get the 2-space as the default when hit carriage return after the colon
 vim.api.nvim_create_autocmd("FileType", 
 {
   group = 'BufFile',
-  pattern = "yaml\\|yml\\|lua",
+  pattern = "yaml\\|yml\\|lua\\|cmake",
   command = "setlocal ts=2 sts=2 sw=2 expandtab",
 })
 
