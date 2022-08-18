@@ -38,24 +38,27 @@ function wrap_decompress() {
     if [ "$extension_name" == "gz" ]; then
         archive_format=`echo $2 | awk -F '.' '{print $(NF -1)}'`
         if [ "$archive_format" == "tar" ]; then
-            content=(`tar tf $2`)
-            decompress $1 $2 "${content[*]}" "tar zxf $2 -C $1" "tar zxf $2"
+            content=`tar tf $2`
+            decompress $1 $2 "$content" "tar zxf $2 -C $1" "tar zxf $2"
         else
             mkdir $1 && mv $2 $1
             pushd $1 && gzip -d $2 && popd
         fi
     elif [ "$extension_name" == "tgz" ]; then
-        content=(`tar tf $2`)
-        decompress $1 $2 "${content[*]}" "tar zxf $2 -C $1" "tar zxf $2"
+        content=`tar tf $2`
+        decompress $1 $2 "$content" "tar zxf $2 -C $1" "tar zxf $2"
     elif [ "$extension_name" == "tar" ]; then
-        content=(`tar tf $2`)
-        decompress $1 $2 "${content[*]}" "tar xf $2 -C $1" "tar xf $2"
+        content=`tar tf $2`
+        decompress $1 $2 "$content" "tar xf $2 -C $1" "tar xf $2"
     elif [ "$extension_name" == "bz2" ]; then
-        content=(`tar tf $2`)
-        decompress $1 $2 "${content[*]}" "tar jxf $2 -C $1" "tar jxf $2"
+        content=`tar tf $2`
+        decompress $1 $2 "$content" "tar jxf $2 -C $1" "tar jxf $2"
+    elif [ "$extension_name" == "zst" ]; then
+        content=`tar tf $2`
+        decompress $1 $2 "$content" "tar -I zstd -xf $2 -C $1" "tar -I zstd -xf $2"
     elif [ "$extension_name" == "zip" ] || [ "$extension_name" == "vsix" ]; then
-        content=(`zipinfo -1 $2`)
-        decompress $1 $2 "${content[*]}" "unzip $2 -d $1" "unzip $2"
+        content=`zipinfo -1 $2`
+        decompress $1 $2 "$content" "unzip $2 -d $1" "unzip $2"
     fi
 }
 
@@ -72,8 +75,9 @@ function decompress() {
 }
 
 function check_wrapped() {
-    root_dir_num=`root_dir "$@"| awk -F ' ' '{print NF}'`
-    if [ "$root_dir_num" == 1 ]; then
+    root_file_num=`root_file "$@" | wc -l`
+    root_dir_num=`root_dir "$@" | wc -l`
+    if [ "$root_file_num" == 0 ] && [ $root_dir_num == 1 ]; then
         echo 1
     else
         echo 0
@@ -82,6 +86,10 @@ function check_wrapped() {
 
 function root_dir() {
     echo "$@" | awk -F '/' '{if($1!="." && NF>1) print $1}' | uniq
+}
+
+function root_file() {
+    echo "$@" | awk -F '/' '{if($1!="." && NF==1) print $1}'
 }
 
 function leaf_dir() {
