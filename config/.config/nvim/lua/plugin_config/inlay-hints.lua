@@ -1,25 +1,18 @@
 vim.cmd([[:highlight inlayHint ctermfg=DarkGreen guifg=SeaGreen]])
 
-local M = {}
-local config = {
+local M = {
+  enabled = nil,
+  inlay_hints = setmetatable({ cache = {}, enabled = false }, { __index = M }),
+  namespace = vim.api.nvim_create_namespace("textDocument/inlayHints"),
+}
 
+local config = {
   -- Only show inlay hints for the current line
   only_current_line = false,
-
-  -- Event which triggers a refersh of the inlay hints.
-  -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
-  -- not that this may cause higher CPU usage.
-  -- This option is only respected when only_current_line and
-  -- autoSetHints both are true.
-  only_current_line_autocmd = "CursorHold",
 
   -- whether to show parameter hints with the inlay hints or not
   -- default: true
   show_parameter_hints = true,
-
-  -- whether to show variable name before type hints with the inlay hints or not
-  -- default: false
-  show_variable_name = false,
 
   -- prefix for parameter hints
   -- default: "<-"
@@ -45,36 +38,103 @@ local config = {
   highlight = "inlayHint",
 }
 
--- Update inlay hints when opening a new buffer and when writing a buffer to a
--- file
--- opts is a string representation of the table of options
-function M.setup_autocmd()
-  local events = "BufEnter,BufWinEnter,TabEnter,BufWritePost"
-  if config.only_current_line then
-    events = string.format(
-      "%s,%s",
-      events,
-      config.only_current_line_autocmd
-    )
-  end
-
-  vim.api.nvim_create_autocmd(events, 
-  {
-    pattern = "*.rs",
-    command = "lua require('plugin_config.rust-inlay-hints').set_inlay_hints()",
-  })
+local function clear_ns(bufnr) -- clear namespace which clears the virtual text as well
+  vim.api.nvim_buf_clear_namespace(bufnr, M.namespace, 0, -1)
 end
 
-local function get_params()
-  local params = vim.lsp.util.make_given_range_params()
-  params["range"]["start"]["line"] = 0
-  params["range"]["end"]["line"] = vim.api.nvim_buf_line_count(0) - 1
+-- Disable hints and clear all cached buffers
+function M.disable()
+  M.inlay_hints.disable = false
+  M.disable_cache_autocmd()
+
+  for k, _ in pairs(M.inlay_hints.cache) do
+    if vim.api.nvim_buf_is_valid(k) then
+      clear_ns(k)
+    end
+  end
+end
+
+local function set_all()
+  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+    M.cache_render(bufnr)
+  end
+end
+
+-- Enable auto hints and set hints for the current buffer
+function M.enable()
+  M.enable_cache_autocmd()
+  set_all()
+end
+
+-- Set inlay hints only for the current buffer
+function M.set()
+  M.cache_render(0)
+end
+
+-- Clear hints only for the current buffer
+function M.unset()
+  clear_ns(0)
+end
+
+function M.enable_cache_autocmd()
+  local opts = config
+  vim.cmd(string.format(
+    [[
+        augroup InlayHintsCache
+        autocmd BufWritePost,BufReadPost,BufEnter,BufWinEnter,TabEnter,TextChanged,TextChangedI *.rs :lua require('plugin_config.inlay-hints').cache_render()
+        %s
+        augroup END
+    ]],
+    opts.only_current_line
+    and "autocmd CursorMoved,CursorMovedI *.rs :lua require('plugin_config.inlay-hints').render()"
+    or ""
+  ))
+end
+
+function M.disable_cache_autocmd()
+  vim.cmd(
+    [[
+    augroup InlayHintsCache
+    autocmd!
+    augroup END
+  ]],
+    false
+  )
+end
+
+local function get_params(client, bufnr)
+  local params = {
+    textDocument = vim.lsp.util.make_text_document_params(bufnr),
+    range = {
+      start = {
+        line = 0,
+        character = 0,
+      },
+      ["end"] = {
+        line = 0,
+        character = 0,
+      },
+    },
+  }
+
+  local line_count = vim.api.nvim_buf_line_count(bufnr) - 1
+  local last_line = vim.api.nvim_buf_get_lines(
+    bufnr,
+    line_count,
+    line_count + 1,
+    true
+  )
+
+  params["range"]["end"]["line"] = line_count
+  params["range"]["end"]["character"] = vim.lsp.util.character_offset(
+    bufnr,
+    line_count,
+    #last_line[1],
+    client.offset_encoding
+  )
+
   return params
 end
-
-local namespace = vim.api.nvim_create_namespace("experimental/inlayHints")
--- whether the hints are enabled or not
-local enabled = nil
 
 -- parses the result into a easily parsable format
 -- example:
@@ -87,29 +147,10 @@ local enabled = nil
 --      kind = "TypeHint",
 --      label = "usize"
 --    } },
---  ["15"] = { {
---      kind = "ParameterHint",
---      label = "styles"
---    }, {
---      kind = "ParameterHint",
---      label = "len"
---    } },
---  ["7"] = { {
---      kind = "ChainingHint",
---      label = "Result<String, VarError>"
---    }, {
---      kind = "ParameterHint",
---      label = "key"
---    } },
---  ["8"] = { {
---      kind = "ParameterHint",
---      label = "op"
---    } }
 -- }
 --
-local function parseHints(result)
+local function parse_hints(result)
   local map = {}
-  local only_current_line = config.only_current_line
 
   if type(result) ~= "table" then
     return {}
@@ -119,7 +160,6 @@ local function parseHints(result)
     local line = value.position.line
     local label = value.label
     local kind = value.kind
-    local current_line = vim.api.nvim_win_get_cursor(0)[1]
 
     local function add_line()
       if map[line] ~= nil then
@@ -129,176 +169,135 @@ local function parseHints(result)
       end
     end
 
-    if only_current_line then
-      if line == tostring(current_line - 1) then
-        add_line()
-      end
-    else
-      add_line()
-    end
+    add_line()
   end
   return map
 end
 
-local function get_max_len(bufnr, parsed_data)
-  local max_len = -1
+function M.cache_render(bufnr)
+  local buffer = bufnr or vim.api.nvim_get_current_buf()
 
-  for key, _ in pairs(parsed_data) do
-    local line = tonumber(key)
-    local current_line = vim.api.nvim_buf_get_lines(
-      bufnr,
-      line,
-      line + 1,
-      false
-    )[1]
-    if current_line then
-      local current_line_len = string.len(current_line)
-      max_len = math.max(max_len, current_line_len)
+  for _, v in ipairs(vim.lsp.buf_get_clients(buffer)) do
+    if M.is_ra_server(v) then
+      v.request(
+        "textDocument/inlayHint",
+        get_params(v, buffer),
+        function(err, result, ctx)
+          if err then
+            return
+          end
+
+          M.inlay_hints.cache[ctx.bufnr] = parse_hints(result)
+
+          M.render(ctx.bufnr)
+        end,
+        buffer
+      )
     end
   end
-
-  return max_len
 end
 
-local function handler(err, result, ctx)
-  if err then
-    return
-  end
+local function render_line(line, line_hints, bufnr)
   local opts = config
-  local bufnr = ctx.bufnr
+  local virt_text = ""
 
-  if vim.api.nvim_get_current_buf() ~= bufnr then
+  local param_hints = {}
+  local other_hints = {}
+
+  if line > vim.api.nvim_buf_line_count(bufnr) then
     return
   end
 
-  -- clean it up at first
-  M.disable_inlay_hints()
+  -- segregate paramter hints and other hints
+  for _, hint in ipairs(line_hints) do
+    if hint.kind == 2 then
+      table.insert(param_hints, hint.label)
+    end
 
-  local parsed = parseHints(result)
-
-  for key, value in pairs(parsed) do
-    local virt_text = ""
-    local line = tonumber(key)
-
-    local current_line = vim.api.nvim_buf_get_lines(
-      bufnr,
-      line,
-      line + 1,
-      false
-    )[1]
-
-    if current_line then
-      local current_line_len = string.len(current_line)
-
-      local param_hints = {}
-      local other_hints = {}
-
-      -- segregate paramter hints and other hints
-      for _, value_inner in ipairs(value) do
-        if value_inner.kind == 2 then
-          table.insert(param_hints, value_inner.label)
-        end
-
-        if value_inner.kind == 1 then
-          table.insert(other_hints, value_inner)
-        end
-      end
-
-      -- show parameter hints inside brackets with commas and a thin arrow
-      if not vim.tbl_isempty(param_hints) and opts.show_parameter_hints then
-        virt_text = virt_text .. opts.parameter_hints_prefix .. "("
-        for i, value_inner_inner in ipairs(param_hints) do
-          virt_text = virt_text .. value_inner_inner:sub(1, -2)
-          if i ~= #param_hints then
-            virt_text = virt_text .. ", "
-          end
-        end
-        virt_text = virt_text .. ") "
-      end
-
-      -- show other hints with commas and a thicc arrow
-      if not vim.tbl_isempty(other_hints) then
-        virt_text = virt_text .. opts.other_hints_prefix
-        for i, value_inner_inner in ipairs(other_hints) do
-          if value_inner_inner.kind == 2 and opts.show_variable_name then
-            local char_start = value_inner_inner.range.start.character
-            local char_end = value_inner_inner.range["end"].character
-            local variable_name = string.sub(
-              current_line,
-              char_start + 1,
-              char_end
-            )
-            virt_text = virt_text
-              .. variable_name
-              .. ": "
-              .. value_inner_inner.label
-          else
-            if string.sub(value_inner_inner.label, 1, 2) == ": " then
-              virt_text = virt_text .. value_inner_inner.label:sub(3)
-            else
-              virt_text = virt_text .. value_inner_inner.label
-            end
-          end
-          if i ~= #other_hints then
-            virt_text = virt_text .. ", "
-          end
-        end
-      end
-
-      if config.right_align then
-        virt_text = virt_text
-          .. string.rep(
-            " ",
-            config.right_align_padding
-          )
-      end
-
-      if config.max_len_align then
-        local max_len = get_max_len(bufnr, parsed)
-        virt_text = string.rep(
-          " ",
-          max_len
-            - current_line_len
-            + config.max_len_align_padding
-        ) .. virt_text
-      end
-
-      -- set the virtual text if it is not empty
-      if virt_text ~= "" then
-        vim.api.nvim_buf_set_extmark(bufnr, namespace, line, 0, {
-          virt_text_pos = config.right_align
-              and "right_align"
-            or "eol",
-          virt_text = {
-            { virt_text, config.highlight },
-          },
-          hl_mode = "combine",
-        })
-      end
-
-      -- update state
-      enabled = true
+    if hint.kind == 1 then
+      table.insert(other_hints, hint)
     end
   end
+
+  -- show parameter hints inside brackets with commas and a thin arrow
+  if not vim.tbl_isempty(param_hints) and opts.show_parameter_hints then
+    virt_text = virt_text .. opts.parameter_hints_prefix .. "("
+    for i, p_hint in ipairs(param_hints) do
+      virt_text = virt_text .. p_hint:sub(1, -2)
+      if i ~= #param_hints then
+        virt_text = virt_text .. ", "
+      end
+    end
+    virt_text = virt_text .. ") "
+  end
+
+  -- show other hints with commas and a thicc arrow
+  if not vim.tbl_isempty(other_hints) then
+    virt_text = virt_text .. opts.other_hints_prefix
+    for i, o_hint in ipairs(other_hints) do
+      if string.sub(o_hint.label, 1, 2) == ": " then
+        virt_text = virt_text .. o_hint.label:sub(3)
+      else
+        virt_text = virt_text .. o_hint.label
+      end
+      if i ~= #other_hints then
+        virt_text = virt_text .. ", "
+      end
+    end
+  end
+
+  -- set the virtual text if it is not empty
+  if virt_text ~= "" then
+    ---@diagnostic disable-next-line: param-type-mismatch
+    vim.api.nvim_buf_set_extmark(bufnr, M.namespace, line, 0, {
+      virt_text_pos = opts.right_align and "right_align" or "eol",
+      virt_text = {
+        { virt_text, opts.highlight },
+      },
+      hl_mode = "combine",
+    })
+  end
+end
+
+function M.render(bufnr)
+  local opts = config
+  local buffer = bufnr or vim.api.nvim_get_current_buf()
+
+  local hints = M.inlay_hints.cache[buffer]
+
+  if hints == nil then
+    return
+  end
+
+  clear_ns(buffer)
+
+  if opts.only_current_line then
+    local curr_line = vim.api.nvim_win_get_cursor(0)[1] - 1
+    local line_hints = hints[curr_line]
+    if line_hints then
+      render_line(curr_line, line_hints, buffer)
+    end
+  else
+    for line, line_hints in pairs(hints) do
+      render_line(line, line_hints, buffer)
+    end
+  end
+end
+
+function M.is_ra_server(client)
+  local name = client.name
+  return client.name == "rust_analyzer"
+    or client.name == "rust_analyzer-standalone"
 end
 
 function M.toggle_inlay_hints()
-  if enabled then
-    M.disable_inlay_hints()
+  if M.enabled then
+    M.disable()
   else
-    M.set_inlay_hints()
+    M.enable()
   end
-  enabled = not enabled
-end
-
-function M.disable_inlay_hints()
-  -- clear namespace which clears the virtual text as well
-  vim.api.nvim_buf_clear_namespace(0, namespace, 0, -1)
-end
-
--- Sends the request to rust-analyzer to get the inlay hints and handle them
-function M.set_inlay_hints()
-  require("function").request(0, "textDocument/inlayHint", get_params(), handler)
+  M.enabled = not M.enabled
+  print(M.enabled)
 end
 
 return M
