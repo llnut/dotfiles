@@ -6,3 +6,4 @@ extra/wget
 extra/git
 extra/numactl
 extra/hwloc
+extra/ntp
