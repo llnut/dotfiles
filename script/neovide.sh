@@ -8,7 +8,7 @@ source $SCRIPT_PATH/util.sh
 SAVE_DIR="neovide"
 SAVE_FILE_PREFIX="$SAVE_DIR"
 SAVE_FILE_SUFFIX=".tar.gz"
-BIN_PATH="$SAVE_PATH/$SAVE_DIR/target/release"
+BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 BIN=("neovide")
 
 backup $SAVE_PATH/$SAVE_DIR

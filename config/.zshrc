@@ -111,7 +111,7 @@ for config ($DOTFILES/config/zsh/*.zsh) source $config
 #fi
 
 #export GOROOT=/usr/bin/go
-export GO111MODULE=on
+#export GO111MODULE=on
 #export GOPATH=/pubdisk/code/go/
 
 function proxy_on() {
@@ -172,9 +172,7 @@ fpath=($DOTFILES/config/oh-my-zsh-plugins/functions/ $fpath)
 autoload -Uz compinit
 compinit
 
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+eval "$(fnm env --use-on-cd)"
 
 source /usr/share/fzf/key-bindings.zsh
 
