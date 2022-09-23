@@ -47,20 +47,6 @@ keymap("n", "<S-q>", ":Bclose<CR>", { noremap = true, silent = true })
 keymap("n", "<leader>q", "<CMD>lua require('function').buf_close_it()<CR>", { noremap = true, silent = false })
 keymap("n", "<leader>Q", ":%bdelete<cr>", { noremap = true, silent = false })
 
---Goto buffer in position...
-keymap("n", "<A-1>", ":BufferGoto 1<CR>", { noremap = true, silent = true })
-keymap("n", "<A-2>", ":BufferGoto 2<CR>", { noremap = true, silent = true })
-keymap("n", "<A-3>", ":BufferGoto 3<CR>", { noremap = true, silent = true })
-keymap("n", "<A-4>", ":BufferGoto 4<CR>", { noremap = true, silent = true })
-keymap("n", "<A-5>", ":BufferGoto 5<CR>", { noremap = true, silent = true })
-keymap("n", "<A-6>", ":BufferGoto 6<CR>", { noremap = true, silent = true })
-keymap("n", "<A-7>", ":BufferGoto 7<CR>", { noremap = true, silent = true })
-keymap("n", "<A-8>", ":BufferGoto 8<CR>", { noremap = true, silent = true })
-keymap("n", "<A-9>", ":BufferGoto 9<CR>", { noremap = true, silent = true })
-
---Pin/unpin buffer
---keymap("n", "<A-p>", ":BufferPin<CR>", { noremap = true, silent = true })
-
 --Switch tabs
 keymap("n", "[t", ":tabprevious<CR>", { noremap = true, silent = true })
 keymap("n", "]t", ":tabprevious<CR>", { noremap = true, silent = true })
@@ -130,8 +116,6 @@ keymap("n", "<leader>-", ":exe \"resize \" . (winheight(0) * 2/3)<CR>", { norema
 -- Undotree
 keymap("n", "<leader>u", ":UndotreeToggle<cr>", { noremap = true, silent = false })
 
--- com Wdt windo diffthis
--- com Wdo diffoff!
 keymap("n", "<leader>scb", ":windo set scrollbind!<CR>", { noremap = true, silent = true })
 keymap("n", "<C-6>", "<C-^>", { noremap = true, silent = false })
 
