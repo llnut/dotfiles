@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Installing ripgrep..."
+echo "Installing himalaya..."
 
 SCRIPT_PATH="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
 source $SCRIPT_PATH/util.sh
