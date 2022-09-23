@@ -34,17 +34,17 @@ keymap("n", "<leader>tn", ":tabnew<CR>", { noremap = true, silent = false })
 -- Close Location panel
 keymap("n", "<leader>ce", ":lclose<CR>", { noremap = true, silent = false })
 -- Switch buffers
-keymap("n", "[b", ":BufferPrevious<CR>", { noremap = true, silent = true })
-keymap("n", "]b", ":BufferNext<CR>", { noremap = true, silent = true })
-keymap("n", "[B", ":BufferGoto 1<CR>", { noremap = true, silent = true })
-keymap("n", "]B", ":BufferLast<CR>", { noremap = true, silent = true })
+keymap("n", "[b", ":bprevious<CR>", { noremap = true, silent = true })
+keymap("n", "]b", ":bnext<CR>", { noremap = true, silent = true })
+keymap("n", "[B", ":bfirst 1<CR>", { noremap = true, silent = true })
+keymap("n", "]B", ":blast<CR>", { noremap = true, silent = true })
 
 -- Buffers
-keymap("n", "<Tab>", ":BufferNext<CR>", { noremap = true, silent = true })
-keymap("n", "<S-Tab>", ":BufferPrevious<CR>", { noremap = true, silent = true })
-keymap("n", "<S-q>", ":BufferClose<CR>", { noremap = true, silent = true })
-keymap("n", "<leader>q", ":BufferClose<cr>", { noremap = true, silent = false })
---keymap("n", "<leader>q", "<CMD>lua require('function').buf_close_it()<CR>", { noremap = true, silent = false })
+keymap("n", "<Tab>", ":bnext<CR>", { noremap = true, silent = true })
+keymap("n", "<S-Tab>", ":bprevious<CR>", { noremap = true, silent = true })
+keymap("n", "<S-q>", ":Bclose<CR>", { noremap = true, silent = true })
+--keymap("n", "<leader>q", ":Bclose<cr>", { noremap = true, silent = false })
+keymap("n", "<leader>q", "<CMD>lua require('function').buf_close_it()<CR>", { noremap = true, silent = false })
 keymap("n", "<leader>Q", ":%bdelete<cr>", { noremap = true, silent = false })
 
 --Goto buffer in position...
@@ -59,7 +59,7 @@ keymap("n", "<A-8>", ":BufferGoto 8<CR>", { noremap = true, silent = true })
 keymap("n", "<A-9>", ":BufferGoto 9<CR>", { noremap = true, silent = true })
 
 --Pin/unpin buffer
-keymap("n", "<A-p>", ":BufferPin<CR>", { noremap = true, silent = true })
+--keymap("n", "<A-p>", ":BufferPin<CR>", { noremap = true, silent = true })
 
 --Switch tabs
 keymap("n", "[t", ":tabprevious<CR>", { noremap = true, silent = true })

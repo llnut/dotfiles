@@ -92,10 +92,16 @@ local function init()
   use { 'mg979/vim-visual-multi', branch = 'master' }
   use { 'mbbill/undotree' }
   use {
-    'romgrk/barbar.nvim',
+    'akinsho/bufferline.nvim',
+    tag = "v2.*",
     requires = {'kyazdani42/nvim-web-devicons'},
-    config = "require('plugin_config.barbar')"
+    config = "require('plugin_config.bufferline')"
   }
+  -- use {
+  --   'romgrk/barbar.nvim',
+  --   requires = {'kyazdani42/nvim-web-devicons'},
+  --   config = "require('plugin_config.barbar')"
+  -- }
   use { 'lambdalisue/suda.vim' }
   use { 
     'mfussenegger/nvim-dap',
