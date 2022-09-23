@@ -40,9 +40,6 @@ keymap("n", "[B", ":bfirst 1<CR>", { noremap = true, silent = true })
 keymap("n", "]B", ":blast<CR>", { noremap = true, silent = true })
 
 -- Buffers
-keymap("n", "<Tab>", ":bnext<CR>", { noremap = true, silent = true })
-keymap("n", "<S-Tab>", ":bprevious<CR>", { noremap = true, silent = true })
-keymap("n", "<S-q>", ":Bclose<CR>", { noremap = true, silent = true })
 --keymap("n", "<leader>q", ":Bclose<cr>", { noremap = true, silent = false })
 keymap("n", "<leader>q", "<CMD>lua require('function').buf_close_it()<CR>", { noremap = true, silent = false })
 keymap("n", "<leader>Q", ":%bdelete<cr>", { noremap = true, silent = false })
