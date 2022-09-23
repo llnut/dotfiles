@@ -97,11 +97,6 @@ local function init()
     requires = {'kyazdani42/nvim-web-devicons'},
     config = "require('plugin_config.bufferline')"
   }
-  -- use {
-  --   'romgrk/barbar.nvim',
-  --   requires = {'kyazdani42/nvim-web-devicons'},
-  --   config = "require('plugin_config.barbar')"
-  -- }
   use { 'lambdalisue/suda.vim' }
   use { 
     'mfussenegger/nvim-dap',
