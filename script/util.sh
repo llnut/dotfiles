@@ -50,6 +50,9 @@ function wrap_decompress() {
     elif [ "$extension_name" == "tar" ]; then
         content=`tar tf $2`
         decompress $1 $2 "$content" "tar xf $2 -C $1" "tar xf $2"
+    elif [ "$extension_name" == "xz" ]; then
+        content=`tar tf $2`
+        decompress $1 $2 "$content" "tar xf $2 -C $1" "tar xf $2"
     elif [ "$extension_name" == "bz2" ]; then
         content=`tar tf $2`
         decompress $1 $2 "$content" "tar jxf $2 -C $1" "tar jxf $2"
