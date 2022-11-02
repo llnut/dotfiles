@@ -1,19 +1,18 @@
-name = "jcsora"
+display-name = "jcsora"
 downloads-dir = "~/.config/himalaya/downloads"
-signature = """
---
-Regards,
-"""
+signature = "Regards,"
 
-[outlook]
+[gmail]
 default = true
 email = "jcsora@outlook.com"
 
+backend = "imap" # imap, maildir or notmuch
 imap-host = "outlook.office365.com"
 imap-port = 993
 imap-login = "jcsora@outlook.com"
 imap-passwd-cmd = "~/.local/bin/mail-pwd"
 
+sender = "smtp" # smtp or sendmail
 smtp-host = "smtp.office365.com"
 smtp-port = 587
 smtp-login = "jcsora@outlook.com"

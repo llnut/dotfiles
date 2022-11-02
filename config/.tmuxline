@@ -48,7 +48,7 @@ set-option -g status-right-length "80"
 set-window-option -g window-status-separator ""
 
 set-option -g status-left "#[bg=$darkgray,fg=$gray] #S "
-set-option -g status-right "#[fg=$gray,bg=$darkgray] C:#{cpu_percentage} R:#{ram_percentage} #[fg=$gray,bg=$darkgray] %Y-%m-%d %H:%M #[fg=$gray, bg=$lightgray] #h "
+set-option -g status-right "#[fg=$gray,bg=$lightgray] C:#{cpu_percentage} R:#{ram_percentage} %m-%d %H:%M"
 
 set-window-option -g window-status-current-format "#[fg=$gray, bg=$lightgray] #I:#[fg=$gray, bg=$lightgray, bold] #W "
 set-window-option -g window-status-format "#[fg=$gray,bg=$darkgray] #I: #W "
