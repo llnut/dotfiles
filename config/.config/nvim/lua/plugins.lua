@@ -70,10 +70,11 @@ local function init()
   }
   use {'hrsh7th/cmp-nvim-lsp', after = 'nvim-cmp'}
   use {'hrsh7th/cmp-nvim-lua', after = 'cmp-nvim-lsp'}
-  use {'hrsh7th/cmp-buffer', after = 'cmp-nvim-lua'}
-  use {'hrsh7th/cmp-path', after = 'cmp-buffer'}
-  use {'hrsh7th/cmp-calc', after = 'cmp-path'}
-  use {'hrsh7th/cmp-cmdline', after = 'cmp-calc'}
+  use {'hrsh7th/cmp-buffer', after = 'cmp-nvim-lsp'}
+  use {'hrsh7th/cmp-path', after = 'cmp-nvim-lsp'}
+  use {'hrsh7th/cmp-calc', after = 'cmp-nvim-lsp'}
+  use {'hrsh7th/cmp-cmdline', after = 'cmp-nvim-lsp'}
+  use {'hrsh7th/cmp-nvim-lsp-document-symbol', after = 'cmp-nvim-lsp'}
   use {
     'saecki/crates.nvim',
     event = { "BufRead Cargo.toml" },
