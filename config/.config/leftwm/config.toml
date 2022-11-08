@@ -91,7 +91,7 @@ key = "f"
 [[keybind]]
 command = "ToggleFloating"
 value = ""
-modifier = ["modkey", "Ctrl"]
+modifier = ["modkey", "Control"]
 key = "t"
 
 [[keybind]]
