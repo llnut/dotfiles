@@ -38,7 +38,8 @@ local config = {
   highlight = "inlayHint",
 }
 
-local function clear_ns(bufnr) -- clear namespace which clears the virtual text as well
+local function clear_ns(bufnr)
+  -- clear namespace which clears the virtual text as well
   vim.api.nvim_buf_clear_namespace(bufnr, M.namespace, 0, -1)
 end
 
@@ -187,6 +188,11 @@ function M.cache_render(bufnr)
             return
           end
 
+          if not vim.api.nvim_buf_is_valid(ctx.bufnr) then
+            M.inlay_hints.cache[ctx.bufnr] = nil
+            return
+          end
+
           M.inlay_hints.cache[ctx.bufnr] = parse_hints(result)
 
           M.render(ctx.bufnr)
@@ -208,7 +214,7 @@ local function render_line(line, line_hints, bufnr)
     return
   end
 
-  -- segregate paramter hints and other hints
+  -- segregate parameter hints and other hints
   for _, hint in ipairs(line_hints) do
     if hint.kind == 2 then
       table.insert(param_hints, hint.label)
