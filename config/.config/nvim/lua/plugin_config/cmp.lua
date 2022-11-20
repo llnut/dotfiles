@@ -15,7 +15,7 @@ cmp.setup {
   mapping = {
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-e>'] = cmp.mapping.close(),
     ['<CR>'] = cmp.mapping.confirm {
@@ -23,15 +23,16 @@ cmp.setup {
       select = true
     }
   },
-  sources = {
+  sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'vsnip' },
-    { name = 'buffer' },
     { name = 'path' },
     { name = 'nvim_lua' },
     { name = 'calc' },
     { name = 'crates' },
-  },
+  }, {
+    { name = 'buffer' },
+  }),
   sorting = {
     priority_weight = 1.0,
     comparators = {
@@ -62,8 +63,8 @@ cmp.setup.filetype('gitcommit', {
   sources = cmp.config.sources({
     { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
   }, {
-    { name = 'buffer' },
-  })
+      { name = 'buffer' },
+    })
 })
 
 -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
@@ -72,8 +73,8 @@ cmp.setup.cmdline({'/', '?'}, {
   sources = cmp.config.sources({
     { name = 'nvim_lsp_document_symbol' }
   }, {
-    { name = 'buffer' }
-  })
+      { name = 'buffer' }
+    })
 })
 
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
@@ -82,7 +83,7 @@ cmp.setup.cmdline(':', {
   sources = cmp.config.sources({
     { name = 'path' }
   }, {
-    { name = 'cmdline' }
-  })
+      { name = 'cmdline' }
+    })
 })
 
