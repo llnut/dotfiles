@@ -1,9 +1,6 @@
-core/base-devel
-core/curl
 core/usbutils
 community/libnewt
-extra/wget
-extra/git
 extra/numactl
 extra/hwloc
 extra/ntp
+extra/alsa-utils
