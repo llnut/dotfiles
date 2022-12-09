@@ -1,4 +1,3 @@
-htop
 rofi
 alacritty
 jq
@@ -6,11 +5,5 @@ xclip
 fzf
 ranger
 perf
-containerd
-nerdctl
-cni-plugins
 buildkit
-iproute2
-bridge-utils
 slock
-inetutils

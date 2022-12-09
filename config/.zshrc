@@ -105,15 +105,6 @@ export ARCHFLAGS="-arch x86_64"
 # Source all .zsh files inside the zsh/ directory
 for config ($DOTFILES/config/zsh/*.zsh) source $config
 
-# Source autocomplete
-#if [ -d $HOME/.zsh-autocomplete ]; then
-#    for config ($HOME/.zsh-autocomplete/*.zsh) source $config
-#fi
-
-#export GOROOT=/usr/bin/go
-#export GO111MODULE=on
-#export GOPATH=/pubdisk/code/go/
-
 function proxy_on() {
     export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
 

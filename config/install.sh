@@ -15,11 +15,11 @@ function doIt() {
     lnbk $SCRIPT_DIR/.config/bottom $CONFIG/bottom
     lnbk $SCRIPT_DIR/.config/leftwm $CONFIG/leftwm
     lnbk $SCRIPT_DIR/.config/zellij $CONFIG/zellij
-    lnbk $SCRIPT_DIR/.config/eww $CONFIG/eww
     lnbk $SCRIPT_DIR/.tmux.conf $HOME/.tmux.conf
     lnbk $SCRIPT_DIR/.zshrc $HOME/.zshrc
     lnbk $SCRIPT_DIR/.gitconfig $HOME/.gitconfig
     lnbk $SCRIPT_DIR/.pam_environment $HOME/.pam_environment
+    lnbk $SCRIPT_DIR/.asoundrc $HOME/.asoundrc
     lnbk $SCRIPT_DIR/.cargo/config.toml $HOME/.cargo/config.toml
 
     mkdir -p $LOCAL/bin
