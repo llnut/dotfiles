@@ -32,8 +32,8 @@ local function init()
     config = "require('plugin_config.lsp')"
   }
   use {
-    'williamboman/nvim-lsp-installer',
-    config = "require('plugin_config.lsp-installer')"
+    'williamboman/mason.nvim',
+    config = "require('plugin_config.mason')"
   }
 
   use { 'nvim-lua/plenary.nvim' }
