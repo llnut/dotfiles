@@ -24,7 +24,6 @@ function doIt() {
 
     mkdir -p $LOCAL/bin
     cp -rf $SCRIPT_DIR/bin/* $LOCAL/bin
-    cp -rf $SCRIPT_DIR/oh-my-zsh-plugins/plugins/* $HOME/.oh-my-zsh/plugins
     mkdir -p $LOCAL/share/fonts
     cp -rf $SCRIPT_DIR/../etc/fonts/* $LOCAL/share/fonts && fc-cache -fv
     sudo cp -f $SCRIPT_DIR/paru/paru.conf /etc
