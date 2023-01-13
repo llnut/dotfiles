@@ -2,6 +2,10 @@
 registry = "https://github.com/rust-lang/crates.io-index"
 replace-with = "rsproxy"
 
+# 北京外国语大学
+[source.bfsu]
+registry = "https://mirrors.bfsu.edu.cn/git/crates.io-index.git"
+
 # 字节跳动
 [source.rsproxy]
 registry = "https://rsproxy.cn/crates.io-index"
@@ -30,21 +34,5 @@ registry = "https://code.aliyun.com/rustcc/crates.io-index.git"
 [net]
 git-fetch-with-cli = true
 
-
-# target
-# arch linux 安装 mingw-w64-gcc
-# rustup toolchain install stable-x86_64-pc-windows-gnu
-# rustup target add x86_64-pc-windows-gnu --toolchain=stable
-
-# rustup toolchain install stable-x86_64-pc-windows-msvc
-# rustup target add x86_64-pc-windows-msvc --toolchain=stable
-
-[target.x86_64-pc-windows-gnu]
-linker = "/usr/bin/x86_64-w64-mingw32-gcc"
-#ar = "/usr/x86_64-mingw32/bin/ar"
-ar = "/usr/bin/x86_64-w64-mingw32-gcc-ar"
-
-[target.x86_64-pc-windows-msvc]
-linker = "/usr/bin/x86_64-w64-mingw32-vcc"
-#ar = "/usr/x86_64-mingw32/bin/ar"
-ar = "/usr/bin/x86_64-w64-mingw32-gcc-ar"
+[build]
+rustc-wrapper = "~/.local/bin/sccache"

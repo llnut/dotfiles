@@ -29,7 +29,11 @@ function circulate_ln() {
     for v in $2
     do
         [ ! -x "$bin_dir/$v" ] && chmod +x $bin_dir/$v
-        ln -sf $bin_dir/$v $3/$(echo $v | awk -F '/' '{print $NF}')
+        if [ "$4" == "hard" ]; then
+            ln -f $bin_dir/$v $3/$(echo $v | awk -F '/' '{print $NF}')
+        else
+            ln -sf $bin_dir/$v $3/$(echo $v | awk -F '/' '{print $NF}')
+        fi
     done
 }
 
