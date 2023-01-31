@@ -13,12 +13,20 @@ BIN=("btm")
 
 LATEST_URL="https://github.com/ClementTsang/bottom/releases/download/nightly"
 REMOTE_FILE_PREFIX="bottom_x86_64-unknown-linux-gnu"
-download "$SAVE_PATH/$SAVE_FILE_PREFIX$SAVE_FILE_SUFFIX" "$LATEST_URL/$REMOTE_FILE_PREFIX$SAVE_FILE_SUFFIX"
 
 backup $SAVE_PATH/$SAVE_DIR
+cd $SAVE_PATH
 
-cd $SAVE_PATH && wrap_decompress $SAVE_DIR $SAVE_FILE_PREFIX$SAVE_FILE_SUFFIX
+if [ -n "$SAVE_FILE_SUFFIX" ]; then
+    download "$SAVE_PATH/$SAVE_FILE_PREFIX$SAVE_FILE_SUFFIX" "$LATEST_URL/$REMOTE_FILE_PREFIX$SAVE_FILE_SUFFIX"
+    wrap_decompress $SAVE_DIR $SAVE_FILE_PREFIX$SAVE_FILE_SUFFIX
+    rm -f $SAVE_PATH/$SAVE_FILE_PREFIX$SAVE_FILE_SUFFIX
+else
+    mkdir -p $SAVE_PATH/$SAVE_DIR
+    download "$SAVE_PATH/$SAVE_DIR/$SAVE_FILE_PREFIX" "$LATEST_URL/$REMOTE_FILE_PREFIX"
+fi
+
 circulate_ln "$BIN_PATH" "${BIN[*]}" "$LOCAL_BIN_PATH"
-rm -f $SAVE_PATH/$SAVE_FILE_PREFIX$SAVE_FILE_SUFFIX
+touch $SAVE_DIR/.$LATEST_TAG
 echo "Installation successful."
 
