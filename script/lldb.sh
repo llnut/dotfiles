@@ -1,13 +1,15 @@
 #!/bin/bash
 
-echo "Installing vscode-lldb..."
+APP_NAME="codelldb"
+echo "Installing $APP_NAME..."
 
 SCRIPT_PATH="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
 source $SCRIPT_PATH/util.sh
 
-SAVE_DIR="codelldb"
+SAVE_DIR="$APP_NAME"
 SAVE_FILE_PREFIX="$SAVE_DIR"
 SAVE_FILE_SUFFIX=".vsix"
+SAVE_VERSION=1
 BIN_PATH="$SAVE_PATH/$SAVE_DIR/extension/adapter"
 BIN=("codelldb")
 
@@ -30,6 +32,6 @@ else
 fi
 
 circulate_ln "$BIN_PATH" "${BIN[*]}" "$LOCAL_BIN_PATH"
-touch $SAVE_DIR/.$LATEST_TAG
+[ $SAVE_VERSION -eq 1 ] && touch $SAVE_DIR/.$LATEST_TAG
 echo "Installation successful."
 
