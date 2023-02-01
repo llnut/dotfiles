@@ -1,13 +1,15 @@
 #!/bin/bash
 
-echo "Installing bottom-nightly..."
+APP_NAME="bottom-nightly"
+echo "Installing ${APP_NAME}..."
 
 SCRIPT_PATH="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
 source $SCRIPT_PATH/util.sh
 
-SAVE_DIR="bottom"
+SAVE_DIR="$APP_NAME"
 SAVE_FILE_PREFIX="$SAVE_DIR"
 SAVE_FILE_SUFFIX=".tar.gz"
+SAVE_VERSION=1
 BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 BIN=("btm")
 
@@ -27,6 +29,6 @@ else
 fi
 
 circulate_ln "$BIN_PATH" "${BIN[*]}" "$LOCAL_BIN_PATH"
-touch $SAVE_DIR/.$LATEST_TAG
+[ $SAVE_VERSION -eq 1 ] && touch $SAVE_DIR/.$LATEST_TAG
 echo "Installation successful."
 

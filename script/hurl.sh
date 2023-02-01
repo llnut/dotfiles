@@ -1,23 +1,22 @@
 #!/bin/bash
 
-APP_NAME="paru"
-echo "Installing $APP_NAME..."
+APP_NAME="hurl"
+echo "Installing ${APP_NAME}..."
 
 SCRIPT_PATH="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
 source $SCRIPT_PATH/util.sh
 
 SAVE_DIR="$APP_NAME"
 SAVE_FILE_PREFIX="$SAVE_DIR"
-SAVE_FILE_SUFFIX=".tar.zst"
-SAVE_VERSION=1
+SAVE_FILE_SUFFIX=".tar.gz"
 BIN_PATH="$SAVE_PATH/$SAVE_DIR"
-BIN=("paru")
+BIN=("hurl" "hurlfmt")
 
-LATEST_URL="https://github.com/Morganamilo/paru/releases/latest"
+LATEST_URL="https://github.com/Orange-OpenSource/hurl/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
 [ -f "$SAVE_PATH/$SAVE_DIR/.$LATEST_TAG" ] && echo "Installation successful." && exit 0
-REMOTE_FILE_PREFIX="paru-${LATEST_TAG}-x86_64"
+REMOTE_FILE_PREFIX="hurl-${LATEST_TAG}-x86_64-linux"
 
 backup $SAVE_PATH/$SAVE_DIR
 cd $SAVE_PATH
@@ -32,6 +31,6 @@ else
 fi
 
 circulate_ln "$BIN_PATH" "${BIN[*]}" "$LOCAL_BIN_PATH"
-[ $SAVE_VERSION -eq 1 ] && touch $SAVE_DIR/.$LATEST_TAG
+touch $SAVE_DIR/.$LATEST_TAG
 echo "Installation successful."
 
