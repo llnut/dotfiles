@@ -1,22 +1,117 @@
-# Don't print a new line at the start of the prompt
+# ~/.config/starship.toml
+
+# Use custom format
+format = '''
+[┌───────────────────>](bold green)
+[│](bold green)$directory$rust$package
+[└─>](bold green) '''
+
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
+
+# Disable the blank line at the start of the prompt
 add_newline = false
 
-# Prompt
-format = """
-$directory$git_branch$node$rust
-[](bold green) """
+# Set 'foo' as custom color palette
+palette = 'foo'
 
-# Custom character prompt
-# [character]                           
-# success_symbol = "[➜ ](bold green)"
-# error_symbol = "[➜ ](bold red)"
+# Define custom colors
+[palettes.foo]
+# Overwrite existing color
+blue = '21'
+# Define new color
+mustard = '#af8700'
 
-# Modules
-[cmd_duration]
-disabled = true
+
+[c]
+format = 'via [$name $version]($style)'
+
+[rust]
+format = 'via [⚙️ $version](red bold)'
+
+[lua]
+format = 'via [🌕 $version](bold blue) '
+
+[docker_context]
+format = 'via [🐋 $context](blue bold)'
+
+[git_branch]
+symbol = '🌱 '
+truncation_length = 4
+truncation_symbol = ''
+ignore_branches = ['master', 'main']
+
+[git_commit]
+commit_hash_length = 4
+tag_symbol = '🔖 '
+
+[git_state]
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
+cherry_pick = '[🍒 PICKING](bold red)'
+
+[git_status]
+conflicted = '🏳'
+ahead = '🏎💨'
+behind = '😰'
+diverged = '😵'
+up_to_date = '✓'
+untracked = '🤷'
+stashed = '📦'
+modified = '📝'
+staged = '[++\($count\)](green)'
+renamed = '👅'
+deleted = '🗑'
 
 [directory]
-format = "[$path]($style) "
+truncation_length = 8
+truncation_symbol = '…/'
+
+[memory_usage]
+disabled = false
+threshold = -1
+symbol = ' '
+style = 'bold dimmed green'
+
+[shell]
+fish_indicator = ''
+powershell_indicator = '_'
+unknown_indicator = 'mystery shell'
+style = 'cyan bold'
+disabled = false
+
+[status]
+style = 'bg:blue'
+symbol = '🔴 '
+success_symbol = '🟢 SUCCESS'
+format = '[\[$symbol$common_meaning$signal_name$maybe_int\]]($style) '
+map_symbol = true
+disabled = false
 
 [time]
+disabled = false
+format = '🕙[\[ $time \]]($style) '
+time_format = '%T'
+utc_time_offset = '-5'
+time_range = '10:00:00-14:00:00'
+
+[username]
+style_user = 'white bold'
+style_root = 'black bold'
+format = 'user: [$user]($style) '
+disabled = false
+show_always = true
+
+
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+add_newline = true
+
+# Replace the '❯' symbol in the prompt with '➜'
+[character] # The name of the module we are configuring is 'character'
+success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+
+# Disable the package module, hiding it from the prompt completely
+[package]
 disabled = true
