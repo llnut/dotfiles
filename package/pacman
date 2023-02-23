@@ -4,3 +4,4 @@ extra/numactl
 extra/hwloc
 extra/ntp
 extra/alsa-utils
+extra/strace
