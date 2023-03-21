@@ -28,10 +28,6 @@ local function init()
   use {'lewis6991/impatient.nvim'}
 
   use {
-    'neovim/nvim-lspconfig',
-    config = "require('plugin_config.lsp')"
-  }
-  use {
     'williamboman/mason.nvim',
     config = "require('plugin_config.mason')"
   }
@@ -75,16 +71,19 @@ local function init()
   use {'hrsh7th/cmp-calc', after = 'cmp-nvim-lsp'}
   use {'hrsh7th/cmp-cmdline', after = 'cmp-nvim-lsp'}
   use {'hrsh7th/cmp-nvim-lsp-document-symbol', after = 'cmp-nvim-lsp'}
+  use {'hrsh7th/cmp-vsnip', after = 'cmp-nvim-lsp'}
+  use {'hrsh7th/vim-vsnip', after = 'cmp-nvim-lsp'}
+  use {
+    'neovim/nvim-lspconfig',
+    config = "require('plugin_config.lsp')",
+    after = 'cmp-nvim-lsp'
+  }
   use {
     'saecki/crates.nvim',
     event = { "BufRead Cargo.toml" },
-    requires = { { 'nvim-lua/plenary.nvim' } },
+    requires = { 'nvim-lua/plenary.nvim' },
     config = "require('plugin_config.crates')"
   }
-
-  use {'hrsh7th/cmp-vsnip', after = 'cmp-nvim-lsp'}
-  use {'hrsh7th/vim-vsnip', after = 'cmp-nvim-lsp'}
-
   use {
     'nvim-lualine/lualine.nvim',
     config = "require('plugin_config.lualine')"
