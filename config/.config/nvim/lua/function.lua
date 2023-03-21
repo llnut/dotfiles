@@ -70,7 +70,7 @@ M.show_documentation = function()
     vim.cmd('h '..vim.fn.expand('<cword>'))
   elseif vim.tbl_contains({ 'man' }, filetype) then
     vim.cmd('Man '..vim.fn.expand('<cword>'))
-  elseif vim.fn.expand('%:t') == 'Cargo.toml' then
+  elseif vim.fn.expand('%:t') == 'Cargo.toml' and require('crates').popup_available() then
     require('crates').show_popup()
   else
     vim.lsp.buf.hover()
