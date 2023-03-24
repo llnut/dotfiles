@@ -25,14 +25,16 @@ function download() {
 
 function circulate_ln() {
     bin_dir="$( cd $1 >/dev/null 2>&1 && pwd )"
-    [ ! -d "$3" ] && mkdir -p $3
-    for v in $2
+    bin=($2)
+    bin_link=($3)
+    [ ! -d "$4" ] && mkdir -p $4
+    for ((i=0; i<${#bin[*]}; i++))
     do
         [ ! -x "$bin_dir/$v" ] && chmod +x $bin_dir/$v
-        if [ "$4" == "hard" ]; then
-            ln -f $bin_dir/$v $3/$(echo $v | awk -F '/' '{print $NF}')
+        if [ "$5" == "hard" ]; then
+            ln -f $bin_dir/${bin[i]} $4/$(echo ${bin_link[i]} | awk -F '/' '{print $NF}')
         else
-            ln -sf $bin_dir/$v $3/$(echo $v | awk -F '/' '{print $NF}')
+            ln -sf $bin_dir/${bin[i]} $4/$(echo ${bin_link[i]} | awk -F '/' '{print $NF}')
         fi
     done
 }
