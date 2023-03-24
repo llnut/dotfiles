@@ -11,13 +11,15 @@ SAVE_FILE_PREFIX="$SAVE_DIR"
 SAVE_FILE_SUFFIX=".vsix"
 SAVE_VERSION=1
 BIN_PATH="$SAVE_PATH/$SAVE_DIR/extension/adapter"
-BIN=("codelldb")
 
 LATEST_URL="https://github.com/vadimcn/vscode-lldb/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
 [ -f "$SAVE_PATH/$SAVE_DIR/.$LATEST_TAG" ] && echo "Installation successful." && exit 0
 REMOTE_FILE_PREFIX="codelldb-x86_64-linux"
+
+BIN=("codelldb")
+BIN_LINK=($BIN)
 
 backup $SAVE_PATH/$SAVE_DIR
 cd $SAVE_PATH

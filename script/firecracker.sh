@@ -1,6 +1,6 @@
 #!/bin/bash
 
-APP_NAME="leaf"
+APP_NAME="firecracker"
 echo "Installing $APP_NAME..."
 
 SCRIPT_PATH="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
@@ -8,18 +8,18 @@ source $SCRIPT_PATH/util.sh
 
 SAVE_DIR="$APP_NAME"
 SAVE_FILE_PREFIX="$SAVE_DIR"
-SAVE_FILE_SUFFIX=".gz"
+SAVE_FILE_SUFFIX=".tgz"
 SAVE_VERSION=1
 BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 
-LATEST_URL="https://github.com/eycorsican/leaf/releases/latest"
+LATEST_URL="https://github.com/firecracker-microvm/firecracker/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
 [ -f "$SAVE_PATH/$SAVE_DIR/.$LATEST_TAG" ] && echo "Installation successful." && exit 0
-REMOTE_FILE_PREFIX="leaf-x86_64-unknown-linux-musl"
+REMOTE_FILE_PREFIX="firecracker-${LATEST_TAG}-x86_64"
 
-BIN=("leaf")
-BIN_LINK=($BIN)
+BIN=("firecracker-${LATEST_TAG}-x86_64" "jailer-${LATEST_TAG}-x86_64" "rebase-snap-${LATEST_TAG}-x86_64" "seccompiler-bin-${LATEST_TAG}-x86_64")
+BIN_LINK=("firecracker" "jailer" "rebase-snap" "seccompiler-bin")
 
 backup $SAVE_PATH/$SAVE_DIR
 cd $SAVE_PATH

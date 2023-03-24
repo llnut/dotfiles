@@ -11,10 +11,12 @@ SAVE_FILE_PREFIX="$SAVE_DIR"
 SAVE_FILE_SUFFIX=".gz"
 SAVE_VERSION=0
 BIN_PATH="$SAVE_PATH/$SAVE_DIR"
-BIN=("rust-analyzer")
 
 LATEST_URL="https://github.com/rust-lang/rust-analyzer/releases/download/nightly"
 REMOTE_FILE_PREFIX="rust-analyzer-x86_64-unknown-linux-gnu"
+
+BIN=("rust-analyzer")
+BIN_LINK=($BIN)
 
 backup $SAVE_PATH/$SAVE_DIR
 cd $SAVE_PATH
@@ -28,7 +30,7 @@ else
     download "$SAVE_PATH/$SAVE_DIR/$SAVE_FILE_PREFIX" "$LATEST_URL/$REMOTE_FILE_PREFIX"
 fi
 
-circulate_ln "$BIN_PATH" "${BIN[*]}" "$LOCAL_BIN_PATH"
+circulate_ln "$BIN_PATH" "${BIN[*]}" "${BIN_LINK[*]}" "$LOCAL_BIN_PATH"
 [ $SAVE_VERSION -eq 1 ] && touch $SAVE_DIR/.$LATEST_TAG
 echo "Installation successful."
 
