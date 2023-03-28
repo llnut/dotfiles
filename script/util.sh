@@ -30,7 +30,7 @@ function circulate_ln() {
     [ ! -d "$4" ] && mkdir -p $4
     for ((i=0; i<${#bin[*]}; i++))
     do
-        [ ! -x "$bin_dir/$v" ] && chmod +x $bin_dir/$v
+        [ ! -x "$bin_dir/${bin[i]}" ] && chmod +x $bin_dir/${bin[i]}
         if [ "$5" == "hard" ]; then
             ln -f $bin_dir/${bin[i]} $4/$(echo ${bin_link[i]} | awk -F '/' '{print $NF}')
         else
