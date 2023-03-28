@@ -15,11 +15,16 @@ BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 LATEST_URL="https://github.com/firecracker-microvm/firecracker/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
-[ -f "$SAVE_PATH/$SAVE_DIR/.$LATEST_TAG" ] && echo "Installation successful." && exit 0
 REMOTE_FILE_PREFIX="firecracker-${LATEST_TAG}-x86_64"
 
 BIN=("firecracker-${LATEST_TAG}-x86_64" "jailer-${LATEST_TAG}-x86_64" "rebase-snap-${LATEST_TAG}-x86_64" "seccompiler-bin-${LATEST_TAG}-x86_64")
 BIN_LINK=("firecracker" "jailer" "rebase-snap" "seccompiler-bin")
+
+if [ -f "$SAVE_PATH/$SAVE_DIR/.$LATEST_TAG" ]; then
+    circulate_ln "$BIN_PATH" "${BIN[*]}" "${BIN_LINK[*]}" "$LOCAL_BIN_PATH"
+    echo "Installation successful."
+    exit 0
+fi
 
 backup $SAVE_PATH/$SAVE_DIR
 cd $SAVE_PATH

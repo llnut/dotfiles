@@ -1,6 +1,6 @@
 #!/bin/bash
 
-APP_NAME="gitui"
+APP_NAME="kata-container"
 echo "Installing $APP_NAME..."
 
 SCRIPT_PATH="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
@@ -8,16 +8,16 @@ source $SCRIPT_PATH/util.sh
 
 SAVE_DIR="$APP_NAME"
 SAVE_FILE_PREFIX="$SAVE_DIR"
-SAVE_FILE_SUFFIX=".tar.gz"
+SAVE_FILE_SUFFIX=".tar.xz"
 SAVE_VERSION=1
-BIN_PATH="$SAVE_PATH/$SAVE_DIR"
+BIN_PATH="$SAVE_PATH/$SAVE_DIR/opt/kata/bin"
 
-LATEST_URL="https://github.com/extrawurst/gitui/releases/latest"
+LATEST_URL="https://github.com/kata-containers/kata-containers/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
-REMOTE_FILE_PREFIX="gitui-linux-musl"
+REMOTE_FILE_PREFIX="kata-static-${LATEST_TAG}-x86_64"
 
-BIN=("gitui")
+BIN=("cloud-hypervisor" "containerd-shim-kata-v2" "firecracker" "jailer" "kata-collect-data.sh" "kata-monitor" "kata-runtime" "qemu-system-x86_64")
 BIN_LINK=($BIN)
 
 if [ -f "$SAVE_PATH/$SAVE_DIR/.$LATEST_TAG" ]; then
