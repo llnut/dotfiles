@@ -12,20 +12,12 @@ SAVE_FILE_SUFFIX=".gz"
 SAVE_VERSION=1
 BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 
-LATEST_URL="https://github.com/Dreamacro/clash/releases/tag/premium"
-LATEST_URL=`github_latest_url "$LATEST_URL"`
-#LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
-LATEST_TAG="2023.03.18"
+LATEST_URL="https://release.dreamacro.workers.dev/latest/"
+LATEST_TAG="latest"
 REMOTE_FILE_PREFIX="clash-linux-amd64-v3-${LATEST_TAG}"
 
 BIN=("clash-premium")
 BIN_LINK=($BIN)
-
-if [ -f "$SAVE_PATH/$SAVE_DIR/.$LATEST_TAG" ]; then
-    circulate_ln "$BIN_PATH" "${BIN[*]}" "${BIN_LINK[*]}" "$LOCAL_BIN_PATH"
-    echo "Installation successful."
-    exit 0
-fi
 
 backup $SAVE_PATH/$SAVE_DIR
 cd $SAVE_PATH
