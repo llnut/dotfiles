@@ -93,7 +93,7 @@ local function init()
   use { 'mbbill/undotree' }
   use {
     'akinsho/bufferline.nvim',
-    tag = "v2.*",
+    tag = "v3.*",
     requires = {'kyazdani42/nvim-web-devicons'},
     config = "require('plugin_config.bufferline')"
   }
