@@ -1,20 +1,5 @@
 local M = {}
 
-M.align = function()
-  local p = '^\\s*|\\s.*\\s|\\s*$'
-  if vim.fn.exists(':Tabularize') and vim.fn.getline('.') == "~# '^\\s*|'" and (vim.fn.getline(vim.fn.line('.') - 1) == "~# " .. p or vim.fn.getline(vim.fn.line('.')+1 == "~# " .. p)) then
-    -- local column = vim.fn.strlen(vim.fn.substitute(vim.fn.getline('.')[0:vim.fn.col('.')], '[^|]','','g'))
-    -- local position = vim.fn.strlen(vim.fn.matchstr(vim.fn.getline('.')[0:vim.fn.col('.')], '.*|\s*\zs.*'))
-    vim.cmd([[
-    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-    Tabularize/|/l1
-    normal! 0
-    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-    ]])
-  end
-end
-
 M.v_set_search = function()
   vim.cmd([[
   let temp = @s

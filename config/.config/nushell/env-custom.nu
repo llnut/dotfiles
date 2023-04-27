@@ -8,3 +8,4 @@ let-env LC_ALL = 'en_US.UTF-8'
 let-env EDITOR = 'nvim'
 let-env DOTFILES = $"($env.HOME)/.dotfiles"
 
+source ~/env-custom.nu

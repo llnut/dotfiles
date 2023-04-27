@@ -1,31 +1,19 @@
-local packer = nil
-local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  if vim.fn.input("Install packer.nvim? (y for yes) ") == "y" then
-    --vim.api.nvim_command("!git clone --depth 1 https://github.com/wbthomason/packer.nvim " .. install_path)
-    packer_bootstrap = vim.fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-    vim.api.nvim_command("packadd packer.nvim")
-    for i, v in ipairs(vim.api.nvim_get_runtime_file("lua/", "v:true")) do
-      print(i, v)
-    end
-    print("Installed packer.nvim.")
-  else
-    return nil
+local ensure_packer = function()
+  local fn = vim.fn
+  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+  if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    vim.cmd [[packadd packer.nvim]]
+    return true
   end
+  return false
 end
 
-local function init()
-  if packer == nil then
-    packer = require('packer')
-    packer.init({ disable_commands = true })
-  end
+local packer_bootstrap = ensure_packer()
 
-  local use = packer.use
-  packer.reset()
-
-  -- Packer can manage itself
-  use 'wbthomason/packer.nvim'
+return require('packer').startup(function(use)
   use {'lewis6991/impatient.nvim'}
+  use 'wbthomason/packer.nvim'
 
   use {
     'williamboman/mason.nvim',
@@ -49,14 +37,13 @@ local function init()
     run = ':TSUpdate',
     config = "require('plugin_config.nvim-treesitter')",
   }
+  use {'MunifTanjim/nui.nvim'}
+  use {'nvim-telescope/telescope-ui-select.nvim'}
   use {
     'nvim-telescope/telescope.nvim',
     config = "require('plugin_config.telescope')",
-    requires = {'nvim-lua/plenary.nvim'}
-  }
-  use {
-    'nvim-telescope/telescope-ui-select.nvim',
-    requires = { "nvim-telescope/telescope.nvim" },
+    requires = {'nvim-lua/plenary.nvim'},
+    after = 'telescope-ui-select.nvim'
   }
 
   use {
@@ -71,8 +58,6 @@ local function init()
   use {'hrsh7th/cmp-calc', after = 'cmp-nvim-lsp'}
   use {'hrsh7th/cmp-cmdline', after = 'cmp-nvim-lsp'}
   use {'hrsh7th/cmp-nvim-lsp-document-symbol', after = 'cmp-nvim-lsp'}
-  use {'hrsh7th/cmp-vsnip', after = 'cmp-nvim-lsp'}
-  use {'hrsh7th/vim-vsnip', after = 'cmp-nvim-lsp'}
   use {
     'neovim/nvim-lspconfig',
     config = "require('plugin_config.lsp')",
@@ -88,9 +73,6 @@ local function init()
     'nvim-lualine/lualine.nvim',
     config = "require('plugin_config.lualine')"
   }
-  use { 'godlygeek/tabular' }
-  use { 'mg979/vim-visual-multi', branch = 'master' }
-  use { 'mbbill/undotree' }
   use {
     'akinsho/bufferline.nvim',
     tag = "v3.*",
@@ -98,11 +80,10 @@ local function init()
     config = "require('plugin_config.bufferline')"
   }
   use { 'lambdalisue/suda.vim' }
-  use { 
+  use {
     'mfussenegger/nvim-dap',
     config = "require('plugin_config.nvim-dap')",
   }
-  use { 'soywod/himalaya', rtp = 'vim' }
   use {
     'lewis6991/gitsigns.nvim',
     after = 'plenary.nvim',
@@ -110,16 +91,19 @@ local function init()
   }
   use {
     'phaazon/hop.nvim',
-    branch = 'v1', -- optional but strongly recommended
+    branch = 'v2', -- optional but strongly recommended
     config = "require('plugin_config.hop')",
   }
-end
+  use {
+    'Bryley/neoai.nvim',
+    after = 'nui.nvim',
+    require = {'MunifTanjim/nui.nvim'},
+    config = "require('plugin_config.neoai')",
+  }
 
-local plugins = setmetatable({}, {
-  __index = function(_, key)
-    init()
-    return packer[key]
-  end,
-})
-
-return plugins
+  -- Automatically set up your configuration after cloning packer.nvim
+  -- Put this at the end after all plugins
+  if packer_bootstrap then
+    require('packer').sync()
+  end
+end)
