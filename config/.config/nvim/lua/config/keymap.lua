@@ -10,8 +10,8 @@ keymap("n", "<leader>W", ":w suda://%<CR>", { noremap = true, silent = false })
 -- => Visual mode related
 --------------------------------------------------------------
 -- Visual star search
-keymap("x", "*", ": <C-u><CMD>lua require('function').v_set_search() <CR>/<C-R>=@/<CR><CR>", { noremap = true, silent = false })
-keymap("x", "#", ": <C-u><CMD>lua require('function').v_set_search() <CR>?<C-R>=@/<CR><CR>", { noremap = true, silent = false })
+keymap("x", "*", ": <C-u><CMD>lua require('util.function').v_set_search() <CR>/<C-R>=@/<CR><CR>", { noremap = true, silent = false })
+keymap("x", "#", ": <C-u><CMD>lua require('util.function').v_set_search() <CR>?<C-R>=@/<CR><CR>", { noremap = true, silent = false })
 
 --------------------------------------------------------------
 -- => Moving around, tabs, windows and buffers
@@ -41,7 +41,7 @@ keymap("n", "]B", ":blast<CR>", { noremap = true, silent = true })
 
 -- Buffers
 --keymap("n", "<leader>q", ":Bclose<cr>", { noremap = true, silent = false })
-keymap("n", "<leader>q", "<CMD>lua require('function').buf_close_it()<CR>", { noremap = true, silent = false })
+keymap("n", "<leader>q", "<CMD>lua require('util.function').buf_close_it()<CR>", { noremap = true, silent = false })
 keymap("n", "<leader>Q", ":%bdelete<cr>", { noremap = true, silent = false })
 
 --Switch tabs
@@ -59,7 +59,7 @@ keymap("n", "<leader>tl", ":exe \"tabn \".g:lasttab<CR>", { noremap = false, sil
 keymap("", "<leader>cd", ":lcd %:h<CR>:pwd<cr>", { noremap = true, silent = false })
 
 -- Strip trailing whitespace (,ss)
-keymap("", "<leader>ss", "<CMD>lua require('function').strip_white_space()<CR>", { noremap = true, silent = false })
+keymap("", "<leader>ss", "<CMD>lua require('util.function').strip_white_space()<CR>", { noremap = true, silent = false })
 
 -- Quickly open a buffer for scribble
 keymap("", "<leader>z", ":e ~/buffer<cr>", { noremap = false, silent = false })
@@ -119,10 +119,10 @@ keymap("n", "<C-6>", "<C-^>", { noremap = true, silent = false })
 -- Select the last changed text(or the text that was just pasted)
 keymap("n", "gp", "`[v`]", { noremap = true, silent = false })
 
-keymap("n", "<leader><leader>df", "<CMD>lua require('function').diff_with_saved()<CR>", { noremap = true, silent = false })
-keymap("n", "<leader><leader>fn", "<CMD>lua require('function').quick_fix_file_names()<CR>", { noremap = true, silent = false })
+keymap("n", "<leader><leader>df", "<CMD>lua require('util.function').diff_with_saved()<CR>", { noremap = true, silent = false })
+keymap("n", "<leader><leader>fn", "<CMD>lua require('util.function').quick_fix_file_names()<CR>", { noremap = true, silent = false })
 
 keymap("n", "<leader>em", ":Himalaya<CR>", { noremap = false, silent = false })
 
 -- type inlay hints
-keymap("", "<leader>ty", "<cmd>lua require('plugin_config.inlay-hints').toggle_inlay_hints()<CR>", { noremap = true, silent = false })
+keymap("", "<leader>ih", "<cmd>lua require('plugin.inlay-hints').toggle_inlay_hints()<CR>", { noremap = true, silent = false })

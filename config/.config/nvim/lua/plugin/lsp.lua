@@ -1,22 +1,10 @@
--- Setup language servers.
-local lspconfig = require('lspconfig')
-lspconfig.rust_analyzer.setup {
-  -- Server-specific settings. See `:help lspconfig-setup`
-  settings = {
-    ['rust-analyzer'] = {},
-  },
-}
-lspconfig.cland.setup {}
-lspconfig.asm_lsp.setup {}
-
-
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
-vim.keymap.set('n', 'K', ':lua require("function").show_documentation()<CR>')
+vim.keymap.set('n', 'K', ':lua require("util.function").show_documentation()<CR>')
 
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
@@ -82,4 +70,14 @@ local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+
+-- Set up lspconfig.
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local lspconfig = require('lspconfig')
+local servers = { "rust_analyzer", "clangd", "asm_lsp" }
+for _, lsp in pairs(servers) do
+  lspconfig[lsp].setup {
+    capabilities = capabilities
+  }
 end

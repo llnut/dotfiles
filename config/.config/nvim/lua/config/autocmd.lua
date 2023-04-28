@@ -37,7 +37,7 @@ vim.api.nvim_create_autocmd("FileType",
 -- {
 --     group = 'BufFile',
 --     pattern = "*",
---     command = "lua require('function').strip_white_space()",
+--     command = "lua require('util.function').strip_white_space()",
 -- })
 
 -- Toggle between current and the last accessed tab
@@ -52,5 +52,6 @@ vim.api.nvim_create_autocmd("BufReadPost",
 {
   group = 'BufFile',
   pattern = "*",
-  command = "lua require('function').return_last_pos()",
+  command = "lua require('util.function').return_last_pos()",
 })
+

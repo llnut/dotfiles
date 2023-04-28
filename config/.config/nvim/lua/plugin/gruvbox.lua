@@ -20,3 +20,12 @@ require("gruvbox").setup({
   dim_inactive = false,
   transparent_mode = false,
 })
+
+vim.cmd([[
+" Enable syntax highlighting
+syntax enable
+
+colorscheme gruvbox
+]])
+vim.o.background = "dark"
+
