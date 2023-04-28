@@ -15,7 +15,7 @@ BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 LATEST_URL="https://github.com/Dreamacro/clash/releases/tag/premium"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 #LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
-LATEST_TAG="2023.03.18"
+LATEST_TAG="2023.04.16"
 REMOTE_FILE_PREFIX="clash-linux-amd64-v3-${LATEST_TAG}"
 
 BIN=("clash-premium")

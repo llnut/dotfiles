@@ -1,5 +1,4 @@
 require('packer_command')
-require('impatient')
 require('color')
 require('config')
 require('function')

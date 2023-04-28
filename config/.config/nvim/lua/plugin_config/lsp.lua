@@ -6,6 +6,8 @@ lspconfig.rust_analyzer.setup {
     ['rust-analyzer'] = {},
   },
 }
+lspconfig.cland.setup {}
+lspconfig.asm_lsp.setup {}
 
 
 -- Global mappings.
@@ -39,7 +41,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, opts)
     vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
     vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
-    vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, opts)
+    vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
     vim.keymap.set('n', '<space>f', function()
       vim.lsp.buf.format { async = true }
@@ -62,25 +64,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-
-local lsp_flags = {
-  -- This is the default in Nvim 0.7+
-  debounce_text_changes = 150,
-}
-
--- Add additional capabilities supported by nvim-cmp
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-local lspconfig = require('lspconfig')
-
----- Enable some language servers with the additional completion capabilities offered by nvim-cmp
-local servers = { "rust_analyzer", "clangd", "asm_lsp", "jedi_language_server" }
-for _, lsp in pairs(servers) do
-  lspconfig[lsp].setup {
-    flags = lsp_flags,
-    capabilities = capabilities
-  }
-end
 
 vim.diagnostic.config({
   virtual_text = false,

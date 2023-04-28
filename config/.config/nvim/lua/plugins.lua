@@ -12,7 +12,6 @@ end
 local packer_bootstrap = ensure_packer()
 
 return require('packer').startup(function(use)
-  use {'lewis6991/impatient.nvim'}
   use 'wbthomason/packer.nvim'
 
   use {
@@ -37,7 +36,6 @@ return require('packer').startup(function(use)
     run = ':TSUpdate',
     config = "require('plugin_config.nvim-treesitter')",
   }
-  use {'MunifTanjim/nui.nvim'}
   use {'nvim-telescope/telescope-ui-select.nvim'}
   use {
     'nvim-telescope/telescope.nvim',
@@ -45,27 +43,26 @@ return require('packer').startup(function(use)
     requires = {'nvim-lua/plenary.nvim'},
     after = 'telescope-ui-select.nvim'
   }
-
+  use {'rafamadriz/friendly-snippets'}
+  use {
+    'neovim/nvim-lspconfig',
+    config = "require('plugin_config.lsp')"
+  }
   use {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
     config = "require('plugin_config.cmp')"
   }
-  use {'hrsh7th/cmp-nvim-lsp', after = 'nvim-cmp'}
-  use {'hrsh7th/cmp-nvim-lua', after = 'cmp-nvim-lsp'}
-  use {'hrsh7th/cmp-buffer', after = 'cmp-nvim-lsp'}
-  use {'hrsh7th/cmp-path', after = 'cmp-nvim-lsp'}
-  use {'hrsh7th/cmp-calc', after = 'cmp-nvim-lsp'}
-  use {'hrsh7th/cmp-cmdline', after = 'cmp-nvim-lsp'}
-  use {'hrsh7th/cmp-nvim-lsp-document-symbol', after = 'cmp-nvim-lsp'}
-  use {
-    'neovim/nvim-lspconfig',
-    config = "require('plugin_config.lsp')",
-    after = 'cmp-nvim-lsp'
-  }
+  use {'hrsh7th/cmp-nvim-lua', after = 'nvim-cmp'}
+  use {'hrsh7th/cmp-buffer', after = 'nvim-cmp'}
+  use {'hrsh7th/cmp-path', after = 'nvim-cmp'}
+  use {'hrsh7th/cmp-calc', after = 'nvim-cmp'}
+  use {'hrsh7th/cmp-cmdline', after = 'nvim-cmp'}
+  use {'hrsh7th/cmp-nvim-lsp-document-symbol', after = 'nvim-cmp'}
+  use {'hrsh7th/cmp-vsnip', after = 'nvim-cmp'}
+  use {'hrsh7th/vim-vsnip', after = 'nvim-cmp'}
   use {
     'saecki/crates.nvim',
-    event = { "BufRead Cargo.toml" },
     requires = { 'nvim-lua/plenary.nvim' },
     config = "require('plugin_config.crates')"
   }
@@ -94,6 +91,7 @@ return require('packer').startup(function(use)
     branch = 'v2', -- optional but strongly recommended
     config = "require('plugin_config.hop')",
   }
+  use {'MunifTanjim/nui.nvim'}
   use {
     'Bryley/neoai.nvim',
     after = 'nui.nvim',
