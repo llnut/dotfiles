@@ -13,7 +13,6 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("config.plugin", {
   defaults = { lazy = true },
-  install = { colorscheme = { "gruvbox" } },
   checker = { enabled = false },
   debug = false,
   lockfile = vim.fn.stdpath("data") .. "/lazy/lazy-lock.json",

@@ -5,7 +5,7 @@ return {
     "williamboman/mason.nvim",
     cmd = "Mason",
     config = function()
-      require('plugin.mason')
+      require("mason").setup()
     end,
   },
   {
@@ -29,7 +29,7 @@ return {
       { "<leader>d", "<cmd>lua require('nvim-tree.api').tree.toggle()<CR>", desc = "NvimTree" },
     },
     config = function()
-      require("plugin.nvim-tree")
+      require("nvim-tree").setup()
     end,
   },
   {
@@ -103,6 +103,7 @@ return {
   },
   {
     'mfussenegger/nvim-dap',
+    event = "LspAttach",
     config = function()
       require('plugin.nvim-dap')
     end,
@@ -119,24 +120,56 @@ return {
     'phaazon/hop.nvim',
     branch = 'v2', -- optional but strongly recommended
     keys = {
-      { "f", desc = "hint char" },
-      { "t", desc = "hint char" },
-      { "w", desc = "hint char" },
-      { "<leader><leader>f", desc = "hint char" },
-      { "<leader><leader>F", desc = "hint char" },
-      { "<leader><leader>w", desc = "hint word" },
-      { "<leader><leader>W", desc = "hint word" },
-      { "<leader><leader>p", desc = "hint patterns" },
-      { "<leader><leader>P", desc = "hint patterns" },
+      "f",
+      "t",
+      "w",
+      "<leader><leader>f",
+      "<leader><leader>F",
+      "<leader><leader>w",
+      "<leader><leader>W",
+      "<leader><leader>p",
+      "<leader><leader>P",
     },
     config = function()
       require('plugin.hop')
     end,
   },
+  {
+    "echasnovski/mini.align",
+    lazy = false,
+    version = false,
+    config = function()
+      require("mini.align").setup()
+    end,
+  },
+  {
+    'Wansmer/treesj',
+    keys = { '<space>m', '<space>j', '<space>s' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = function()
+      require('treesj').setup()
+    end,
+  },
+  {
+    "LudoPinelli/comment-box.nvim",
+    cmd = {
+      "CBllbox",
+      "CBlcbox",
+      "CBlrbox",
+      "CBclbox",
+      "CBccbox",
+      "CBcrbox",
+      "CBrlbox",
+      "CBrcbox",
+      "CBrrbox",
+      "CBalbox",
+      "CBacbox",
+      "CBarbox",
+    },
+  },
   { 'MunifTanjim/nui.nvim' },
   {
     'Bryley/neoai.nvim',
-    lazy = false,
     dependencies = {'MunifTanjim/nui.nvim'},
     cmd = {
       "NeoAI",
@@ -156,7 +189,7 @@ return {
       { "<leader>ag", desc = "generate git message" },
     },
     config = function()
-      require('plugin.neoai')
+      require("neoai").setup()
     end,
   }
 }

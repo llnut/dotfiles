@@ -1,128 +1,107 @@
-local keymap = vim.api.nvim_set_keymap;
+local keymap = vim.keymap.set
+local option = { noremap = true, silent = true }
 
 -- save file
-keymap("n", "<leader>w", ":w<CR>", { noremap = true, silent = false })
-
--- Save a file as root (,W)
-keymap("n", "<leader>W", ":w suda://%<CR>", { noremap = true, silent = false })
-
---------------------------------------------------------------
--- => Visual mode related
---------------------------------------------------------------
--- Visual star search
-keymap("x", "*", ": <C-u><CMD>lua require('util.function').v_set_search() <CR>/<C-R>=@/<CR><CR>", { noremap = true, silent = false })
-keymap("x", "#", ": <C-u><CMD>lua require('util.function').v_set_search() <CR>?<C-R>=@/<CR><CR>", { noremap = true, silent = false })
+keymap("n", "<leader>w", ":w<CR>", option)
 
 --------------------------------------------------------------
 -- => Moving around, tabs, windows and buffers
 --------------------------------------------------------------
-keymap("", "<C-h>", "<C-w>h", { noremap = true, silent = false })
-keymap("", "<C-j>", "<C-w>j", { noremap = true, silent = false })
-keymap("", "<C-k>", "<C-w>k", { noremap = true, silent = false })
-keymap("", "<C-l>", "<C-w>l", { noremap = true, silent = false })
+keymap("", "<C-h>", "<C-w>h", option)
+keymap("", "<C-j>", "<C-w>j", option)
+keymap("", "<C-k>", "<C-w>k", option)
+keymap("", "<C-l>", "<C-w>l", option)
 
 -- no highlighting temporary with <leader>ht
-keymap("", "<leader>ht", ":nohlsearch<CR>", { noremap = true, silent = true })
+keymap("", "<leader>ht", ":nohlsearch<CR>", option)
 
 -- Close the current window.
-keymap("n", "<leader>cw", ":close<CR>", { noremap = true, silent = false })
+keymap("n", "<leader>cw", ":close<CR>", option)
 
 -- Close current tab
-keymap("n", "<leader>ct", ":tabclose<CR>", { noremap = true, silent = false })
+keymap("n", "<leader>ct", ":tabclose<CR>", option)
 -- New tab
-keymap("n", "<leader>tn", ":tabnew<CR>", { noremap = true, silent = false })
+keymap("n", "<leader>tn", ":tabnew<CR>", option)
 -- Close Location panel
-keymap("n", "<leader>ce", ":lclose<CR>", { noremap = true, silent = false })
+keymap("n", "<leader>ce", ":lclose<CR>", option)
 -- Switch buffers
-keymap("n", "[b", ":bprevious<CR>", { noremap = true, silent = true })
-keymap("n", "]b", ":bnext<CR>", { noremap = true, silent = true })
-keymap("n", "[B", ":bfirst 1<CR>", { noremap = true, silent = true })
-keymap("n", "]B", ":blast<CR>", { noremap = true, silent = true })
+keymap("n", "[b", ":bprevious<CR>", option)
+keymap("n", "]b", ":bnext<CR>", option)
+keymap("n", "[B", ":bfirst 1<CR>", option)
+keymap("n", "]B", ":blast<CR>", option)
 
 -- Buffers
---keymap("n", "<leader>q", ":Bclose<cr>", { noremap = true, silent = false })
-keymap("n", "<leader>q", "<CMD>lua require('util.function').buf_close_it()<CR>", { noremap = true, silent = false })
-keymap("n", "<leader>Q", ":%bdelete<cr>", { noremap = true, silent = false })
+--keymap("n", "<leader>q", ":Bclose<cr>", option)
+keymap("n", "<leader>q", ":lua require('util.function').buf_close_it()<CR>", option)
+keymap("n", "<leader>Q", ":%bdelete<cr>", option)
 
 --Switch tabs
-keymap("n", "[t", ":tabprevious<CR>", { noremap = true, silent = true })
-keymap("n", "]t", ":tabprevious<CR>", { noremap = true, silent = true })
-keymap("n", "[T", ":tabfirst<CR>", { noremap = true, silent = true })
-keymap("n", "]T", ":tablast<CR>", { noremap = true, silent = true })
+keymap("n", "[t", ":tabprevious<CR>", option)
+keymap("n", "]t", ":tabprevious<CR>", option)
+keymap("n", "[T", ":tabfirst<CR>", option)
+keymap("n", "]T", ":tablast<CR>", option)
 --copen
-keymap("n", "<leader>co", ":copen<CR>", { noremap = true, silent = false })
-
--- Let 'tl' toggle between this and the last accessed tab
-keymap("n", "<leader>tl", ":exe \"tabn \".g:lasttab<CR>", { noremap = false, silent = false })
+keymap("n", "<leader>co", ":copen<CR>", option)
 
 -- cd to the directory containing the file in the buffer
-keymap("", "<leader>cd", ":lcd %:h<CR>:pwd<cr>", { noremap = true, silent = false })
+keymap("", "<leader>cd", ":lcd %:h<CR>:pwd<cr>", option)
 
 -- Strip trailing whitespace (,ss)
-keymap("", "<leader>ss", "<CMD>lua require('util.function').strip_white_space()<CR>", { noremap = true, silent = false })
+keymap("", "<leader>ss", ":lua require('util.function').strip_white_space()<CR>", option)
 
--- Quickly open a buffer for scribble
-keymap("", "<leader>z", ":e ~/buffer<cr>", { noremap = false, silent = false })
+-- Quickly open file
+keymap("", "<leader>z", ":e ~/buffer<cr>", option)
+keymap("", "<leader>x", ":e ~/buffer.md<cr>", option)
+keymap("", "<leader>c", ":e ~/README.md<cr>", option)
 
--- Quickly open a markdown buffer for scribble
-keymap("", "<leader>x", ":e ~/buffer.md<cr>", { noremap = false, silent = false })
+keymap("", "<C-p>", ":lua require('telescope.builtin').find_files({hidden=false})<CR>", option)
+keymap("", "<leader>b", ":lua require('telescope.builtin').buffers()<CR>", option)
+keymap("", "<leader>tg", ":lua require('telescope.builtin').treesitter()<CR>", option)
+keymap("", "<leader>m", ":lua require('telescope.builtin').oldfiles()<CR>", option)
+keymap("", "<leader>rg", ":lua require('telescope.builtin').live_grep()<CR>", option)
+keymap("", "<leader>eg", ":lua require('telescope.builtin').live_grep({prompt_title = 'find in open buffers', grep_open_files = true})<CR>", option)
 
--- Quickly open README.md
-keymap("", "<leader>c", ":e ~/README.md<cr>", { noremap = false, silent = false })
+keymap("", "<leader>d", ":NvimTreeToggle<CR>", option)
+keymap("", "<leader>ff", ":NvimTreeFindFile<CR>", option)
 
-keymap("", "<C-p>", "<cmd>lua require('telescope.builtin').find_files({hidden=false})<CR>", { noremap = false, silent = false })
-keymap("", "<leader>b", "<cmd>lua require('telescope.builtin').buffers()<CR>", { noremap = false, silent = false })
-keymap("", "<leader>tg", "<cmd>lua require('telescope.builtin').treesitter()<CR>", { noremap = false, silent = false })
-keymap("", "<leader>m", "<cmd>lua require('telescope.builtin').oldfiles()<CR>", { noremap = false, silent = false })
-keymap("", "<leader>rg", "<cmd>lua require('telescope.builtin').live_grep()<CR>", { noremap = true, silent = false })
-keymap("", "<leader>eg", "<cmd>lua require('telescope.builtin').live_grep({prompt_title = 'find in open buffers', grep_open_files = true})<CR>", { noremap = true, silent = false })
-
-keymap("", "<leader>d", ":NvimTreeToggle<CR>", { noremap = true, silent = false })
-keymap("", "<leader>ff", ":NvimTreeFindFile<CR>", { noremap = true, silent = false })
-
--- keymap("", "<bs>", ":tabprevious<CR>", { noremap = true, silent = false })
--- keymap("", "<C-l>", ":tabnext<CR>", { noremap = true, silent = false })
--- keymap("i", "[", "[]<esc>i", { noremap = true, silent = false })
--- keymap("i", "{", "{}<esc>i", { noremap = true, silent = false })
--- keymap("i", "{<CR>", "{<CR>}<c-o>O", { noremap = true, silent = false })
--- keymap("i", "(", "()<esc>i", { noremap = true, silent = false })
--- keymap("i", "<>", "<><<esc>i", { noremap = true, silent = false })
--- keymap("i", "\"", "\"\"<esc>i", { noremap = true, silent = false })
--- keymap("i", "'", "''<esc>i", { noremap = true, silent = false })
+-- keymap("", "<bs>", ":tabprevious<CR>", option)
+-- keymap("", "<C-l>", ":tabnext<CR>", option)
+-- keymap("i", "[", "[]<esc>i", option)
+-- keymap("i", "{", "{}<esc>i", option)
+-- keymap("i", "{<CR>", "{<CR>}<c-o>O", option)
+-- keymap("i", "(", "()<esc>i", option)
+-- keymap("i", "<>", "<><<esc>i", option)
+-- keymap("i", "\"", "\"\"<esc>i", option)
+-- keymap("i", "'", "''<esc>i", option)
 
 -- set text wrapping toggles
-keymap("", "<leader>tw", ":set invwrap<CR>:set wrap?<CR>", { noremap = true, silent = true })
-keymap("", "<leader>l", ": Tab/", { noremap = true, silent = false })
+keymap("", "<leader>tw", ":set invwrap<CR>:set wrap?<CR>", option)
 
-keymap("", "]c", "<cmd>Gitsigns next_hunk<CR>", { noremap = true, silent = false })
-keymap("", "[c", "<cmd>Gitsigns prev_hunk<CR>", { noremap = true, silent = false })
+keymap("", "]c", ":Gitsigns next_hunk<CR>", option)
+keymap("", "[c", ":Gitsigns prev_hunk<CR>", option)
 
 -- Down is really the next line
--- keymap("n", "j", "gj", { noremap = true, silent = false })
--- keymap("n", "k", "gk", { noremap = true, silent = false })
+-- keymap("n", "j", "gj", option)
+-- keymap("n", "k", "gk", option)
 
 -- Resize vsplit
-keymap("n", "25s", ":vertical resize 40<cr>", { noremap = false, silent = false })
-keymap("n", "50s", "<c-w>=", { noremap = false, silent = false })
-keymap("n", "75s", ":vertical resize 120<cr>", { noremap = false, silent = false })
-keymap("n", "<leader>>", ":exe \"vertical resize \" . (winwidth(0) * 3/2)<CR>", { noremap = true, silent = true })
-keymap("n", "<leader><", ":exe \"vertical resize \" . (winwidth(0) * 2/3)<CR>", { noremap = true, silent = true })
-keymap("n", "<leader>+", ":exe \"resize \" . (winheight(0) * 3/2)<CR>", { noremap = true, silent = true })
-keymap("n", "<leader>-", ":exe \"resize \" . (winheight(0) * 2/3)<CR>", { noremap = true, silent = true })
+keymap("n", "25s", ":vertical resize 40<cr>", option)
+keymap("n", "50s", "<c-w>=", option)
+keymap("n", "75s", ":vertical resize 120<cr>", option)
+keymap("n", "<leader>>", ":exe \"vertical resize \" . (winwidth(0) * 3/2)<CR>", option)
+keymap("n", "<leader><", ":exe \"vertical resize \" . (winwidth(0) * 2/3)<CR>", option)
+keymap("n", "<leader>+", ":exe \"resize \" . (winheight(0) * 3/2)<CR>", option)
+keymap("n", "<leader>-", ":exe \"resize \" . (winheight(0) * 2/3)<CR>", option)
 
--- Undotree
-keymap("n", "<leader>u", ":UndotreeToggle<cr>", { noremap = true, silent = false })
-
-keymap("n", "<leader>scb", ":windo set scrollbind!<CR>", { noremap = true, silent = true })
-keymap("n", "<C-6>", "<C-^>", { noremap = true, silent = false })
+keymap("n", "<leader>scb", ":windo set scrollbind!<CR>", option)
+keymap("n", "<C-6>", "<C-^>", option)
 
 -- Select the last changed text(or the text that was just pasted)
-keymap("n", "gp", "`[v`]", { noremap = true, silent = false })
+keymap("n", "gp", "`[v`]", option)
 
-keymap("n", "<leader><leader>df", "<CMD>lua require('util.function').diff_with_saved()<CR>", { noremap = true, silent = false })
-keymap("n", "<leader><leader>fn", "<CMD>lua require('util.function').quick_fix_file_names()<CR>", { noremap = true, silent = false })
+keymap("n", "<leader><leader>df", ":lua require('util.function').diff_with_saved()<CR>", option)
+keymap("n", "<leader><leader>fn", ":lua require('util.function').quick_fix_file_names()<CR>", option)
 
-keymap("n", "<leader>em", ":Himalaya<CR>", { noremap = false, silent = false })
+-- inlay hints
+keymap("", "<leader>ih", ":lua require('plugin.inlay-hints').toggle_inlay_hints()<CR>", option)
 
--- type inlay hints
-keymap("", "<leader>ih", "<cmd>lua require('plugin.inlay-hints').toggle_inlay_hints()<CR>", { noremap = true, silent = false })
