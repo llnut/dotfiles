@@ -1,4 +1,7 @@
-vim.api.nvim_create_autocmd("TextYankPost", { command = "silent! lua vim.highlight.on_yank() {higroup='IncSearch', timeout=400}" })
+vim.api.nvim_create_autocmd(
+  "TextYankPost",
+  { callback = function() vim.highlight.on_yank({ higroup = 'IncSearch', timeout = 100 }) end }
+)
 
 vim.api.nvim_create_autocmd(
   { "BufRead", "BufNewFile" },
@@ -28,7 +31,7 @@ vim.api.nvim_create_autocmd(
 vim.api.nvim_create_autocmd(
   { "BufRead", "BufNewFile" },
   {
-    pattern = { "*.yaml", "*.yml", "*.lua", "*.cmake", "*.html" },
+    pattern = { "*.yaml", "*.yml", "*.lua", "*.cmake", "*.html", "*.md" },
     command = "setlocal ts=2 sts=2 sw=2 expandtab",
   }
 )

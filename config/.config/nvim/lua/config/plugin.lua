@@ -35,7 +35,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     event = "BufReadPre",
-    run = ':TSUpdate',
+    build = ':TSUpdate',
     config = function()
       require('plugin.nvim-treesitter')
     end,
