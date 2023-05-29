@@ -2,7 +2,7 @@
 
 LOCAL_BIN_PATH="$HOME/.local/bin"
 CUR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-SAVE_PATH="$CUR_PATH/../bin"
+SAVE_PATH="$HOME/.dotfiles-bin"
 
 [ ! -d "$SAVE_PATH" ] && mkdir -p $SAVE_PATH
 [ ! -d "$HOME/.local/bin" ] && mkdir -p $HOME/.local/bin
