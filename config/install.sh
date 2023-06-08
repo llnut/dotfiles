@@ -15,6 +15,7 @@ function doIt() {
     lnbk $SCRIPT_DIR/.config/bottom $CONFIG/bottom
     lnbk $SCRIPT_DIR/.config/leftwm $CONFIG/leftwm
     lnbk $SCRIPT_DIR/.config/zellij $CONFIG/zellij
+    lnbk $SCRIPT_DIR/.config/dunst $CONFIG/dunst
     lnbk $SCRIPT_DIR/.tmux.conf $HOME/.tmux.conf
     lnbk $SCRIPT_DIR/.zshrc $HOME/.zshrc
     lnbk $SCRIPT_DIR/.gitconfig $HOME/.gitconfig

@@ -1,4 +1,5 @@
 DOTFILES="$HOME/.dotfiles"
+DOTFILES_BIN="$HOME/.dotfiles-bin"
 export DOTFILES=$DOTFILES
 # If you come from bash you might have to change your $PATH.
 export PATH=$DOTFILES/config/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/go/bin:$HOME/.cargo/bin:$PATH
@@ -83,7 +84,7 @@ ZSH_CUSTOM=$DOTFILES/config/oh-my-zsh-plugins
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  zsh-autosuggestions vi-mode
+  zsh-autosuggestions vi-mode rust docker docker-compose themes
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -183,7 +184,7 @@ eval "$(fnm env --use-on-cd)"
 source /usr/share/fzf/key-bindings.zsh
 
 # rg bash_completion
-[ -f "$DOTFILES/bin/ripgrep/complete/rg.bash" ] && \. "$DOTFILES/bin/ripgrep/complete/rg.bash"
+[ -f "$DOTFILES_BIN/ripgrep/complete/rg.bash" ] && \. "$DOTFILES_BIN/ripgrep/complete/rg.bash"
 
 eval "$(zoxide init zsh)"
 

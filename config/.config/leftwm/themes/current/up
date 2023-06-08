@@ -15,3 +15,5 @@ ln -s $SCRIPT_PATH/down /tmp/leftwm-theme-down
 # Set the theme.toml config
 leftwm-command "LoadTheme $SCRIPT_PATH/theme.toml"
 
+# Scheduled rest
+[ -f "$HOME/.local/bin/notify-rest.sh" ] && $HOME/.local/bin/notify-rest.sh >/tmp/notify-rest.log 2>&1 &

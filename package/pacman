@@ -5,3 +5,12 @@ extra/hwloc
 extra/ntp
 extra/alsa-utils
 extra/strace
+extra/dunst
+extra/fzf
+extra/jq
+extra/alacritty
+extra/xclip
+extra/rofi
+extra/perf
+extra/slock
+extra/cargo-flamegraph
