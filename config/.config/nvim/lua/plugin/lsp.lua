@@ -75,7 +75,7 @@ end
 -- Set up lspconfig.
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local lspconfig = require('lspconfig')
-local servers = { "rust_analyzer", "clangd", "asm_lsp" }
+local servers = { "rust_analyzer", "clangd", "asm_lsp", "gopls" }
 for _, lsp in pairs(servers) do
   lspconfig[lsp].setup {
     capabilities = capabilities
