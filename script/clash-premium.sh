@@ -13,9 +13,8 @@ SAVE_VERSION=1
 BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 
 LATEST_URL="https://github.com/Dreamacro/clash/releases/tag/premium"
-LATEST_URL=`github_latest_url "$LATEST_URL"`
-#LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
-LATEST_TAG="2023.04.16"
+LATEST_TAG=`curl -fSL ${LATEST_URL} | grep "<title>Release Premium" | awk -F ' ' '{print $3}'`
+LATEST_URL="https://github.com/Dreamacro/clash/releases/download/premium"
 REMOTE_FILE_PREFIX="clash-linux-amd64-v3-${LATEST_TAG}"
 
 BIN=("clash-premium")
