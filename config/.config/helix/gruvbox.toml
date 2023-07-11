@@ -1,43 +1,88 @@
-# Based on the gruvbox theme by Jakub Bartodziej
+# Author : Jakub Bartodziej <kubabartodziej@gmail.com>
+# The theme uses the gruvbox dark palette with standard contrast: github.com/morhetz/gruvbox
 
+"attribute" = "aqua1"
+"keyword" = { fg = "red1" }
+"keyword.directive" = "red0"
+"namespace" = "aqua1"
+"punctuation" = "orange1"
+"punctuation.delimiter" = "orange1"
+
+"operator" = "purple1"
+"special" = "purple0"
+"variable.other.member" = "blue1"
+"variable" = "fg1"
+"variable.builtin" = "orange1"
+"variable.parameter" = "fg2"
 "type" = "yellow1"
 "type.builtin" = "yellow1"
-"constructor" = { modifiers = ["bold"] }
-"function" = { modifiers = ["bold"] }
+"constructor" = { fg = "purple1", modifiers = ["bold"] }
+"function" = { fg = "green1", modifiers = ["bold"] }
+"function.macro" = "aqua1"
+"function.builtin" = "yellow1"
+"tag" = "red1"
 "comment" = { fg = "gray1", modifiers = ["italic"]  }
-"constant.builtin" = { modifiers = ["bold"] }
-"string" = "green0"
+"constant" = { fg = "purple1" }
+"constant.builtin" = { fg = "purple1", modifiers = ["bold"] }
+"string" = "green1"
+"constant.numeric" = "purple1"
 "constant.character.escape" = { fg = "fg2", modifiers = ["bold"] }
+"label" = "aqua1"
+"module" = "aqua1"
 
 "diff.plus" = "green1"
 "diff.delta" = "orange1"
 "diff.minus" = "red1"
 
-"warning" = { fg = "orange1", bg = "bg1" }
-"error" = { fg = "red1", bg = "bg1" }
-"info" = { fg = "aqua1", bg = "bg1" }
-"hint" = { fg = "blue1", bg = "bg1" }
+"warning" = "orange1"
+"error" = "red1"
+"info" = "aqua1"
+"hint" = "blue1"
+
 
 "ui.background" = { bg = "bg0" }
 "ui.linenr" = { fg = "bg4" }
 "ui.linenr.selected" = { fg = "yellow1" }
+
+"ui.cursorline" = { bg = "bg1" }
 "ui.statusline" = { fg = "fg1", bg = "bg2" }
+"ui.statusline.normal" = { fg = "fg1", bg = "bg2" }
+"ui.statusline.insert" = { fg = "fg1", bg = "blue0" }
+"ui.statusline.select" = { fg = "fg1", bg = "orange0" }
 "ui.statusline.inactive" = { fg = "fg4", bg = "bg1" }
+
 "ui.popup" = { bg = "bg1" }
 "ui.window" = { bg = "bg1" }
 "ui.help" = { bg = "bg1", fg = "fg1" }
 "ui.text" = { fg = "fg1" }
 "ui.text.focus" = { fg = "fg1" }
-"ui.selection" = { bg = "bg3", modifiers = ["reversed"] }
-"ui.cursor.primary" = { modifiers = ["reversed"] }
-"ui.cursor.match" = { modifiers = ["reversed"] }
+"ui.selection" = { bg = "bg2" }
+"ui.selection.primary" = { bg = "bg3" }
+"ui.cursor.primary" = { bg = "fg4", fg = "bg1" }
+"ui.cursor.match" = { bg = "bg3" }
 "ui.menu" = { fg = "fg1", bg = "bg2" }
 "ui.menu.selected" = { fg = "bg2", bg = "blue1", modifiers = ["bold"] }
+"ui.virtual.whitespace" = "bg2"
+"ui.virtual.ruler" = { bg = "bg1" }
+"ui.virtual.inlay-hint" = { fg = "gray1" }
 
-"diagnostic" = { modifiers = ["underlined"] }
+"diagnostic.warning" = { underline = { color = "orange1", style = "curl" } }
+"diagnostic.error" = { underline = { color = "red1", style = "curl" } }
+"diagnostic.info" = { underline = { color = "aqua1", style = "curl" } }
+"diagnostic.hint" = { underline = { color = "blue1", style = "curl" } }
+
+"markup.heading" = "aqua1"
+"markup.bold" = { modifiers = ["bold"] }
+"markup.italic" = { modifiers = ["italic"] }
+
+"markup.strikethrough" = { modifiers = ["crossed_out"] }
+"markup.link.url" = { fg = "green1", modifiers = ["underlined"] }
+"markup.link.text" = "red1"
+
+"markup.raw" = "red1"
 
 [palette]
-bg0 = "#32302f" # main background
+bg0 = "#282828" # main background
 bg1 = "#3c3836"
 bg2 = "#504945"
 bg3 = "#665c54"
