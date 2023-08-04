@@ -1,0 +1,164 @@
+#!/bin/bash
+
+function show_help() {
+cat << EOF
+Usage: available-ip [Options]
+
+Options:
+--help, -h, help          Display this help message.
+-n, --network             Network of the IP addresss to be fetched. Example: 192.168.0.1/24
+true / false              Enable eager mode to fetch available IP addresses in the local network. Defaults to false.
+
+Description:
+This script is used to fetch available IP addresses in the local network.
+In eager mode, it will attempt to fetch all available IP addresses in the local network.
+If not specified, it will only fetch one available IP address.
+To enable eager mode, set the input argument to true.
+EOF
+}
+
+# 子网掩码转化为cidr表示
+function get_cidr_prefix() {
+    binary_subnet_mask=$(get_binary_ip "$1")
+    count=0
+    for ((i=0; i<${#binary_subnet_mask}; i++)); do
+        bit="${binary_subnet_mask:i:1}"
+        if [[ $bit -eq 1 ]]; then
+            ((count++))
+        fi
+    done
+    echo $count
+}
+
+# 获取IP地址的二进制表示
+function get_binary_ip() {
+    IFS='.' read -r -a ip <<< "$1"
+    binary=""
+    for octet in "${ip[@]}"; do
+        binary+="$(printf '%08d' "$(bc <<< "obase=2; $octet")")"
+    done
+    echo "$binary"
+}
+
+# 获取IP地址的网络ID（与子网掩码进行按位与操作）
+function get_network_id_cidr() {
+    binary_ip=$(get_binary_ip "$1")
+    network_id="${binary_ip:0:$2}"
+    # 补全网络ID
+    while [[ ${#network_id} -lt 32 ]]; do
+        network_id+="0"
+    done
+    echo "$network_id"
+}
+
+# 获取IP地址的网络ID（与子网掩码进行按位与操作）
+function get_network_id() {
+    ip_address="$1"
+    subnet_mask="$2"
+    binary_ip=$((2#$(get_binary_ip "$ip_address")))
+    binary_subnet_mask=$((2#$(get_binary_ip "$subnet_mask")))
+    result=$(($binary_ip & $binary_subnet_mask))
+    echo "ibase=10; obase=2;$result" | bc
+}
+
+# 获取相同子网内的其他IP地址
+function get_other_ips() {
+    ip_address="$1"
+    subnet_mask="$2"
+    subnet_is_cidr="$3"
+
+    if [ "${subnet_is_cidr}" == "true" ]; then
+        network_id=$(get_network_id_cidr "$ip_address" "$subnet_mask")
+        digit=$((32 - $subnet_mask))
+    else
+        network_id=$(get_network_id "$ip_address" "$subnet_mask")
+        digit=$(get_cidr_prefix "$subnet_mask")
+    fi
+
+    # 对于每个可能的最后一个IP地址（从1到254），检查其网络ID是否与给定的IP地址的网络ID相同
+    for i in $(seq 1 $((2 ** digit - 2))); do
+        other_ip_address="${network_id:0:$subnet_mask}$(printf "%0${digit}d" "$(bc <<< "ibase=10; obase=2; $i")")"
+
+        # 将二进制IP地址转换为十进制
+        other_ip=""
+        for (( j=0; j<32; j+=8 )); do
+            octet="${other_ip_address:$j:8}"
+            other_ip+="$((2#$octet))."
+        done
+        other_ip="${other_ip%.*}"
+
+        # 排除给定的IP地址
+        if [[ "$other_ip" != "$ip_address" ]]; then
+            echo "$other_ip"
+        fi
+    done
+}
+
+
+DEFAULT_INTERFACE=$(ip route | grep default | awk '{print $5}')
+IP_ADDR=$(ip -o -4 addr show dev ${DEFAULT_INTERFACE} | awk '{split($4, a, "/"); print a[1]}')
+SUBNET_MASK=$(ip -o -4 addr show dev ${DEFAULT_INTERFACE} | awk '{split($4, a, "/"); print a[2]}')
+SUBNET_IS_CIDR="false"
+INTERRUPTED="false"
+EAGER_MODE="false"
+IPV4_REGEX="^([0-9]{1,3}\.){3}[0-9]{1,3}$"
+
+PARAMS=""
+while (( "$#" )); do
+    case "$1" in
+        -n|--network)
+            if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+                IP_ADDR=$(echo $2 | awk -F '/' '{print $1}')
+                SUBNET_MASK=$(echo $2 | awk -F '/' '{print $2}')
+                shift 2
+            fi
+            ;;
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        --)
+            shift
+            PARAMS="$PARAMS $@"
+            break
+            ;;
+        -*|--*)
+            echo "无效选项: $1"
+            exit 1
+            ;;
+        *)
+            [ "$1" == "true" ] && EAGER_MODE="true"
+            PARAMS="$PARAMS $1"
+            shift
+            ;;
+    esac
+done
+
+function handle_interrupt() {
+    INTERRUPTED="true"
+}
+trap handle_interrupt INT
+
+if [[ ! $IP_ADDR =~ $IPV4_REGEX ]]; then
+    echo "Network is not contain a valid IPv4 address."
+    exit 1
+fi
+
+if [[ ! $SUBNET_MASK =~ $IPV4_REGEX ]]; then
+    if [ "$SUBNET_MASK" -le 0 ] || [ "$SUBNET_MASK" -gt 32 ]; then
+        echo "Network is not contain a valid IPv4 address."
+        exit 1
+    fi
+    SUBNET_IS_CIDR="true"
+fi
+
+OTHER_IP_ADDR=$(get_other_ips ${IP_ADDR} ${SUBNET_MASK} ${SUBNET_IS_CIDR})
+for v in $OTHER_IP_ADDR; do
+    [ ${INTERRUPTED} == "true" ] && break
+    ping -c 1 $v -w 1 >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        echo "${v} available" && [ "${EAGER_MODE}" == "false" ] && break
+    fi
+    ((HOST_FIELD++))
+done
+
