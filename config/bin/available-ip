@@ -69,15 +69,17 @@ function get_other_ips() {
 
     if [ "${subnet_is_cidr}" == "true" ]; then
         network_id=$(get_network_id_cidr "$ip_address" "$subnet_mask")
-        digit=$((32 - $subnet_mask))
+        zero_digit=$((32 - $subnet_mask))
+        one_digit=$subnet_mask
     else
         network_id=$(get_network_id "$ip_address" "$subnet_mask")
-        digit=$(get_cidr_prefix "$subnet_mask")
+        one_digit=$(get_cidr_prefix "$subnet_mask")
+        zero_digit=$((32 - $one_digit))
     fi
 
     # 对于每个可能的最后一个IP地址（从1到254），检查其网络ID是否与给定的IP地址的网络ID相同
-    for i in $(seq 1 $((2 ** digit - 2))); do
-        other_ip_address="${network_id:0:$subnet_mask}$(printf "%0${digit}d" "$(bc <<< "ibase=10; obase=2; $i")")"
+    for i in $(seq 1 $((2 ** zero_digit - 2))); do
+        other_ip_address="${network_id:0:$one_digit}$(printf "%0${zero_digit}d" "$(bc <<< "ibase=10; obase=2; $i")")"
 
         # 将二进制IP地址转换为十进制
         other_ip=""
@@ -123,7 +125,7 @@ while (( "$#" )); do
             break
             ;;
         -*|--*)
-            echo "无效选项: $1"
+            echo "Unexpected argument: $1"
             exit 1
             ;;
         *)
