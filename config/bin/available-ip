@@ -205,14 +205,17 @@ for v in $OTHER_IP_ADDR; do
             else
                 IP_ADDRESSES=("$v")
             fi
-            [ $NUMBER -gt 0 ] && [ ${#IP_ADDRESSES[@]} -eq $NUMBER ] && break
         else
+            IP_ADDRESSES+=("$v")
             echo "${v} available"
         fi
     fi
+    [ $NUMBER -gt 0 ] && [ ${#IP_ADDRESSES[@]} -eq $NUMBER ] && break
 done
 
-for v in ${IP_ADDRESSES[@]}; do
-    echo "${v} available"
-done
+if [ "$CONSECUTIVE_MODE" == "true" ]; then
+    for v in ${IP_ADDRESSES[@]}; do
+        echo "${v} available"
+    done
+fi
 
