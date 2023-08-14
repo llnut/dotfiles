@@ -5,15 +5,24 @@ cat << EOF
 Usage: available-ip [Options]
 
 Options:
---help, -h, help          Display this help message.
--n, --network             Network of the IP addresss to be fetched. Example: 192.168.0.1/24
-true / false              Enable eager mode to fetch available IP addresses in the local network. Defaults to false.
+--help, -h, help            Display this help message.
+
+-n, --network               Network of the IP addresss to be fetched.
+                            Example: 192.168.0.1/24
+
+-t, --timeout               Time to wait for each reply.
+                            Default: 1 second
+
+-c, --consecutive           Used to fetch consecutive IP addresses. When fetching multiple IP addresses, it is effective.
+                            Default: false
+
+[number]                    The number of IP addresses to be fetched. Set to 0 to fetch all available IP addresses in the given network.
+                            Default: 1
 
 Description:
-This script is used to fetch available IP addresses in the local network.
-In eager mode, it will attempt to fetch all available IP addresses in the local network.
+This script is used to fetch available IP addresses in the given network.
+In eager mode, it will attempt to fetch all available IP addresses.
 If not specified, it will only fetch one available IP address.
-To enable eager mode, set the input argument to true.
 EOF
 }
 
@@ -77,7 +86,7 @@ function get_other_ips() {
         zero_digit=$((32 - $one_digit))
     fi
 
-    # 对于每个可能的最后一个IP地址（从1到254），检查其网络ID是否与给定的IP地址的网络ID相同
+    # 对于每个可能的最后一个IP地址，检查其网络ID是否与给定的IP地址的网络ID相同
     for i in $(seq 1 $((2 ** zero_digit - 2))); do
         other_ip_address="${network_id:0:$one_digit}$(printf "%0${zero_digit}d" "$(bc <<< "ibase=10; obase=2; $i")")"
 
@@ -102,8 +111,13 @@ IP_ADDR=$(ip -o -4 addr show dev ${DEFAULT_INTERFACE} | awk '{split($4, a, "/");
 SUBNET_MASK=$(ip -o -4 addr show dev ${DEFAULT_INTERFACE} | awk '{split($4, a, "/"); print a[2]}')
 SUBNET_IS_CIDR="false"
 INTERRUPTED="false"
-EAGER_MODE="false"
 IPV4_REGEX="^([0-9]{1,3}\.){3}[0-9]{1,3}$"
+CONSECUTIVE_MODE="false"
+TIMEOUT=1
+TIMEOUT_REGEX="^[1-9]{1,3}$"
+NUMBER=1
+NUMBER_REGEX="^([1-9]{1}[0-9]{0,4}|0)$"
+IP_ADDRESSES=()
 
 PARAMS=""
 while (( "$#" )); do
@@ -112,6 +126,22 @@ while (( "$#" )); do
             if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
                 IP_ADDR=$(echo $2 | awk -F '/' '{print $1}')
                 SUBNET_MASK=$(echo $2 | awk -F '/' '{print $2}')
+                shift 2
+            fi
+            ;;
+        -t|--timeout)
+            if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+                TIMEOUT=$2
+                if [[ ! $TIMEOUT =~ $TIMEOUT_REGEX ]]; then
+                    echo "Unexpected timeout argument: $TIMEOUT"
+                    exit 1
+                fi
+                shift 2
+            fi
+            ;;
+        -c|--consecutive)
+            if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+                [ "$2" == "true" ] && CONSECUTIVE_MODE=$2
                 shift 2
             fi
             ;;
@@ -129,7 +159,11 @@ while (( "$#" )); do
             exit 1
             ;;
         *)
-            [ "$1" == "true" ] && EAGER_MODE="true"
+            if [[ ! $1 =~ $NUMBER_REGEX ]]; then
+                echo "Unexpected number argument: $1"
+                exit 1
+            fi
+            NUMBER=$1
             PARAMS="$PARAMS $1"
             shift
             ;;
@@ -156,11 +190,29 @@ fi
 
 OTHER_IP_ADDR=$(get_other_ips ${IP_ADDR} ${SUBNET_MASK} ${SUBNET_IS_CIDR})
 for v in $OTHER_IP_ADDR; do
-    [ ${INTERRUPTED} == "true" ] && break
-    ping -c 1 $v -w 1 >/dev/null 2>&1
+    [ "${INTERRUPTED}" == "true" ] && break
+    ping -c 1 $v -w $TIMEOUT >/dev/null 2>&1
     if [ $? -ne 0 ]; then
-        echo "${v} available" && [ "${EAGER_MODE}" == "false" ] && break
+        if [ "$CONSECUTIVE_MODE" == "true" ] && [ $NUMBER -ne 1 ]; then
+            if [ ${#IP_ADDRESSES[@]} -eq 0 ]; then
+                IP_ADDRESSES+=("$v")
+                continue
+            fi
+            prev_host_field=$(echo ${IP_ADDRESSES[$((${#IP_ADDRESSES[@]}-1))]} | awk -F '.' '{print $NF}')
+            curr_host_field=$(echo $v | awk -F '.' '{print $NF}')
+            if [ $((++prev_host_field)) -eq "$curr_host_field" ]; then
+                IP_ADDRESSES+=("$v")
+            else
+                IP_ADDRESSES=("$v")
+            fi
+            [ $NUMBER -gt 0 ] && [ ${#IP_ADDRESSES[@]} -eq $NUMBER ] && break
+        else
+            echo "${v} available"
+        fi
     fi
-    ((HOST_FIELD++))
+done
+
+for v in ${IP_ADDRESSES[@]}; do
+    echo "${v} available"
 done
 
