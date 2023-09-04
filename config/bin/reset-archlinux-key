@@ -1,0 +1,8 @@
+#!/bin/bash
+
+sudo rm -rf /etc/pacman.d/gnupg
+# sudo gpg --refresh-keys
+sudo pacman-key --init
+sudo pacman-key --populate archlinux
+sudo pacman-key --refresh-keys
+

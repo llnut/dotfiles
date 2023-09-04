@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-function show_help() {
+show_help() {
 cat << EOF
 Usage: available-ip [Options]
 
@@ -13,7 +13,7 @@ Options:
 -t, --timeout               Time to wait for each reply.
                             Default: 1 second
 
--c, --consecutive           Used to fetch consecutive IP addresses. When fetching multiple IP addresses, it is effective.
+-c, --consecutive           Used to fetch consecutive IP addresses. When fetching multiple IP addresses (not all), it is effective.
                             Default: false
 
 [number]                    The number of IP addresses to be fetched. Set to 0 to fetch all available IP addresses in the given network.
@@ -27,7 +27,7 @@ EOF
 }
 
 # 子网掩码转化为cidr表示
-function get_cidr_prefix() {
+get_cidr_prefix() {
     binary_subnet_mask=$(get_binary_ip "$1")
     count=0
     for ((i=0; i<${#binary_subnet_mask}; i++)); do
@@ -40,7 +40,7 @@ function get_cidr_prefix() {
 }
 
 # 获取IP地址的二进制表示
-function get_binary_ip() {
+get_binary_ip() {
     IFS='.' read -r -a ip <<< "$1"
     binary=""
     for octet in "${ip[@]}"; do
@@ -50,7 +50,7 @@ function get_binary_ip() {
 }
 
 # 获取IP地址的网络ID（与子网掩码进行按位与操作）
-function get_network_id_cidr() {
+get_network_id_cidr() {
     binary_ip=$(get_binary_ip "$1")
     network_id="${binary_ip:0:$2}"
     # 补全网络ID
@@ -61,7 +61,7 @@ function get_network_id_cidr() {
 }
 
 # 获取IP地址的网络ID（与子网掩码进行按位与操作）
-function get_network_id() {
+get_network_id() {
     ip_address="$1"
     subnet_mask="$2"
     binary_ip=$((2#$(get_binary_ip "$ip_address")))
@@ -71,7 +71,7 @@ function get_network_id() {
 }
 
 # 获取相同子网内的其他IP地址
-function get_other_ips() {
+get_other_ips() {
     ip_address="$1"
     subnet_mask="$2"
     subnet_is_cidr="$3"
@@ -193,7 +193,7 @@ for v in $OTHER_IP_ADDR; do
     [ "${INTERRUPTED}" == "true" ] && break
     ping -c 1 $v -w $TIMEOUT >/dev/null 2>&1
     if [ $? -ne 0 ]; then
-        if [ "$CONSECUTIVE_MODE" == "true" ] && [ $NUMBER -ne 1 ]; then
+        if [ "$CONSECUTIVE_MODE" == "true" ] && [ $NUMBER -gt 1 ]; then
             if [ ${#IP_ADDRESSES[@]} -eq 0 ]; then
                 IP_ADDRESSES+=("$v")
                 continue
@@ -213,7 +213,7 @@ for v in $OTHER_IP_ADDR; do
     [ $NUMBER -gt 0 ] && [ ${#IP_ADDRESSES[@]} -eq $NUMBER ] && break
 done
 
-if [ "$CONSECUTIVE_MODE" == "true" ]; then
+if [ "$CONSECUTIVE_MODE" == "true" ] && [ $NUMBER -gt 1 ]; then
     for v in ${IP_ADDRESSES[@]}; do
         echo "${v} available"
     done
