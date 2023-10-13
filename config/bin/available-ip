@@ -170,7 +170,7 @@ while (( "$#" )); do
     esac
 done
 
-function handle_interrupt() {
+handle_interrupt() {
     INTERRUPTED="true"
 }
 trap handle_interrupt INT

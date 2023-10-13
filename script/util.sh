@@ -7,23 +7,23 @@ SAVE_PATH="$HOME/.dotfiles-bin"
 [ ! -d "$SAVE_PATH" ] && mkdir -p $SAVE_PATH
 [ ! -d "$HOME/.local/bin" ] && mkdir -p $HOME/.local/bin
 
-function backup() {
+backup() {
     rm -rf ${1}_bk
     if [ -e "$1" ]; then
         mv -f $1 ${1}_bk
     fi
 }
 
-function github_latest_url() {
+github_latest_url() {
     latest_url=`curl --proto '=https' --tlsv1.2 -sSLIf -o /dev/null -w '%{url_effective}' $1`
     echo "$latest_url" | sed "s/releases\/tag\//releases\/download\//g"
 }
 
-function download() {
+download() {
     curl -o ${1} --proto '=https' --tlsv1.2 -SLf ${2}
 }
 
-function circulate_ln() {
+circulate_ln() {
     bin_dir="$( cd $1 >/dev/null 2>&1 && pwd )"
     bin=($2)
     bin_link=($3)
@@ -39,7 +39,7 @@ function circulate_ln() {
     done
 }
 
-function wrap_decompress() {
+wrap_decompress() {
     extension_name=`echo $2 | awk -F '.' '{print $NF}'`
     if [ "$extension_name" == "gz" ]; then
         archive_format=`echo $2 | awk -F '.' '{print $(NF -1)}'`
@@ -71,7 +71,7 @@ function wrap_decompress() {
     fi
 }
 
-function decompress() {
+decompress() {
     wrapped=`check_wrapped "$3"`
     if [ "$wrapped" == 0 ]; then
         mkdir $1
@@ -83,7 +83,7 @@ function decompress() {
     fi
 }
 
-function check_wrapped() {
+check_wrapped() {
     root_file_num=`root_file "$@" | wc -l`
     root_dir_num=`root_dir "$@" | wc -l`
     if [ "$root_file_num" == 0 ] && [ $root_dir_num == 1 ]; then
@@ -93,18 +93,18 @@ function check_wrapped() {
     fi
 }
 
-function root_dir() {
+root_dir() {
     echo "$@" | awk -F '/' '{if($1!="." && NF>1) print $1}' | uniq
 }
 
-function root_file() {
+root_file() {
     echo "$@" | awk -F '/' '{if($1!="." && NF==1) print $1}'
 }
 
-function leaf_dir() {
+leaf_dir() {
     echo "$1" | awk -F '/' '{if($NF != "" ) print $NF; else print $(NF-1)}'
 }
 
-function parent_dir(){
+parent_dir(){
     echo "$1" | awk -F '/' '{r=""; tail=0; if($NF=="")tail=NF-2; else tail=NF-1; for(i=1;i<=tail;i++)r=r""$i"/"; print r}'
 }

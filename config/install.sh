@@ -6,7 +6,7 @@ CONFIG=${HOME}/.config
 LOCAL=$HOME/.local
 SCRIPT_DIR="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
 
-function doIt() {
+doIt() {
     lnbk $SCRIPT_DIR/.config/nushell $CONFIG/nushell
     lnbk $SCRIPT_DIR/.config/nvim $CONFIG/nvim
     lnbk $SCRIPT_DIR/.config/gitui $CONFIG/gitui
@@ -30,7 +30,7 @@ function doIt() {
     sudo cp -f $SCRIPT_DIR/paru/paru.conf /etc
 }
 
-function lnbk() {
+lnbk() {
     rm -rf ${2}_bk
     if [ -e $2 ]; then
         mv -f $2 ${2}_bk

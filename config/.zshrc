@@ -121,7 +121,7 @@ export ARCHFLAGS="-arch x86_64"
 # Source all .zsh files inside the zsh/ directory
 for config ($DOTFILES/config/zsh/*.zsh) source $config
 
-function proxy_on() {
+proxy_on() {
     export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
 
     if (( $# > 0 )); then
@@ -159,13 +159,13 @@ function proxy_on() {
            RSYNC_PROXY=$proxy
 }
 
-function proxy_off(){
+proxy_off() {
     unset http_proxy https_proxy ftp_proxy rsync_proxy \
           HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY
     echo -e "Proxy environment variable removed."
 }
 
-function generate_random() {
+generate_random() {
     cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1
 }
 
