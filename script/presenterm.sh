@@ -1,23 +1,23 @@
 #!/bin/bash
 
-APP_NAME="yazi"
-echo "Installing ${APP_NAME}..."
+APP_NAME="presenterm"
+echo "Installing $APP_NAME..."
 
 SCRIPT_PATH="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
 source $SCRIPT_PATH/util.sh
 
 SAVE_DIR="$APP_NAME"
 SAVE_FILE_PREFIX="$SAVE_DIR"
-SAVE_FILE_SUFFIX=".zip"
+SAVE_FILE_SUFFIX=".tar.gz"
 SAVE_VERSION=1
 BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 
-LATEST_URL="https://github.com/sxyazi/yazi/releases/download"
-LATEST_TAG="v0.1.5"
-LATEST_URL="${LATEST_URL}/${LATEST_TAG}"
-REMOTE_FILE_PREFIX="yazi-x86_64-unknown-linux-gnu"
+LATEST_URL="https://github.com/mfontanini/presenterm/releases/latest"
+LATEST_URL=`github_latest_url "$LATEST_URL"`
+LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}' | awk -F 'v' '{print $NF}'`
+REMOTE_FILE_PREFIX="${APP_NAME}-${LATEST_TAG}-x86_64-unknown-linux-musl"
 
-BIN=("yazi")
+BIN=("presenterm")
 BIN_LINK=($BIN)
 
 if [ -f "$SAVE_PATH/$SAVE_DIR/.$LATEST_TAG" ]; then

@@ -1,5 +1,5 @@
 [include]
-    path = /home/sora/.dotfiles/config/delta/themes.gitconfig
+    path = /home/llnut/.dotfiles/config/delta/themes.gitconfig
 
 [core]
     pager = delta

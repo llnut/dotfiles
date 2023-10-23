@@ -337,7 +337,7 @@
     merge-conflict-theirs-diff-header-decoration-style = "#434C5E" box
 
 [delta "gruvbox-dark"]
-    #author: https://github.com/jcsora
+    #author: https://github.com/llnut
     dark0-hard = "#1d2021"
     dark0 = "#282828"
     dark0-soft = "#32302f"

@@ -2,7 +2,7 @@
 
 #set -x
 
-title="sora's dotfiles setup script"
+title="llnut's dotfiles setup script"
 
 CONFIG=$HOME/.config
 LOCAL=$HOME/.local
@@ -27,7 +27,7 @@ installNeeded() {
 
         echo "[*] Installing Rust..."
         if [[ ! -x $HOME/.cargo/bin/cargo ]] || [[ ! -x $HOME/.cargo/bin/rustc ]];then
-            rust_init="/home/sora/.setup-script/rustup-init"
+            rust_init="/home/llnut/.setup-script/rustup-init"
             curl -o $rust_init --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs
             chmod +x $rust_init && $rust_init -y
         fi
