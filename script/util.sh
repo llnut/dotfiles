@@ -1,11 +1,13 @@
 #!/bin/bash
+#set -x
 
-LOCAL_BIN_PATH="$HOME/.local/bin"
+LOCAL_BIN_PATH="${HOME}/.local/bin"
+LOCAL_SHARE_PATH="${HOME}/.local/share"
 CUR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-SAVE_PATH="$HOME/.dotfiles-bin"
+SAVE_PATH="${HOME}/.dotfiles-bin"
 
 [ ! -d "$SAVE_PATH" ] && mkdir -p $SAVE_PATH
-[ ! -d "$HOME/.local/bin" ] && mkdir -p $HOME/.local/bin
+[ ! -d "${HOME}/.local/bin" ] && mkdir -p ${HOME}/.local/bin
 
 backup() {
     rm -rf ${1}_bk
@@ -21,6 +23,18 @@ github_latest_url() {
 
 download() {
     curl -o ${1} --proto '=https' --tlsv1.2 -SLf ${2}
+}
+
+install_fonts() {
+    dir_src="$( cd $1 >/dev/null 2>&1 && pwd )"
+    filename_src=($2)
+    filename_dst=($3)
+    [ ! -d "$4" ] && mkdir -p $4
+    for ((i=0; i<${#filename_src[*]}; i++))
+    do
+        cp -f $dir_src/${filename_src[i]} $4/$(echo ${filename_dst[i]} | awk -F '/' '{print $NF}')
+    done
+    fc-cache -fv
 }
 
 circulate_ln() {
