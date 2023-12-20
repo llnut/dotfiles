@@ -3,7 +3,7 @@ DOTFILES_BIN="$HOME/.dotfiles-bin"
 export DOTFILES=$DOTFILES
 # If you come from bash you might have to change your $PATH.
 export PATH=$DOTFILES/config/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/go/bin:$HOME/.cargo/bin:$PATH
-export MANPATH=$HOME/.man:`manpath` >/dev/null 2>&1
+export MANPATH=/usr/local/man:$HOME/.man:`manpath` >/dev/null 2>&1
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml
@@ -85,14 +85,12 @@ ZSH_CUSTOM=$DOTFILES/config/oh-my-zsh-plugins
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  zsh-autosuggestions vi-mode rust docker docker-compose themes golang
+  zsh-autosuggestions vi-mode rust docker docker-compose golang
 )
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
@@ -102,7 +100,7 @@ export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='nvim'
+  export EDITOR='vim'
 else
   export EDITOR='nvim'
 fi
