@@ -61,13 +61,13 @@ disabled = false
 style_user = 'white bold green'
 style_root = 'black bold red'
 format = '[$user]($style)'
-disabled = false
+disabled = true
 show_always = true
 
 [localip]
 ssh_only = false
 format = '@[$localipv4](bold green) '
-disabled = false
+disabled = true
 
 # Replace the '❯' symbol in the prompt with '➜'
 [character] # The name of the module we are configuring is 'character'
@@ -157,9 +157,9 @@ format = '[🐋 $context](blue bold) '
 
 [git_branch]
 symbol = '🌱 '
-truncation_length = 4
+truncation_length = 10
 truncation_symbol = ''
-ignore_branches = ['master', 'main']
+ignore_branches = []
 
 [git_commit]
 commit_hash_length = 4

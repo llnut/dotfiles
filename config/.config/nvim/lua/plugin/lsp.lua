@@ -75,9 +75,21 @@ end
 -- Set up lspconfig.
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local lspconfig = require('lspconfig')
-local servers = { "rust_analyzer", "clangd", "asm_lsp", "gopls" }
+local servers = { "clangd", "asm_lsp", "gopls" }
 for _, lsp in pairs(servers) do
   lspconfig[lsp].setup {
     capabilities = capabilities
   }
 end
+
+lspconfig.rust_analyzer.setup {
+  -- Server-specific settings. See `:help lspconfig-setup`
+  settings = {
+    ['rust-analyzer'] = {
+      cargo = {
+        allFeatures = true
+        -- features = {}
+      }
+    }
+  }
+}
