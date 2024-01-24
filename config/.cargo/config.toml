@@ -29,11 +29,6 @@ registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index/"
 [source.tuna]
 registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
 
-# rustcc社区
-[source.rustcc]
-registry = "https://code.aliyun.com/rustcc/crates.io-index.git"
-
-
 [net]
 git-fetch-with-cli = true
 

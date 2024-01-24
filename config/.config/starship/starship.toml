@@ -33,11 +33,11 @@ $cmd_duration\
 $shell\
 $character"""
 
-right_format = """
-$memory_usage\
-$battery\
-$time\
-"""
+#right_format = """
+#$memory_usage\
+#$battery\
+#$time\
+#"""
 
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'

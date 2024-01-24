@@ -1,6 +1,9 @@
-require('bufferline').setup {
+local bufferline = require('bufferline')
+bufferline.setup {
   options = {
     mode = "buffers",
+    style_preset = bufferline.style_preset.default,
+    themable = true,
     numbers = "both",
     close_command = "bdelete! %d",
     right_mouse_command = "bdelete! %d",
@@ -10,7 +13,7 @@ require('bufferline').setup {
       icon = '▎',
       style = 'icon',
     },
-    buffer_close_icon = '',
+    buffer_close_icon = '󰅖',
     modified_icon = '●',
     close_icon = '',
     left_trunc_marker = '',
@@ -49,12 +52,17 @@ require('bufferline').setup {
       }
     },
     color_icons = true,
+    get_element_icon = function(element)
+      local icon, hl = require('nvim-web-devicons').get_icon_by_filetype(element.filetype, { default = false })
+      return icon, hl
+    end,
     show_buffer_icons = true,
     show_buffer_close_icons = true,
     show_close_icon = false,
     show_tab_indicators = true,
     show_duplicate_prefix = true,
     persist_buffer_sort = true,
+    move_wraps_at_ends = false,
     separator_style = "thin",
     enforce_regular_tabs = false,
     always_show_bufferline = true,
