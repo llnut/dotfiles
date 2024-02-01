@@ -178,7 +178,7 @@ fpath=($DOTFILES/config/oh-my-zsh-plugins/functions/ $fpath)
 autoload -Uz compinit
 compinit
 
-eval "$(fnm env --use-on-cd)"
+#eval "$(fnm env --use-on-cd)"
 
 source /usr/share/fzf/key-bindings.zsh
 

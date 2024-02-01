@@ -102,6 +102,6 @@ keymap("n", "gp", "`[v`]", option)
 keymap("n", "<leader><leader>df", ":lua require('util.function').diff_with_saved()<CR>", option)
 keymap("n", "<leader><leader>fn", ":lua require('util.function').quick_fix_file_names()<CR>", option)
 
--- inlay hints
-keymap("", "<leader>ih", ":lua require('plugin.inlay-hints').toggle_inlay_hints()<CR>", option)
+-- inlay hint
+keymap("", "<leader>ih", ":lua require('util.function').toggle_inlay_hint()<CR>", option)
 

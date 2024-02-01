@@ -53,5 +53,9 @@ M.show_documentation = function()
   end
 end
 
+function M.toggle_inlay_hint()
+    vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
+end
+
 return M
 
