@@ -1,6 +1,6 @@
 #!/bin/bash
 
-APP_NAME="miniserve"
+APP_NAME="pueued"
 echo "Installing ${APP_NAME}..."
 
 SCRIPT_PATH="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
@@ -12,12 +12,12 @@ SAVE_FILE_SUFFIX=""
 SAVE_VERSION=1
 BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 
-LATEST_URL="https://github.com/svenstaro/miniserve/releases/latest"
+LATEST_URL="https://github.com/Nukesor/pueue/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
-LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}' | awk -F 'v' '{print $NF}'`
-REMOTE_FILE_PREFIX="miniserve-${LATEST_TAG}-x86_64-unknown-linux-musl"
+LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
+REMOTE_FILE_PREFIX="pueued-linux-x86_64"
 
-BIN=("miniserve")
+BIN=("pueued")
 BIN_LINK=($BIN)
 
 if [ -f "$SAVE_PATH/$SAVE_DIR/.$LATEST_TAG" ]; then

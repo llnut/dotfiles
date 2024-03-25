@@ -12,10 +12,10 @@ SAVE_FILE_SUFFIX=".zip"
 SAVE_VERSION=1
 BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 
-LATEST_URL="https://github.com/sxyazi/yazi/releases/download"
-LATEST_TAG="v0.1.5"
-LATEST_URL="${LATEST_URL}/${LATEST_TAG}"
-REMOTE_FILE_PREFIX="yazi-x86_64-unknown-linux-gnu"
+LATEST_URL="https://github.com/sxyazi/yazi/releases/latest"
+LATEST_URL=`github_latest_url "$LATEST_URL"`
+LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
+REMOTE_FILE_PREFIX="yazi-x86_64-unknown-linux-musl"
 
 BIN=("yazi")
 BIN_LINK=($BIN)
