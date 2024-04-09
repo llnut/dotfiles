@@ -24,8 +24,8 @@ doIt() {
     lnbk ${SCRIPT_DIR}/.asoundrc ${HOME}/.asoundrc
     lnbk ${SCRIPT_DIR}/.cargo/config.toml ${HOME}/.cargo/config.toml
 
-    mkdir -p ${LOCAL}/bin
-    cp -rf ${SCRIPT_DIR}/bin/* ${LOCAL}/bin
+    mkdir -p ${LOCAL_DIR}/bin
+    cp -rf ${SCRIPT_DIR}/bin/* ${LOCAL_DIR}/bin
     sudo cp -f ${SCRIPT_DIR}/paru/paru.conf /etc
 }
 
