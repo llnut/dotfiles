@@ -18,7 +18,7 @@ LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
 REMOTE_FILE_PREFIX="sg-x86_64-unknown-linux-gnu"
 
 BIN=("sg")
-BIN_LINK=($BIN)
+BIN_LINK=("ast-grep")
 
 if [ -f "$SAVE_PATH/$SAVE_DIR/.$LATEST_TAG" ]; then
     circulate_ln "$BIN_PATH" "${BIN[*]}" "${BIN_LINK[*]}" "$LOCAL_BIN_PATH"
