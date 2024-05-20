@@ -17,11 +17,6 @@ keymap("", "<leader>ht", ":nohlsearch<CR>", option)
 
 -- Close the current window.
 keymap("n", "<leader>cw", ":close<CR>", option)
-
--- Close current tab
-keymap("n", "<leader>ct", ":tabclose<CR>", option)
--- New tab
-keymap("n", "<leader>tn", ":tabnew<CR>", option)
 -- Close Location panel
 keymap("n", "<leader>ce", ":lclose<CR>", option)
 -- Switch buffers
@@ -35,11 +30,16 @@ keymap("n", "]B", ":blast<CR>", option)
 keymap("n", "<leader>q", ":lua require('util.function').buf_close_it()<CR>", option)
 keymap("n", "<leader>Q", ":%bdelete<cr>", option)
 
+-- New tab
+keymap("n", "<leader>tn", ":tabnew<CR>", option)
 --Switch tabs
 keymap("n", "[t", ":tabprevious<CR>", option)
-keymap("n", "]t", ":tabprevious<CR>", option)
+keymap("n", "]t", ":tabnext<CR>", option)
 keymap("n", "[T", ":tabfirst<CR>", option)
 keymap("n", "]T", ":tablast<CR>", option)
+-- Close current tab
+keymap("n", "<leader>tq", ":tabclose<CR>", option)
+keymap("n", "<leader>tQ", ":tabonly<CR>", option)
 --copen
 keymap("n", "<leader>co", ":copen<CR>", option)
 
