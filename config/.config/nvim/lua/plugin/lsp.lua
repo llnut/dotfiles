@@ -91,5 +91,6 @@ lspconfig.rust_analyzer.setup {
         -- features = {}
       }
     }
-  }
+  },
+  capabilities = capabilities
 }

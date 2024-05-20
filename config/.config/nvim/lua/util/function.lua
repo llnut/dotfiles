@@ -57,5 +57,16 @@ function M.toggle_inlay_hint()
     vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
 end
 
+function M.toggle_lsp_client()
+  local buf = vim.api.nvim_get_current_buf()
+
+  local clients = vim.lsp.get_clients({ bufnr = buf })
+  if not vim.tbl_isempty(clients) then
+    vim.cmd("LspStop")
+  else
+    vim.cmd("LspStart")
+  end
+end
+
 return M
 

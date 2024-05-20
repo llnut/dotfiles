@@ -104,4 +104,6 @@ keymap("n", "<leader><leader>fn", ":lua require('util.function').quick_fix_file_
 
 -- inlay hint
 keymap("", "<leader>ih", ":lua require('util.function').toggle_inlay_hint()<CR>", option)
+-- lsp toggle
+keymap("", "<leader>tl", ":lua require('util.function').toggle_lsp_client()<CR>", option)
 
