@@ -1,17 +1,15 @@
 #!/bin/bash
-#set -x
 
 LOCAL_BIN_PATH="${HOME}/.local/bin"
 LOCAL_SHARE_PATH="${HOME}/.local/share"
-CUR_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 SAVE_PATH="${HOME}/.dotfiles-bin"
 
 [ ! -d "$SAVE_PATH" ] && mkdir -p $SAVE_PATH
 [ ! -d "${HOME}/.local/bin" ] && mkdir -p ${HOME}/.local/bin
 
 backup() {
-    rm -rf ${1}_bk
     if [ -e "$1" ]; then
+        rm -rf ${1}_bk
         mv -f $1 ${1}_bk
     fi
 }
