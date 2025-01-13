@@ -15,7 +15,7 @@ BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 LATEST_URL="https://github.com/imsnif/bandwhich/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
-REMOTE_FILE_PREFIX="bandwhich-v${LATEST_TAG}-x86_64-unknown-linux-musl"
+REMOTE_FILE_PREFIX="bandwhich-${LATEST_TAG}-x86_64-unknown-linux-musl"
 
 BIN=("bandwhich")
 BIN_LINK=($BIN)

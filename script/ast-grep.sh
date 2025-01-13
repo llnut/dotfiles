@@ -15,7 +15,7 @@ BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 LATEST_URL="https://github.com/ast-grep/ast-grep/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
-REMOTE_FILE_PREFIX="sg-x86_64-unknown-linux-gnu"
+REMOTE_FILE_PREFIX="app-x86_64-unknown-linux-gnu"
 
 BIN=("sg")
 BIN_LINK=("ast-grep")

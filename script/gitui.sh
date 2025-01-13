@@ -15,7 +15,7 @@ BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 LATEST_URL="https://github.com/extrawurst/gitui/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
-REMOTE_FILE_PREFIX="gitui-linux-musl"
+REMOTE_FILE_PREFIX="gitui-linux-x86_64"
 
 BIN=("gitui")
 BIN_LINK=($BIN)

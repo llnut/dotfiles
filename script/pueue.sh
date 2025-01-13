@@ -15,7 +15,7 @@ BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 LATEST_URL="https://github.com/Nukesor/pueue/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
-REMOTE_FILE_PREFIX="pueue-linux-x86_64"
+REMOTE_FILE_PREFIX="pueue-x86_64-unknown-linux-musl"
 
 BIN=("pueue")
 BIN_LINK=($BIN)

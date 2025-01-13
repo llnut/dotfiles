@@ -15,7 +15,7 @@ BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 LATEST_URL="https://github.com/soywod/himalaya/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
-REMOTE_FILE_PREFIX="himalaya-linux"
+REMOTE_FILE_PREFIX="himalaya.x86_64-linux"
 
 BIN=("himalaya")
 BIN_LINK=($BIN)

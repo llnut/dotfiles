@@ -15,7 +15,7 @@ BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 LATEST_URL="https://github.com/mgunyho/tere/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}' | awk -F 'v' '{print $NF}'`
-REMOTE_FILE_PREFIX="tere-${LATEST_TAG}-x86_64-unknown-linux-gnu"
+REMOTE_FILE_PREFIX="tere-${LATEST_TAG}-x86_64-unknown-linux-musl"
 
 BIN=("tere")
 BIN_LINK=($BIN)

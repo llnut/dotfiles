@@ -15,7 +15,7 @@ BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 LATEST_URL="https://github.com/orf/gping/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
-REMOTE_FILE_PREFIX="gping-Linux-x86_64"
+REMOTE_FILE_PREFIX="gping-Linux-musl-x86_64"
 
 BIN=("gping")
 BIN_LINK=($BIN)

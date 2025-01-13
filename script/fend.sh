@@ -15,7 +15,7 @@ BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 LATEST_URL="https://github.com/printfn/fend/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}' | awk -F 'v' '{print $NF}'`
-REMOTE_FILE_PREFIX="fend-${LATEST_TAG}-linux-x64"
+REMOTE_FILE_PREFIX="fend-${LATEST_TAG}-linux-x86_64-musl"
 
 BIN=("fend")
 BIN_LINK=($BIN)

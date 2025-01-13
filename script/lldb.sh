@@ -15,7 +15,7 @@ BIN_PATH="$SAVE_PATH/$SAVE_DIR/extension/adapter"
 LATEST_URL="https://github.com/vadimcn/vscode-lldb/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
-REMOTE_FILE_PREFIX="codelldb-x86_64-linux"
+REMOTE_FILE_PREFIX="codelldb-linux-x64"
 
 BIN=("codelldb")
 BIN_LINK=($BIN)
