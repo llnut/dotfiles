@@ -36,7 +36,7 @@ install_fonts() {
 }
 
 circulate_ln() {
-    bin_dir="$( cd $1 >/dev/null 2>&1 && pwd )"
+    bin_dir="$(cd $1 >/dev/null 2>&1 && pwd)"
     bin=($2)
     bin_link=($3)
     [ ! -d "$4" ] && mkdir -p $4
@@ -52,57 +52,52 @@ circulate_ln() {
 }
 
 wrap_decompress() {
-    extension_name=`echo $2 | awk -F '.' '{print $NF}'`
-    if [ "$extension_name" == "gz" ]; then
-        archive_format=`echo $2 | awk -F '.' '{print $(NF -1)}'`
-        if [ "$archive_format" == "tar" ]; then
-            content=`tar tf $2`
-            decompress $1 $2 "$content" "tar zxf $2 -C $1" "tar zxf $2"
-        else
-            mkdir $1 && mv $2 $1
-            pushd $1 && gzip -d $2 && popd
-        fi
-    elif [ "$extension_name" == "tgz" ]; then
-        content=`tar tf $2`
-        decompress $1 $2 "$content" "tar zxf $2 -C $1" "tar zxf $2"
-    elif [ "$extension_name" == "tar" ]; then
-        content=`tar tf $2`
-        decompress $1 $2 "$content" "tar xf $2 -C $1" "tar xf $2"
-    elif [ "$extension_name" == "xz" ]; then
-        content=`tar tf $2`
-        decompress $1 $2 "$content" "tar xf $2 -C $1" "tar xf $2"
-    elif [ "$extension_name" == "bz2" ]; then
-        content=`tar tf $2`
-        decompress $1 $2 "$content" "tar jxf $2 -C $1" "tar jxf $2"
-    elif [ "$extension_name" == "zst" ]; then
-        content=`tar tf $2`
-        decompress $1 $2 "$content" "tar -I zstd -xf $2 -C $1" "tar -I zstd -xf $2"
-    elif [ "$extension_name" == "zip" ] || [ "$extension_name" == "vsix" ]; then
-        content=`zipinfo -1 $2`
-        decompress $1 $2 "$content" "unzip $2 -d $1" "unzip $2"
-    fi
+    local extension_name=$(echo $2 | awk -F '.' '{print $NF}')
+    local content
+    case "$extension_name" in
+        "gz")
+            if [ "$(echo $2 | awk -F '.' '{print $(NF -1)}')" == "tar" ]; then
+                content=$(tar tf $2)
+                decompress $1 $2 "$content" "tar zxf $2 -C $1" "tar zxf $2"
+            else
+                mkdir $1 && mv $2 $1
+                pushd $1 && gzip -d $2 && popd
+            fi
+            ;;
+        "tgz" | "tar" | "xz" | "bz2")
+            content=$(tar tf $2)
+            decompress $1 $2 "$content" "tar xf $2 -C $1" "tar xf $2"
+            ;;
+        "zst")
+            content=$(tar tf $2)
+            decompress $1 $2 "$content" "tar -I zstd -xf $2 -C $1" "tar -I zstd -xf $2"
+            ;;
+        "zip")
+            content=$(zipinfo -1 $2)
+            decompress $1 $2 "$content" "unzip $2 -d $1" "unzip $2"
+            ;;
+    esac
 }
 
 decompress() {
-    wrapped=`check_wrapped "$3"`
-    if [ "$wrapped" == 0 ]; then
+    is_wrapped "$3"
+    if [ $? -ne 0 ]; then
         mkdir $1
         eval "$4"
     else
-        wrapped_name=`root_dir "$content" | awk -F '/' '{print $1F}'`
+        wrapped_name=$(root_dir "$content" | awk -F '/' '{print $1F}')
         eval "$5"
-        [ "wrapped_name" == `leaf_dir "$1"` ] || mv $wrapped_name $1
+        [ "$wrapped_name" == $(leaf_dir "$1") ] || mv $wrapped_name $1
     fi
 }
 
-check_wrapped() {
-    root_file_num=`root_file "$@" | wc -l`
-    root_dir_num=`root_dir "$@" | wc -l`
-    if [ "$root_file_num" == 0 ] && [ $root_dir_num == 1 ]; then
-        echo 1
-    else
-        echo 0
+is_wrapped() {
+    root_file_num=$(root_file "$@" | wc -l)
+    root_dir_num=$(root_dir "$@" | wc -l)
+    if [ "$root_file_num" -eq 0 ] && [ "$root_dir_num" -eq 1 ]; then
+        return 0
     fi
+    return 1
 }
 
 root_dir() {
