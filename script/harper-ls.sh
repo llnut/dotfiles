@@ -1,7 +1,7 @@
 #!/bin/bash
 
-APP_NAME="nvim-nightly"
-echo "Installing $APP_NAME..."
+APP_NAME="harper-ls"
+echo "Installing ${APP_NAME}..."
 
 SCRIPT_PATH="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
 source $SCRIPT_PATH/util.sh
@@ -9,14 +9,22 @@ source $SCRIPT_PATH/util.sh
 SAVE_DIR="$APP_NAME"
 SAVE_FILE_PREFIX="$SAVE_DIR"
 SAVE_FILE_SUFFIX=".tar.gz"
-SAVE_VERSION=0
-BIN_PATH="$SAVE_PATH/$SAVE_DIR/bin"
+SAVE_VERSION=1
+BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 
-LATEST_URL="https://github.com/neovim/neovim/releases/download/nightly"
-REMOTE_FILE_PREFIX="nvim-linux-x86_64"
+LATEST_URL="https://github.com/Automattic/harper/releases/latest"
+LATEST_URL=`github_latest_url "$LATEST_URL"`
+LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
+REMOTE_FILE_PREFIX="harper-ls-x86_64-unknown-linux-gnu"
 
-BIN=("nvim")
+BIN=("harper-ls")
 BIN_LINK=($BIN)
+
+if [ -f "$SAVE_PATH/$SAVE_DIR/.$LATEST_TAG" ]; then
+    circulate_ln "$BIN_PATH" "${BIN[*]}" "${BIN_LINK[*]}" "$LOCAL_BIN_PATH"
+    echo "Installation successful."
+    exit 0
+fi
 
 backup $SAVE_PATH/$SAVE_DIR
 cd $SAVE_PATH

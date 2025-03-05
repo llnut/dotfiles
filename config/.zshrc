@@ -85,7 +85,7 @@ ZSH_CUSTOM=$DOTFILES/config/oh-my-zsh-plugins
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  zsh-autosuggestions vi-mode rust docker docker-compose golang
+  zsh-autosuggestions vi-mode rust docker docker-compose
 )
 
 source $ZSH/oh-my-zsh.sh

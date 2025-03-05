@@ -88,3 +88,12 @@ lspconfig.rust_analyzer.setup {
   },
   capabilities = capabilities
 }
+
+lspconfig.harper_ls.setup {
+  settings = {
+    ["harper-ls"] = {
+      --userDictPath = "~/dict.txt",
+      diagnosticSeverity = "hint",
+    }
+  },
+}

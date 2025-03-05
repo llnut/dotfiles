@@ -80,7 +80,7 @@ return {
   },
   {
     'saecki/crates.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' },
+    event = { "BufRead Cargo.toml" },
     config = function()
       require('plugin.crates')
     end,
@@ -115,24 +115,6 @@ return {
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       require('plugin.gitsigns')
-    end,
-  },
-  {
-    'phaazon/hop.nvim',
-    branch = 'v2', -- optional but strongly recommended
-    keys = {
-      "f",
-      "t",
-      "w",
-      "<leader><leader>f",
-      "<leader><leader>F",
-      "<leader><leader>w",
-      "<leader><leader>W",
-      "<leader><leader>p",
-      "<leader><leader>P",
-    },
-    config = function()
-      require('plugin.hop')
     end,
   },
   {
