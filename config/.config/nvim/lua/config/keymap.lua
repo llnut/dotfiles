@@ -54,15 +54,8 @@ keymap("", "<leader>z", ":e ~/buffer<cr>", option)
 keymap("", "<leader>x", ":e ~/buffer.md<cr>", option)
 keymap("", "<leader>c", ":e ~/README.md<cr>", option)
 
-keymap("", "<C-p>", ":lua require('telescope.builtin').find_files({hidden=false})<CR>", option)
-keymap("", "<leader>b", ":lua require('telescope.builtin').buffers()<CR>", option)
-keymap("", "<leader>tg", ":lua require('telescope.builtin').treesitter()<CR>", option)
-keymap("", "<leader>m", ":lua require('telescope.builtin').oldfiles()<CR>", option)
-keymap("", "<leader>rg", ":lua require('telescope.builtin').live_grep()<CR>", option)
-keymap("", "<leader>eg", ":lua require('telescope.builtin').live_grep({prompt_title = 'find in open buffers', grep_open_files = true})<CR>", option)
-
 keymap("", "<leader>d", ":NvimTreeToggle<CR>", option)
-keymap("", "<leader>ff", ":NvimTreeFindFile<CR>", option)
+keymap("", "<leader>f", ":NvimTreeFindFile<CR>", option)
 
 -- keymap("", "<bs>", ":tabprevious<CR>", option)
 -- keymap("", "<C-l>", ":tabnext<CR>", option)
@@ -107,3 +100,5 @@ keymap("", "<leader>ih", ":lua require('util.function').toggle_inlay_hint()<CR>"
 -- lsp toggle
 keymap("", "<leader>tl", ":lua require('util.function').toggle_lsp_client()<CR>", option)
 
+-- default show_documentation
+keymap("n", "K", ":lua require('util.function').show_documentation()<CR>", option)

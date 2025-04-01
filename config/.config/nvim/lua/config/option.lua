@@ -1,7 +1,7 @@
 local home_dir = os.getenv("HOME")
 
 local options = {
-  clipboard      = "unnamed,unnamedplus",   --- Copy-paste between vim and everything else
+  clipboard      = vim.env.SSH_TTY and "" or "unnamed,unnamedplus",   --- Copy-paste between vim and everything else
   cmdheight      = 1,                       --- Give more space for displaying messages
   completeopt    = "menu,menuone,noselect", --- Better autocompletion
   cursorline     = true,                    --- Highlight of current line
@@ -58,16 +58,16 @@ local options = {
   mat            = 2,                       --- How many tenths of a second to blink when matching brackets
   foldcolumn     = "1",                     --- Add a bit extra margin to the left
   fileformats    = "unix,dos,mac",          --- Use Unix as the standard file type
-  autoread       = true,                    --- Set to auto read when a file is changed from the outside
+  autoread       = false,                    --- Set to auto read when a file is changed from the outside
   wildmenu       = true,                    --- Enhance command-line completion
   gdefault       = false,                    --- Add the g flag to search/replace by default
   endofline      = false,                   --- Don’t add empty newlines at the end of files
 
-  modeline       = true,                    --- Respect modeline in files
-  modelines      = 4,
+  modeline       = false,                    --- Respect modeline in files
+  modelines      = 0,
 
-  exrc           = true,                    --- Enable per-directory .vimrc files and disable unsafe commands in them
-  secure         = true,
+  exrc           = false,                    --- Enable per-directory .vimrc files and disable unsafe commands in them
+  secure         = false,
 
   lcs            = [[tab:▸\ ,trail:·,nbsp:_]], --- Show “invisible” characters
   list           = true,
@@ -80,7 +80,7 @@ local options = {
 local globals = {
   fillchars                   = "fold:\\ ", --- Fill chars needed for folds
   mapleader                   = ',',        --- Map leader key to SPC
-  speeddating_no_mappings     = 1,          --- Disable default mappings for speeddating
+  snacks_animate              = false,
   python3_host_prog           = '/usr/bin/python',
   history                     = 500,        --- Sets how many lines of history VIM has to remember
   wildignore     = "*.o,*~,*.pyc,*node_modules/**,*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store,*/target/*",      --- Ignore compiled files

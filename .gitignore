@@ -3,6 +3,7 @@
 /config/.config/nvim/swaps/*
 /config/.config/nvim/vimspector-config/*
 /config/.config/nvim/plugin/*
+/config/.config/nvim/lazy-lock.json
 /config/.config/himalaya/downloads/*
 /config/.config/nushell/history.txt
 /bin

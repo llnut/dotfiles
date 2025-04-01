@@ -1,47 +1,8 @@
 format = """
-<<<<<<< HEAD
-||||||| parent of 760afbd (chore: migrate leftwm config to ron && update alacritty configs && fix install.sh and util.sh)
 $shlvl\
 $hostname\
-$username\
-$localip\
-=======
-$shlvl\
-$hostname\
->>>>>>> 760afbd (chore: migrate leftwm config to ron && update alacritty configs && fix install.sh and util.sh)
 $directory\
 $git_branch\
-<<<<<<< HEAD
-||||||| parent of 760afbd (chore: migrate leftwm config to ron && update alacritty configs && fix install.sh and util.sh)
-$git_commit\
-$git_state\
-$git_metrics\
-$git_status\
-$docker_context\
-$package\
-$c\
-$cmake\
-$golang\
-$lua\
-$nodejs\
-$python\
-$rust\
-$zig\
-$conda\
-$meson\
-=======
-$package\
-$c\
-$cmake\
-$golang\
-$lua\
-$nodejs\
-$python\
-$rust\
-$zig\
-$conda\
-$meson\
->>>>>>> 760afbd (chore: migrate leftwm config to ron && update alacritty configs && fix install.sh and util.sh)
 $env_var\
 $sudo\
 $line_break\
