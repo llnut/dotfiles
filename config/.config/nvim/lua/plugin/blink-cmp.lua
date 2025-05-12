@@ -70,10 +70,6 @@ return {
           calc = {
             name = 'calc',
             module = 'blink.compat.source',
-          },
-          crates = {
-            name = 'crates',
-            module = 'blink.compat.source',
           }
         }
       },
