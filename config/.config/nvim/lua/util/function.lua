@@ -67,5 +67,9 @@ function M.toggle_lsp_client()
   end
 end
 
+function M.buf_format()
+  vim.lsp.buf.format({ async = false })
+end
+
 return M
 

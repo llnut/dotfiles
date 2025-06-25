@@ -102,3 +102,6 @@ keymap("", "<leader>tl", ":lua require('util.function').toggle_lsp_client()<CR>"
 
 -- default show_documentation
 keymap("n", "K", ":lua require('util.function').show_documentation()<CR>", option)
+
+-- format current buf
+keymap("n", "<Space>f", ":lua require('util.function').buf_format()<CR>", option)
