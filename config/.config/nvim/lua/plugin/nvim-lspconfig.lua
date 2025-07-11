@@ -85,7 +85,7 @@ return {
   config = function(_, opts)
     local capabilities = require('blink.cmp').get_lsp_capabilities()
     local lspconfig = require('lspconfig')
-    local servers = { "clangd", "asm_lsp" }
+    local servers = { "clangd", "asm_lsp", "lua_ls" }
     for _, lsp in pairs(servers) do
       lspconfig[lsp].setup({ capabilities = capabilities })
     end

@@ -105,3 +105,6 @@ keymap("n", "K", ":lua require('util.function').show_documentation()<CR>", optio
 
 -- format current buf
 keymap("n", "<Space>f", ":lua require('util.function').buf_format()<CR>", option)
+
+-- toggle codecompanion chat buffer
+keymap("n", "<leader>cc", ":lua require('codecompanion').toggle()<CR>", option)
