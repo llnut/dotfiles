@@ -96,7 +96,7 @@ return {
         ['rust-analyzer'] = {
           cargo = {
             -- allFeatures = true
-            features = { "vm" }
+            -- features = { "vm" }
           }
         }
       },

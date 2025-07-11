@@ -36,6 +36,14 @@ vim.api.nvim_create_autocmd(
   }
 )
 
+vim.api.nvim_create_autocmd(
+  { "BufRead", "BufNewFile" },
+  {
+    pattern = { "*.c" },
+    command = "setlocal ts=8 sts=8 sw=8 noexpandtab",
+  }
+)
+
 -- Trim trailing white space on save
 -- vim.api.nvim_create_autocmd("BufWritePre", 
 -- {
