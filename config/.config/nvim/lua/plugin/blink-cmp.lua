@@ -50,7 +50,14 @@ return {
       keymap = {
         -- set to 'none' to disable the 'default' preset
         preset = 'default',
-        ['<CR>'] = { 'accept', 'fallback' },
+        ["<C-e>"] = { "show", "show_documentation", "hide_documentation", "hide" },
+        ['<CR>'] = {
+          function(cmp)
+            if cmp.snippet_active() then return cmp.accept()
+            else return cmp.select_and_accept() end
+          end,
+          'fallback'
+        },
       },
 
       appearance = {
