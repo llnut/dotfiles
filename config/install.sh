@@ -30,6 +30,7 @@ lnbk ${SCRIPT_DIR}/.config/leftwm ${CONFIG_DIR}/leftwm
 lnbk ${SCRIPT_DIR}/.config/starship ${CONFIG_DIR}/starship
 lnbk ${SCRIPT_DIR}/.config/zellij ${CONFIG_DIR}/zellij
 lnbk ${SCRIPT_DIR}/.config/dunst ${CONFIG_DIR}/dunst
+lnbk ${SCRIPT_DIR}/.config/gdb ${CONFIG_DIR}/gdb
 lnbk ${SCRIPT_DIR}/.tmux.conf ${HOME}/.tmux.conf
 lnbk ${SCRIPT_DIR}/.zshrc ${HOME}/.zshrc
 lnbk ${SCRIPT_DIR}/.gitconfig ${HOME}/.gitconfig

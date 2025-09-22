@@ -7,6 +7,8 @@ export MANPATH=/usr/local/man:$HOME/.man:`manpath` >/dev/null 2>&1
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml
+# fnm - fast node manager
+export XDG_RUNTIME_DIR="$HOME/.cache/xdgr"
 
 HISTFILE=~/.histfile
 HISTSIZE=1000

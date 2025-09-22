@@ -49,27 +49,29 @@ return {
       --  allow_insecure = true,
       --  proxy = "socks://127.0.0.1:9999"
       --},
-      deepseek = function()
-        return require("codecompanion.adapters").extend("deepseek", {
-          env = {
-            api_key = "cmd:llnut-keys deepseek-apikey",
-          },
-          schema = {
-            model = {
-              default = "deepseek-reasoner",
-              choices = {
-                ["deepseek-reasoner"] = {
-                  opts = { can_reason = true }
-                },
-                "deepseek-chat"
-              }
+      http = {
+        deepseek = function()
+          return require("codecompanion.adapters").extend("deepseek", {
+            env = {
+              api_key = "cmd:llnut-keys deepseek-apikey",
             },
-            --temperature = {
-            --  default = 0.4,
-            --},
-          },
-        })
-      end,
+            schema = {
+              model = {
+                default = "deepseek-reasoner",
+                choices = {
+                  ["deepseek-reasoner"] = {
+                    opts = { can_reason = true }
+                  },
+                  "deepseek-chat"
+                }
+              },
+              --temperature = {
+                --  default = 0.4,
+                --},
+              },
+            })
+          end,
+        }
     },
     prompt_library = {
       ["DeepSeek Explain In Chinese"] = {
