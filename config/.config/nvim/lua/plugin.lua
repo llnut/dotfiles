@@ -19,22 +19,5 @@ return {
     config = function()
       require('treesj').setup()
     end,
-  },
-  {
-    "LudoPinelli/comment-box.nvim",
-    cmd = {
-      "CBllbox",
-      "CBlcbox",
-      "CBlrbox",
-      "CBclbox",
-      "CBccbox",
-      "CBcrbox",
-      "CBrlbox",
-      "CBrcbox",
-      "CBrrbox",
-      "CBalbox",
-      "CBacbox",
-      "CBarbox",
-    },
-  },
+  }
 }
