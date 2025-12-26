@@ -1,23 +1,23 @@
 #!/bin/bash
 
-APP_NAME="rustscan"
-echo "Installing ${APP_NAME}..."
+APP_NAME="yay"
+echo "Installing $APP_NAME..."
 
 SCRIPT_PATH="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
 source $SCRIPT_PATH/util.sh
 
 SAVE_DIR="$APP_NAME"
 SAVE_FILE_PREFIX="$SAVE_DIR"
-SAVE_FILE_SUFFIX=".tar.gz.zip"
+SAVE_FILE_SUFFIX=".tar.gz"
 SAVE_VERSION=1
 BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 
-LATEST_URL="https://github.com/RustScan/RustScan/releases/latest"
+LATEST_URL="https://github.com/Jguer/yay/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
-LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
-REMOTE_FILE_PREFIX="x86_64-linux-rustscan"
+LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}' | awk -F 'v' '{print $NF}'`
+REMOTE_FILE_PREFIX="yay_${LATEST_TAG}_x86_64"
 
-BIN=("rustscan")
+BIN=("yay")
 BIN_LINK=($BIN)
 
 if [ -f "$SAVE_PATH/$SAVE_DIR/.$LATEST_TAG" ]; then

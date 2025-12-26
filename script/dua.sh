@@ -1,6 +1,6 @@
 #!/bin/bash
 
-APP_NAME="rustscan"
+APP_NAME="dua"
 echo "Installing ${APP_NAME}..."
 
 SCRIPT_PATH="$( cd "$( dirname "$0" )" >/dev/null 2>&1 && pwd )"
@@ -8,16 +8,16 @@ source $SCRIPT_PATH/util.sh
 
 SAVE_DIR="$APP_NAME"
 SAVE_FILE_PREFIX="$SAVE_DIR"
-SAVE_FILE_SUFFIX=".tar.gz.zip"
+SAVE_FILE_SUFFIX=".tar.gz"
 SAVE_VERSION=1
 BIN_PATH="$SAVE_PATH/$SAVE_DIR"
 
-LATEST_URL="https://github.com/RustScan/RustScan/releases/latest"
+LATEST_URL="https://github.com/Byron/dua-cli/releases/latest"
 LATEST_URL=`github_latest_url "$LATEST_URL"`
 LATEST_TAG=`echo $LATEST_URL | awk -F '/' '{print $NF}'`
-REMOTE_FILE_PREFIX="x86_64-linux-rustscan"
+REMOTE_FILE_PREFIX="dua-$LATEST_TAG-x86_64-unknown-linux-musl"
 
-BIN=("rustscan")
+BIN=("dua")
 BIN_LINK=($BIN)
 
 if [ -f "$SAVE_PATH/$SAVE_DIR/.$LATEST_TAG" ]; then

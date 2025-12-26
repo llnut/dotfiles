@@ -2,7 +2,7 @@ DOTFILES="$HOME/.dotfiles"
 DOTFILES_BIN="$HOME/.dotfiles-bin"
 export DOTFILES=$DOTFILES
 # If you come from bash you might have to change your $PATH.
-export PATH=$DOTFILES/config/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/go/bin:$HOME/.cargo/bin:$PATH
+export PATH=$DOTFILES/config/bin:$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/go/bin:$HOME/.cargo/bin:$HOME/.local/go/bin:$PATH
 export MANPATH=/usr/local/man:$HOME/.man:`manpath` >/dev/null 2>&1
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
