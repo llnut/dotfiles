@@ -3,6 +3,7 @@
 
 [core]
     pager = delta
+    excludesfile = /home/llnut/.gitignore-global
 
 [interactive]
     diffFilter = delta --color-only

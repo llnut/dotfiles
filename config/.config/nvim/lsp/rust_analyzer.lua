@@ -24,92 +24,30 @@
 --- Note: do not set `init_options` for this LS config, it will be automatically populated by the contents of settings["rust-analyzer"] per
 --- https://github.com/rust-lang/rust-analyzer/blob/eb5da56d839ae0a9e9f50774fa3eb78eb0964550/docs/dev/lsp-extensions.md?plain=1#L26.
 
-vim.api.nvim_create_autocmd('LspAttach', {
-  callback = function(args)
-    local opts = { buffer = args.buf }
-    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-    -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
-    if client:supports_method('textDocument/completion') then
-      vim.lsp.completion.enable(true, client.id, args.buf, {autotrigger = true})
-    end
-    if client:supports_method('textDocument/diagnostic') then
-      vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
-      vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-      vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-      vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
-    end
-    if client:supports_method('textDocument/declaration') then
-      vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    end
-    if client:supports_method('textDocument/definition') then
-      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    end
-    if client:supports_method('workspace/workspaceFolders') then
-      vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
-      vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
-      vim.keymap.set('n', '<space>wl', function()
-        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-      end, opts)
-    end
-    if client:supports_method('textDocument/typeDefinition*') then
-      vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
-    end
-    if client:supports_method('textDocument/rename') then
-      vim.keymap.set('n', 'grn', vim.lsp.buf.rename, opts)
-    end
-    if client:supports_method('textDocument/codeAction') then
-      vim.keymap.set({ 'n', 'v' }, 'gra', vim.lsp.buf.code_action, opts)
-    end
-    if client:supports_method('textDocument/references') then
-      vim.keymap.set('n', 'grr', vim.lsp.buf.references, opts)
-    end
-    if client:supports_method('textDocument/implementation') then
-      vim.keymap.set('n', 'gri', vim.lsp.buf.implementation, opts)
-    end
-    if client:supports_method('textDocument/signatureHelp') then
-      vim.keymap.set('n', '<C-S>', vim.lsp.buf.signature_help, opts)
-    end
-  end,
-})
-
-vim.api.nvim_create_autocmd("CursorHold", {
-  buffer = bufnr,
-  callback = function()
-    local opts = {
-      focusable = false,
-      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-      border = nil,
-      source = 'always',
-      prefix = nil,
-      scope = 'cursor',
-    }
-    vim.diagnostic.open_float(nil, opts)
-  end
-})
-
-vim.diagnostic.config({
-  virtual_text = false,
-  signs = true,
-  float = true,
-  underline = true,
-  update_in_insert = false,
-  severity_sort = false,
-})
-
--- You will likely want to reduce updatetime which affects CursorHold
--- note: this setting is global and should be set only once
-vim.o.updatetime = 250
-
+-- Rust-analyzer specific configuration
 vim.lsp.config('rust_analyzer', {
   settings = {
     ['rust-analyzer'] = {
-      --diagnostics = {
-      --  enable = false;
-      --},
       cargo = {
-        -- allFeatures = true
-        -- features = { "vm" }
-      }
+        allFeatures = true,
+        buildScripts = {
+          enable = true,
+        },
+      },
+      check = {
+        command = "clippy",
+      },
+      procMacro = {
+        enable = true,
+      },
+      completion = {
+        autoimport = {
+          enable = true,
+        },
+        postfix = {
+          enable = true,
+        },
+      },
     }
   }
 })

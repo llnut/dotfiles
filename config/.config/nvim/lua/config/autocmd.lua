@@ -1,68 +1,63 @@
-vim.api.nvim_create_autocmd(
-  "TextYankPost",
-  { callback = function() vim.hl.on_yank({ higroup = 'IncSearch', timeout = 100 }) end }
-)
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
 
-vim.api.nvim_create_autocmd(
-  { "BufRead", "BufNewFile" },
-  {
-    pattern = { "*.txt", "*.md", "*.tex" },
-    command = "setlocal spell"
-  }
-)
-vim.api.nvim_create_autocmd(
-  { "BufRead", "BufNewFile" },
-  {
-    pattern = "*.json",
-    command = "setfiletype json syntax=javascript",
-  }
-)
+local general = augroup('GeneralSettings', { clear = true })
+local filetype_settings = augroup('FiletypeSettings', { clear = true })
 
--- Treat .md files as Markdown
-vim.api.nvim_create_autocmd(
-  { "BufRead", "BufNewFile" },
-  {
-    pattern = "*.md",
-    command = "setlocal filetype=markdown",
-  }
-)
-
--- Get the 2-space as the default when hit carriage return after the colon
-vim.api.nvim_create_autocmd(
-  { "BufRead", "BufNewFile" },
-  {
-    pattern = { "*.yaml", "*.yml", "*.lua", "*.cmake", "*.html", "*.md" },
-    command = "setlocal ts=2 sts=2 sw=2 expandtab",
-  }
-)
-
-vim.api.nvim_create_autocmd(
-  { "BufRead", "BufNewFile" },
-  {
-    pattern = { "*.c" },
-    command = "setlocal ts=8 sts=8 sw=8 noexpandtab",
-  }
-)
-
--- Trim trailing white space on save
--- vim.api.nvim_create_autocmd("BufWritePre", 
--- {
---     group = 'BufFile',
---     pattern = "*",
---     command = "lua require('util.function').strip_white_space()",
--- })
-
--- Toggle between current and the last accessed tab
-vim.api.nvim_create_autocmd("TabLeave", 
-{
-  pattern = "*",
-  command = "let g:lasttab = tabpagenr()",
+autocmd('TextYankPost', {
+  group = general,
+  desc = 'Highlight when yanking text',
+  callback = function()
+    vim.hl.on_yank({ higroup = 'IncSearch', timeout = 200 })
+  end,
 })
 
--- Return to last edit position when opening files (You want this!)
-vim.api.nvim_create_autocmd("BufReadPost", 
-{
-  pattern = "*",
-  command = "lua require('util.function').return_last_pos()",
+autocmd('BufReadPost', {
+  group = general,
+  desc = 'Return to last edit position',
+  callback = function()
+    require('util.function').return_last_pos()
+  end,
+})
+
+autocmd('TabLeave', {
+  group = general,
+  desc = 'Track last tab for quick switching',
+  callback = function()
+    vim.g.lasttab = vim.fn.tabpagenr()
+  end,
+})
+
+autocmd('FileType', {
+  group = filetype_settings,
+  pattern = { 'text', 'markdown', 'tex' },
+  desc = 'Enable spell check',
+  callback = function()
+    vim.opt_local.spell = true
+  end,
+})
+
+autocmd('FileType', {
+  group = filetype_settings,
+  pattern = { 'yaml', 'lua', 'html' },
+  desc = 'Set 2-space indentation',
+  callback = function()
+    vim.opt_local.tabstop = 2
+    vim.opt_local.softtabstop = 2
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.expandtab = true
+  end,
+})
+
+autocmd('FileType', {
+  group = filetype_settings,
+  pattern = 'c',
+  desc = 'Set 8-space tab for C',
+  callback = function()
+    vim.opt_local.tabstop = 8
+    vim.opt_local.softtabstop = 8
+    vim.opt_local.shiftwidth = 8
+    vim.opt_local.expandtab = false
+  end,
 })
 

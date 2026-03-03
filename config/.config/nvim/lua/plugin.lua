@@ -1,6 +1,4 @@
 return {
-  { 'nvim-lua/plenary.nvim' },
-  { 'kyazdani42/nvim-web-devicons' },
   {
     "williamboman/mason.nvim",
     cmd = "Mason",

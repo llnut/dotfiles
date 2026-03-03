@@ -1,52 +1,49 @@
+-- Official documentation: https://github.com/nvim-treesitter/nvim-treesitter
+-- IMPORTANT: Requires Neovim 0.11.0+
 return {
   "nvim-treesitter/nvim-treesitter",
-  event = "BufReadPre",
-  lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
+  version = false, -- Use main branch for latest
+  lazy = false,    -- Don't lazy load as per official docs
   build = ':TSUpdate',
-  init = function(plugin)
-    -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
-    -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
-    -- no longer trigger the **nvim-treesitter** module to be loaded in time.
-    -- Luckily, the only things that those plugins need are the custom queries, which we make available
-    -- during startup.
-    require("lazy.core.loader").add_to_rtp(plugin)
-    require("nvim-treesitter.query_predicates")
-  end,
   cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
   keys = {
     { "gnn", desc = "Increment Selection" },
     { "<bs>", desc = "Decrement Selection", mode = "x" },
   },
   opts = {
-    -- A list of parser names, or "all"
-    ensure_installed = { "c", "lua", "rust", "bash"},
+    ensure_installed = {
+      "c",
+      "lua",
+      "rust",
+      "bash",
+      "python",
+      "toml",
+      "json",
+      "yaml",
+      "markdown",
+      "markdown_inline",
+      "vim",
+      "vimdoc",
+      "regex",
+    },
 
     -- Install parsers synchronously (only applied to `ensure_installed`)
     sync_install = false,
 
     -- Automatically install missing parsers when entering buffer
-    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
     auto_install = true,
 
-    -- List of parsers to ignore installing (for "all")
-    ignore_install = {},
-
     highlight = {
-      -- `false` will disable the whole extension
       enable = true,
-
+      -- Disable for large files
       disable = function(lang, buf)
-        local max_filesize = 100 * 1024 -- 100 KB
-        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+        local max_filesize = 200 * 1024 -- 200 KB
+        local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
         if ok and stats and stats.size > max_filesize then
           return true
         end
       end,
-
-      -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-      -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-      -- Using this option may slow down your editor, and you may see some duplicate highlights.
-      -- Instead of true it can also be a list of languages
+      -- Set to false for no additional vim regex highlighting
       additional_vim_regex_highlighting = false,
     },
 
@@ -56,17 +53,23 @@ return {
         init_selection = "gnn",
         node_incremental = "grn",
         scope_incremental = "grc",
-        node_decremental = "grm",
+        node_decremental = "<bs>",
       },
     },
 
-    -- Indentation based on treesitter for the = operator. NOTE: This is an experimental feature.
-    indent = { enable = true }
+    -- Indentation based on treesitter (experimental)
+    indent = {
+      enable = true,
+      disable = { "python", "yaml" },
+    },
   },
   config = function(_, opts)
-    require('nvim-treesitter').setup(opts)
+    require('nvim-treesitter.configs').setup(opts)
+
+    -- Enable folding with treesitter
     vim.opt.foldmethod = 'expr'
-    vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+    vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     vim.opt.foldlevel = 99
+    vim.opt.foldlevelstart = 99
   end,
 }
