@@ -18,11 +18,7 @@ else # OS X `ls`
 fi
 
 # Filesystem aliases
-alias ..='cd ..'
-alias ...='cd ../..'
-
 alias ll="ls -alFh ${colorflag}"
-alias rmf="rm -rf"
 
 # Helpers
 alias grep="grep --color=auto --ignore-case"

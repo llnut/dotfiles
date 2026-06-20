@@ -1,75 +1,94 @@
--- Official documentation: https://github.com/nvim-treesitter/nvim-treesitter
--- IMPORTANT: Requires Neovim 0.11.0+
+local parsers = {
+  "bash",
+  "c",
+  "json",
+  "lua",
+  "markdown",
+  "markdown_inline",
+  "python",
+  "query",
+  "regex",
+  "rust",
+  "toml",
+  "vim",
+  "vimdoc",
+  "yaml",
+}
+
+local filetypes = {
+  "bash",
+  "c",
+  "help",
+  "json",
+  "lua",
+  "markdown",
+  "python",
+  "query",
+  "regex",
+  "rust",
+  "sh",
+  "toml",
+  "vim",
+  "yaml",
+}
+
+local filetype_to_lang = {
+  help = "vimdoc",
+  sh = "bash",
+}
+
+local indent_disabled = {
+  python = true,
+  yaml = true,
+}
+
+local function is_large_file(buf)
+  local name = vim.api.nvim_buf_get_name(buf)
+  if name == "" then
+    return false
+  end
+
+  local ok, stats = pcall(vim.uv.fs_stat, name)
+  return ok and stats and stats.size > 200 * 1024
+end
+
 return {
   "nvim-treesitter/nvim-treesitter",
-  version = false, -- Use main branch for latest
-  lazy = false,    -- Don't lazy load as per official docs
-  build = ':TSUpdate',
-  cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
-  keys = {
-    { "gnn", desc = "Increment Selection" },
-    { "<bs>", desc = "Decrement Selection", mode = "x" },
-  },
-  opts = {
-    ensure_installed = {
-      "c",
-      "lua",
-      "rust",
-      "bash",
-      "python",
-      "toml",
-      "json",
-      "yaml",
-      "markdown",
-      "markdown_inline",
-      "vim",
-      "vimdoc",
-      "regex",
-    },
+  branch = "main",
+  version = false,
+  lazy = false,
+  build = function()
+    local treesitter = require("nvim-treesitter")
+    treesitter.install(parsers):wait(300000)
+    treesitter.update(parsers):wait(300000)
+  end,
+  cmd = { "TSInstall", "TSInstallFromGrammar", "TSLog", "TSUninstall", "TSUpdate" },
+  config = function()
+    vim.opt.foldlevelstart = 99
 
-    -- Install parsers synchronously (only applied to `ensure_installed`)
-    sync_install = false,
+    vim.api.nvim_create_autocmd("FileType", {
+      group = vim.api.nvim_create_augroup("Treesitter", { clear = true }),
+      pattern = filetypes,
+      callback = function(args)
+        if is_large_file(args.buf) then
+          return
+        end
 
-    -- Automatically install missing parsers when entering buffer
-    auto_install = true,
+        local ft = vim.bo[args.buf].filetype
+        local lang = filetype_to_lang[ft] or vim.treesitter.language.get_lang(ft) or ft
+        local ok = pcall(vim.treesitter.start, args.buf, lang)
+        if not ok then
+          return
+        end
 
-    highlight = {
-      enable = true,
-      -- Disable for large files
-      disable = function(lang, buf)
-        local max_filesize = 200 * 1024 -- 200 KB
-        local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
-        if ok and stats and stats.size > max_filesize then
-          return true
+        vim.wo.foldmethod = "expr"
+        vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+        vim.wo.foldlevel = 99
+
+        if not indent_disabled[lang] then
+          vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end
       end,
-      -- Set to false for no additional vim regex highlighting
-      additional_vim_regex_highlighting = false,
-    },
-
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        init_selection = "gnn",
-        node_incremental = "grn",
-        scope_incremental = "grc",
-        node_decremental = "<bs>",
-      },
-    },
-
-    -- Indentation based on treesitter (experimental)
-    indent = {
-      enable = true,
-      disable = { "python", "yaml" },
-    },
-  },
-  config = function(_, opts)
-    require('nvim-treesitter.configs').setup(opts)
-
-    -- Enable folding with treesitter
-    vim.opt.foldmethod = 'expr'
-    vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-    vim.opt.foldlevel = 99
-    vim.opt.foldlevelstart = 99
+    })
   end,
 }
