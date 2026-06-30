@@ -1,10 +1,14 @@
 #!/bin/bash
+# Shared helpers for the per-tool install scripts. Each script sources this
+# file and calls gh_install or gh_install_fonts with named arguments.
 
-LOCAL_BIN_PATH="${HOME}/.local/bin"
-LOCAL_SHARE_PATH="${HOME}/.local/share"
-SAVE_PATH="${HOME}/.dotfiles-bin"
+readonly LOCAL_BIN_PATH="${HOME}/.local/bin"
+readonly LOCAL_SHARE_PATH="${HOME}/.local/share"
+readonly SAVE_PATH="${HOME}/.dotfiles-bin"
 
-mkdir -p "$SAVE_PATH" "${HOME}/.local/bin"
+_err() {
+    printf 'Error: %s\n' "$*" >&2
+}
 
 backup() {
     if [[ -e "$1" ]]; then
@@ -13,10 +17,12 @@ backup() {
     fi
 }
 
+# Resolve the redirect of a GitHub releases/latest URL into the matching
+# releases/download/<tag> base URL.
 github_latest_url() {
     local url
     url=$(curl --proto '=https' --tlsv1.2 -sSLIf -o /dev/null -w '%{url_effective}' "$1") || {
-        echo "Error: failed to resolve latest release for $1" >&2
+        _err "failed to resolve latest release for $1"
         return 1
     }
     local tag="${url##*/}"
@@ -31,7 +37,7 @@ download() {
 circulate_ln() {
     local bin_dir dest_dir spec name link
     bin_dir="$(cd "$1" && pwd)" || {
-        echo "Error: directory $1 does not exist" >&2
+        _err "directory $1 does not exist"
         return 1
     }
     dest_dir="$2"
@@ -49,7 +55,7 @@ circulate_ln() {
 install_fonts() {
     local src_dir dest_dir font
     src_dir="$(cd "$1" && pwd)" || {
-        echo "Error: directory $1 does not exist" >&2
+        _err "directory $1 does not exist"
         return 1
     }
     dest_dir="$2"
@@ -65,17 +71,20 @@ _extract() {
     local archive="$1" dest="$2"
     local -a cmd
     case "$archive" in
-        *.tar.gz|*.tgz)           cmd=(tar zxf "$archive") ;;
-        *.tar.xz|*.tar.bz2|*.tar) cmd=(tar xf  "$archive") ;;
-        *.tar.zst)                 cmd=(tar -I zstd -xf "$archive") ;;
-        *.zip|*.vsix)              cmd=(unzip -q "$archive") ;;
-        *) echo "Error: unsupported archive format: $archive" >&2; return 1 ;;
+        *.tar.gz | *.tgz) cmd=(tar zxf "$archive") ;;
+        *.tar.xz | *.tar.bz2 | *.tar) cmd=(tar xf "$archive") ;;
+        *.tar.zst) cmd=(tar -I zstd -xf "$archive") ;;
+        *.zip | *.vsix) cmd=(unzip -q "$archive") ;;
+        *)
+            _err "unsupported archive format: $archive"
+            return 1
+            ;;
     esac
     if [[ -n "$dest" ]]; then
         mkdir -p "$dest"
         case "$archive" in
-            *.zip|*.vsix) "${cmd[@]}" -d "$dest" ;;
-            *)            "${cmd[@]}" -C "$dest" ;;
+            *.zip | *.vsix) "${cmd[@]}" -d "$dest" ;;
+            *) "${cmd[@]}" -C "$dest" ;;
         esac
     else
         "${cmd[@]}"
@@ -85,7 +94,7 @@ _extract() {
 wrap_decompress() {
     local dest="$1" archive="$2"
 
-    # Plain .gz (not .tar.gz): just decompress in place
+    # Plain .gz, not .tar.gz: decompress in place.
     if [[ "$archive" == *.gz && "$archive" != *.tar.gz ]]; then
         mkdir -p "$dest"
         mv "$archive" "$dest/"
@@ -95,12 +104,16 @@ wrap_decompress() {
 
     local content
     case "$archive" in
-        *.tar.gz|*.tgz|*.tar.xz|*.tar.bz2|*.tar|*.tar.zst) content=$(tar tf "$archive") ;;
-        *.zip|*.vsix)                                         content=$(zipinfo -1 "$archive") ;;
-        *) echo "Error: unsupported archive format: $archive" >&2; return 1 ;;
+        *.tar.gz | *.tgz | *.tar.xz | *.tar.bz2 | *.tar | *.tar.zst) content=$(tar tf "$archive") ;;
+        *.zip | *.vsix) content=$(zipinfo -1 "$archive") ;;
+        *)
+            _err "unsupported archive format: $archive"
+            return 1
+            ;;
     esac
 
-    # Count unique root dirs/files; get wrapped dir name if exactly one root dir
+    # Count unique root entries; capture the wrapped dir name when the archive
+    # holds exactly one top-level directory and no top-level files.
     local n_dirs n_files wrapped_name
     read -r n_dirs n_files wrapped_name < <(
         awk -F/ '
@@ -120,119 +133,235 @@ wrap_decompress() {
     fi
 }
 
-# gh_install [-n] [-t TAG] DIR RELEASE_URL REMOTE_PREFIX SUFFIX [BIN_SUBPATH [BIN[:LINK]...]]
-#   -n            nightly: always re-download, no version caching
-#   -t TAG        override resolved tag (for pre-computed URLs)
-#   DIR           local directory name under $SAVE_PATH
-#   RELEASE_URL   .../releases/latest (auto-resolved) or a fixed download base URL
-#   REMOTE_PREFIX remote filename without suffix; use {TAG} as placeholder
-#   SUFFIX        archive extension (.tar.gz, .zip, .gz …) or "" for bare binary
-#   BIN_SUBPATH   subdir within extracted archive for binaries (default "")
-#   BIN[:LINK]    binary names, "name" or "name:link" (default: DIR:DIR)
+# Substitute {TAG} and {VERSION} placeholders in a template string.
+_subst_tag() {
+    local s="$1" tag="$2" version="$3"
+    s="${s//\{TAG\}/$tag}"
+    s="${s//\{VERSION\}/$version}"
+    printf '%s' "$s"
+}
+
+# Resolve the download base URL and release tag from --repo/--url inputs.
+# _resolve_source BASE_VAR TAG_VAR REPO URL TAG NIGHTLY
+# BASE_VAR and TAG_VAR are passed by name; callers must not name their output
+# variables __gh_base_out or __gh_tag_out to avoid a nameref self-reference.
+_resolve_source() {
+    local -n __gh_base_out="$1" __gh_tag_out="$2"
+    local repo="$3" url="$4" nightly="$6"
+    __gh_tag_out="$5"
+
+    if [[ -n "$repo" ]]; then
+        if ((nightly)); then
+            __gh_base_out="https://github.com/$repo/releases/download/nightly"
+        elif [[ -n "$__gh_tag_out" ]]; then
+            __gh_base_out="https://github.com/$repo/releases/download/$__gh_tag_out"
+        else
+            local latest
+            latest=$(github_latest_url "https://github.com/$repo/releases/latest") || return 1
+            __gh_tag_out="${latest##*/}"
+            __gh_base_out="$latest"
+        fi
+        # An explicit --url overrides the download base but keeps the resolved tag.
+        [[ -n "$url" ]] && __gh_base_out="$url"
+    else
+        __gh_base_out="$url"
+        if ((nightly == 0)) && [[ -z "$__gh_tag_out" ]]; then
+            __gh_tag_out="${url##*/}"
+        fi
+    fi
+    return 0
+}
+
+_gh_install_usage() {
+    cat >&2 << 'EOF'
+Usage: gh_install --name NAME (--repo OWNER/REPO | --url BASE) --asset PREFIX
+                  [--ext EXT] [--subdir PATH] [--bin NAME[:LINK]]...
+                  [--nightly] [--tag TAG] [-h|--help]
+
+Arguments:
+  --name NAME        Local directory under the bin store, also the default binary name.
+  --repo OWNER/REPO  GitHub repository; resolves releases/latest into a download URL.
+  --url BASE         Explicit download base URL; an escape hatch for non-standard layouts.
+  --asset PREFIX     Asset file name without the extension. Supports {TAG} and {VERSION}.
+  --ext EXT          Archive extension such as .tar.gz, .zip, .gz. Omit for a bare binary.
+  --subdir PATH      Sub-directory inside the extracted archive holding the binaries.
+  --bin NAME[:LINK]  Binary to link, repeatable. Defaults to NAME:NAME. Supports {TAG}/{VERSION}.
+  --nightly          Always re-download, skip version caching.
+  --tag TAG          Force a specific tag instead of resolving the latest release.
+
+Placeholders:
+  {TAG}      Resolved release tag, e.g. v1.2.3.
+  {VERSION}  Tag without a leading v, e.g. 1.2.3.
+EOF
+}
+
 gh_install() {
-    local nightly=0 force_tag=""
-    while [[ "$1" == -* ]]; do
+    local name="" repo="" url="" asset="" ext="" subdir="" tag="" nightly=0
+    local -a bins=()
+
+    while (($#)); do
         case "$1" in
-            -n) nightly=1; shift ;;
-            -t) force_tag="$2"; shift 2 ;;
-            *)  echo "gh_install: unknown option: $1" >&2; return 1 ;;
+            --name=*) name="${1#*=}" ;;
+            --name) name="$2"; shift ;;
+            --repo=*) repo="${1#*=}" ;;
+            --repo) repo="$2"; shift ;;
+            --url=*) url="${1#*=}" ;;
+            --url) url="$2"; shift ;;
+            --asset=*) asset="${1#*=}" ;;
+            --asset) asset="$2"; shift ;;
+            --ext=*) ext="${1#*=}" ;;
+            --ext) ext="$2"; shift ;;
+            --subdir=*) subdir="${1#*=}" ;;
+            --subdir) subdir="$2"; shift ;;
+            --tag=*) tag="${1#*=}" ;;
+            --tag) tag="$2"; shift ;;
+            --bin=*) bins+=("${1#*=}") ;;
+            --bin) bins+=("$2"); shift ;;
+            --nightly) nightly=1 ;;
+            -h | --help) _gh_install_usage; return 0 ;;
+            *) _err "gh_install: unknown argument: $1"; _gh_install_usage; return 1 ;;
         esac
+        shift
     done
 
-    local dir="$1" url="$2" remote_prefix="$3" suffix="$4"
-    local bin_subpath="${5:-}"
-    (( $# >= 5 )) && shift 5 || shift $#
+    [[ -n "$name" ]] || { _err "gh_install: --name is required"; return 1; }
+    [[ -n "$asset" ]] || { _err "gh_install: --asset is required"; return 1; }
+    [[ -n "$repo" || -n "$url" ]] || { _err "gh_install: --repo or --url is required"; return 1; }
 
-    echo "Installing $dir..."
+    echo "Installing $name..."
+    mkdir -p "$SAVE_PATH" "$LOCAL_BIN_PATH"
 
-    local save_dir="$SAVE_PATH/$dir"
-    local bin_dir="$save_dir${bin_subpath:+/$bin_subpath}"
-    local tag="" dl_url="$url"
+    local dl_base="" rtag=""
+    _resolve_source dl_base rtag "$repo" "$url" "$tag" "$nightly" || return 1
 
-    if [[ -n "$force_tag" ]]; then
-        tag="$force_tag"
-    elif [[ "$url" == *"/releases/latest" ]]; then
-        dl_url=$(github_latest_url "$url") || return 1
-        tag="${dl_url##*/}"
-    elif (( nightly == 0 )); then
-        tag="${url##*/}"
-    fi
-
-    local resolved_prefix="${remote_prefix/\{TAG\}/$tag}"
+    local version="${rtag#v}"
+    local resolved_asset
+    resolved_asset=$(_subst_tag "$asset" "$rtag" "$version")
 
     local -a specs=()
-    if [[ $# -eq 0 ]]; then
-        specs=("$dir:$dir")
+    if ((${#bins[@]} == 0)); then
+        specs=("$name:$name")
     else
-        for b in "$@"; do
-            local name="${b%%:*}" link="${b#*:}"
-            specs+=("${name/\{TAG\}/$tag}:${link/\{TAG\}/$tag}")
+        local spec name_part link_part
+        for spec in "${bins[@]}"; do
+            name_part=$(_subst_tag "${spec%%:*}" "$rtag" "$version")
+            link_part=$(_subst_tag "${spec#*:}" "$rtag" "$version")
+            specs+=("$name_part:$link_part")
         done
     fi
 
-    if (( nightly == 0 )) && [[ -n "$tag" && -f "$save_dir/.$tag" ]]; then
+    local save_dir="$SAVE_PATH/$name"
+    local bin_dir="$save_dir${subdir:+/$subdir}"
+
+    if ((nightly == 0)) && [[ -n "$rtag" && -f "$save_dir/.$rtag" ]]; then
         circulate_ln "$bin_dir" "$LOCAL_BIN_PATH" "${specs[@]}"
         echo "Already up-to-date."
-        return
+        return 0
     fi
 
     backup "$save_dir"
 
-    if [[ -n "$suffix" ]]; then
+    local remote="$dl_base/$resolved_asset$ext"
+    if [[ -n "$ext" ]]; then
         (
             cd "$SAVE_PATH" || exit 1
-            download "$SAVE_PATH/$dir$suffix" "$dl_url/$resolved_prefix$suffix" || {
-                echo "Error: download failed for $dir" >&2
+            download "$SAVE_PATH/$name$ext" "$remote" || {
+                _err "download failed for $name"
                 exit 1
             }
-            wrap_decompress "$dir" "$dir$suffix"
-            rm -f "$SAVE_PATH/$dir$suffix"
+            wrap_decompress "$name" "$name$ext"
+            rm -f "$SAVE_PATH/$name$ext"
         ) || return 1
     else
         mkdir -p "$save_dir"
-        download "$save_dir/$dir" "$dl_url/$resolved_prefix" || {
-            echo "Error: download failed for $dir" >&2
+        download "$save_dir/$name" "$remote" || {
+            _err "download failed for $name"
             return 1
         }
     fi
 
     circulate_ln "$bin_dir" "$LOCAL_BIN_PATH" "${specs[@]}"
-    (( nightly == 0 )) && [[ -n "$tag" ]] && touch "$save_dir/.$tag"
+    ((nightly == 0)) && [[ -n "$rtag" ]] && touch "$save_dir/.$rtag"
     echo "Installation successful."
 }
 
-# gh_install_fonts DIR RELEASE_URL REMOTE_PREFIX SUFFIX FONT_FILE...
+_gh_install_fonts_usage() {
+    cat >&2 << 'EOF'
+Usage: gh_install_fonts --name NAME (--repo OWNER/REPO | --url BASE) --asset PREFIX
+                        --ext EXT --font FILE... [--tag TAG] [-h|--help]
+
+Arguments:
+  --name NAME        Local directory under the bin store.
+  --repo OWNER/REPO  GitHub repository; resolves releases/latest into a download URL.
+  --url BASE         Explicit download base URL.
+  --asset PREFIX     Asset file name without the extension. Supports {TAG} and {VERSION}.
+  --ext EXT          Archive extension such as .tar.xz.
+  --font FILE        Font file to install, repeatable.
+  --tag TAG          Force a specific tag instead of resolving the latest release.
+EOF
+}
+
 gh_install_fonts() {
-    local dir="$1" url="$2" remote_prefix="$3" suffix="$4"
-    shift 4
-    local -a fonts=("$@")
+    local name="" repo="" url="" asset="" ext="" tag=""
+    local -a fonts=()
 
-    echo "Installing $dir..."
+    while (($#)); do
+        case "$1" in
+            --name=*) name="${1#*=}" ;;
+            --name) name="$2"; shift ;;
+            --repo=*) repo="${1#*=}" ;;
+            --repo) repo="$2"; shift ;;
+            --url=*) url="${1#*=}" ;;
+            --url) url="$2"; shift ;;
+            --asset=*) asset="${1#*=}" ;;
+            --asset) asset="$2"; shift ;;
+            --ext=*) ext="${1#*=}" ;;
+            --ext) ext="$2"; shift ;;
+            --tag=*) tag="${1#*=}" ;;
+            --tag) tag="$2"; shift ;;
+            --font=*) fonts+=("${1#*=}") ;;
+            --font) fonts+=("$2"); shift ;;
+            -h | --help) _gh_install_fonts_usage; return 0 ;;
+            *) _err "gh_install_fonts: unknown argument: $1"; _gh_install_fonts_usage; return 1 ;;
+        esac
+        shift
+    done
 
-    local save_dir="$SAVE_PATH/$dir"
-    local dl_url tag
-    dl_url=$(github_latest_url "$url") || return 1
-    tag="${dl_url##*/}"
-    local resolved_prefix="${remote_prefix/\{TAG\}/$tag}"
+    [[ -n "$name" ]] || { _err "gh_install_fonts: --name is required"; return 1; }
+    [[ -n "$asset" ]] || { _err "gh_install_fonts: --asset is required"; return 1; }
+    [[ -n "$ext" ]] || { _err "gh_install_fonts: --ext is required"; return 1; }
+    [[ -n "$repo" || -n "$url" ]] || { _err "gh_install_fonts: --repo or --url is required"; return 1; }
+    ((${#fonts[@]})) || { _err "gh_install_fonts: at least one --font is required"; return 1; }
 
-    if [[ -f "$save_dir/.$tag" ]]; then
+    echo "Installing $name..."
+    mkdir -p "$SAVE_PATH"
+
+    local dl_base="" rtag=""
+    _resolve_source dl_base rtag "$repo" "$url" "$tag" 0 || return 1
+
+    local version="${rtag#v}"
+    local resolved_asset
+    resolved_asset=$(_subst_tag "$asset" "$rtag" "$version")
+
+    local save_dir="$SAVE_PATH/$name"
+    if [[ -n "$rtag" && -f "$save_dir/.$rtag" ]]; then
         install_fonts "$save_dir" "$LOCAL_SHARE_PATH/fonts" "${fonts[@]}"
         echo "Already up-to-date."
-        return
+        return 0
     fi
 
     backup "$save_dir"
     (
         cd "$SAVE_PATH" || exit 1
-        download "$SAVE_PATH/$dir$suffix" "$dl_url/$resolved_prefix$suffix" || {
-            echo "Error: download failed for $dir" >&2
+        download "$SAVE_PATH/$name$ext" "$dl_base/$resolved_asset$ext" || {
+            _err "download failed for $name"
             exit 1
         }
-        wrap_decompress "$dir" "$dir$suffix"
-        rm -f "$SAVE_PATH/$dir$suffix"
+        wrap_decompress "$name" "$name$ext"
+        rm -f "$SAVE_PATH/$name$ext"
     ) || return 1
 
     install_fonts "$save_dir" "$LOCAL_SHARE_PATH/fonts" "${fonts[@]}"
-    touch "$save_dir/.$tag"
+    [[ -n "$rtag" ]] && touch "$save_dir/.$rtag"
     echo "Installation successful."
 }

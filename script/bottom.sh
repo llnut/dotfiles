@@ -1,4 +1,5 @@
 #!/bin/bash
 SCRIPT_PATH=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 source "$SCRIPT_PATH/util.sh"
-gh_install -n "bottom-nightly" "https://github.com/ClementTsang/bottom/releases/download/nightly" "bottom_x86_64-unknown-linux-gnu" ".tar.gz" "" "btm"
+gh_install --name bottom-nightly --repo ClementTsang/bottom --nightly \
+    --asset bottom_x86_64-unknown-linux-gnu --ext .tar.gz --bin btm

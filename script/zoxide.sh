@@ -1,10 +1,4 @@
 #!/bin/bash
 SCRIPT_PATH=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 source "$SCRIPT_PATH/util.sh"
-main() {
-    local _dl _ver
-    _dl=$(github_latest_url "https://github.com/ajeetdsouza/zoxide/releases/latest") || return 1
-    _ver="${_dl##*/v}"
-    gh_install "zoxide" "$_dl" "zoxide-${_ver}-x86_64-unknown-linux-musl" ".tar.gz"
-}
-main "$@"
+gh_install --name zoxide --repo ajeetdsouza/zoxide --asset "zoxide-{VERSION}-x86_64-unknown-linux-musl" --ext .tar.gz
