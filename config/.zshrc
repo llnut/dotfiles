@@ -189,3 +189,13 @@ source /usr/share/fzf/key-bindings.zsh
 
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
+
+cargo-muslbuild() {
+  docker run \
+    -e http_proxy="${http_proxy}" \
+    -e https_proxy="${http_proxy}" \
+    -e no_proxy="${no_proxy}" \
+    -v ~/.cargo/registry:/root/.cargo/registry \
+    -v "$PWD:/volume" \
+    --rm -it clux/muslrust:stable cargo build $@
+}
