@@ -10,65 +10,14 @@
 ---
 --- The default `cmd` assumes that the `lua-language-server` binary can be found in `$PATH`.
 ---
---- If you primarily use `lua-language-server` for Neovim, and want to provide completions,
---- analysis, and location handling for plugins on runtime path, you can use the following
---- settings.
+--- Projects that ship their own `.luarc.json` keep their settings. Every
+--- other workspace, including this config directory, is treated as Neovim
+--- Lua: the runtime files are added to the workspace library so that the
+--- `vim` API resolves.
 ---
---- ```lua
---- vim.lsp.config('lua_ls', {
----   on_init = function(client)
----     if client.workspace_folders then
----       local path = client.workspace_folders[1].name
----       if
----         path ~= vim.fn.stdpath('config')
----         and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
----       then
----         return
----       end
----     end
----
----     client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
----       runtime = {
----         -- Tell the language server which version of Lua you're using (most
----         -- likely LuaJIT in the case of Neovim)
----         version = 'LuaJIT',
----         -- Tell the language server how to find Lua modules same way as Neovim
----         -- (see `:h lua-module-load`)
----         path = {
----           'lua/?.lua',
----           'lua/?/init.lua',
----         },
----       },
----       -- Make the server aware of Neovim runtime files
----       workspace = {
----         checkThirdParty = false,
----         library = {
----           vim.env.VIMRUNTIME
----           -- Depending on the usage, you might want to add additional paths
----           -- here.
----           -- '${3rd}/luv/library'
----           -- '${3rd}/busted/library'
----         }
----         -- Or pull in all of 'runtimepath'.
----         -- NOTE: this is a lot slower and will cause issues when working on
----         -- your own configuration.
----         -- See https://github.com/neovim/nvim-lspconfig/issues/3189
----         -- library = {
----         --   vim.api.nvim_get_runtime_file('', true),
----         -- }
----       }
----     })
----   end,
----   settings = {
----     Lua = {}
----   }
---- })
---- ```
----
---- See `lua-language-server`'s [documentation](https://luals.github.io/wiki/settings/) for an explanation of the above fields:
+--- See `lua-language-server`'s [documentation](https://luals.github.io/wiki/settings/) for an explanation of the fields:
 --- * [Lua.runtime.path](https://luals.github.io/wiki/settings/#runtimepath)
 --- * [Lua.workspace.library](https://luals.github.io/wiki/settings/#workspacelibrary)
----
 
 ---@type vim.lsp.Config
 return {
@@ -83,5 +32,37 @@ return {
     'selene.toml',
     'selene.yml',
     '.git',
+  },
+  on_init = function(client)
+    if client.workspace_folders then
+      local path = client.workspace_folders[1].name
+      if
+        path ~= vim.fn.stdpath('config')
+        and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+      then
+        return
+      end
+    end
+
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        -- Neovim embeds LuaJIT
+        version = 'LuaJIT',
+        -- Resolve modules the same way Neovim does, see `:h lua-module-load`
+        path = {
+          'lua/?.lua',
+          'lua/?/init.lua',
+        },
+      },
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME,
+        },
+      },
+    })
+  end,
+  settings = {
+    Lua = {},
   },
 }

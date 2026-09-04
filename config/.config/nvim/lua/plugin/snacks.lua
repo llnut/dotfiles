@@ -1,36 +1,25 @@
+-- Official documentation: https://github.com/folke/snacks.nvim
 return {
   "folke/snacks.nvim",
   priority = 1000,
   lazy = false,
   ---@type snacks.Config
   opts = {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
     animate = { enabled = false },
     bigfile = { enabled = true },
-    dashboard = { enabled = false },
-    explorer = { enabled = false },
-    indent = { enabled = false },
-    input = { enabled = false },
     picker = { enabled = true },
-    notifier = { enabled = false },
     quickfile = { enabled = true },
-    scope = { enabled = false },
-    scroll = { enabled = false },
     statuscolumn = { enabled = true },
     words = { enabled = true },
   },
   keys = {
     -- Top Pickers & Explorer
-    { "<leader>cl", function() Snacks.picker.lsp_config() end, desc = "Lsp info"},
-
+    { "<leader>cl", function() Snacks.picker.lsp_config() end, desc = "Lsp info" },
     { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
     { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
     { "<leader>/", function() Snacks.picker.grep() end, desc = "Grep" },
     { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
     { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
-    --{ "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
     -- find
     { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
     { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
@@ -55,7 +44,6 @@ return {
     { '<leader>s"', function() Snacks.picker.registers() end, desc = "Registers" },
     { '<leader>s/', function() Snacks.picker.search_history() end, desc = "Search History" },
     { "<leader>sa", function() Snacks.picker.autocmds() end, desc = "Autocmds" },
-    { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
     { "<leader>sc", function() Snacks.picker.command_history() end, desc = "Command History" },
     { "<leader>sC", function() Snacks.picker.commands() end, desc = "Commands" },
     { "<leader>sd", function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },

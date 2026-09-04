@@ -7,50 +7,11 @@
 --- rust-analyzer (aka rls 2.0), a language server for Rust
 ---
 ---
---- See [docs](https://rust-analyzer.github.io/book/configuration.html) for extra settings. The settings can be used like this:
---- ```lua
---- vim.lsp.config('rust_analyzer', {
----   settings = {
----     ['rust-analyzer'] = {
-
----       diagnostics = {
----         enable = false;
----       }
----     }
----   }
---- })
---- ```
+--- See [docs](https://rust-analyzer.github.io/book/configuration.html) for extra settings.
+--- Settings belong under `settings['rust-analyzer']` in the returned table.
 ---
 --- Note: do not set `init_options` for this LS config, it will be automatically populated by the contents of settings["rust-analyzer"] per
 --- https://github.com/rust-lang/rust-analyzer/blob/eb5da56d839ae0a9e9f50774fa3eb78eb0964550/docs/dev/lsp-extensions.md?plain=1#L26.
-
--- Rust-analyzer specific configuration
-vim.lsp.config('rust_analyzer', {
-  settings = {
-    ['rust-analyzer'] = {
-      cargo = {
-        allFeatures = true,
-        buildScripts = {
-          enable = true,
-        },
-      },
-      check = {
-        command = "clippy",
-      },
-      procMacro = {
-        enable = true,
-      },
-      completion = {
-        autoimport = {
-          enable = true,
-        },
-        postfix = {
-          enable = true,
-        },
-      },
-    }
-  }
-})
 
 local function reload_workspace(bufnr)
   local clients = vim.lsp.get_clients { bufnr = bufnr, name = 'rust_analyzer' }
@@ -83,7 +44,6 @@ local function is_library(fname)
     end
   end
 end
-
 
 ---@type vim.lsp.Config
 return {
@@ -134,6 +94,16 @@ return {
   capabilities = {
     experimental = {
       serverStatusNotification = true,
+    },
+  },
+  settings = {
+    ['rust-analyzer'] = {
+      cargo = {
+        allFeatures = true,
+      },
+      check = {
+        command = 'clippy',
+      },
     },
   },
   before_init = function(init_params, config)

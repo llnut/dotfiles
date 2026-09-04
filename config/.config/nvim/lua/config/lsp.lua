@@ -1,33 +1,36 @@
 local M = {}
 
+local servers = { 'asm_lsp', 'clangd', 'lua_ls', 'rust_analyzer' }
+
 local function setup_keymaps(client, bufnr)
-  local opts = { buffer = bufnr, silent = true }
-  local set = vim.keymap.set
+  local function map(lhs, rhs, desc)
+    vim.keymap.set('n', lhs, rhs, { buf = bufnr, desc = desc })
+  end
 
   -- Diagnostic float (default is <C-W>d, keep <space>e for familiarity)
-  set('n', '<space>e', vim.diagnostic.open_float, opts)
+  map('<space>e', vim.diagnostic.open_float, 'Diagnostic float')
   -- Diagnostic loclist (no Neovim default)
-  set('n', '<space>q', vim.diagnostic.setloclist, opts)
+  map('<space>q', vim.diagnostic.setloclist, 'Diagnostics to location list')
 
-  -- Signature help in NORMAL mode (0.11 default is insert/select mode only)
+  -- Signature help in Normal mode (the default <C-S> covers Insert mode only)
   if client:supports_method('textDocument/signatureHelp') then
-    set('n', '<C-s>', vim.lsp.buf.signature_help, opts)
+    map('<C-s>', vim.lsp.buf.signature_help, 'Signature help')
   end
 
   -- Format (no Neovim default keymap)
   if client:supports_method('textDocument/formatting') then
-    set('n', '<space>f', function()
+    map('<space>f', function()
       vim.lsp.buf.format({ async = false, timeout_ms = 2000 })
-    end, opts)
+    end, 'Format buffer')
   end
 
   -- Workspace folders (no Neovim defaults)
   if client:supports_method('workspace/workspaceFolders') then
-    set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
-    set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
-    set('n', '<space>wl', function()
+    map('<space>wa', vim.lsp.buf.add_workspace_folder, 'Add workspace folder')
+    map('<space>wr', vim.lsp.buf.remove_workspace_folder, 'Remove workspace folder')
+    map('<space>wl', function()
       print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, opts)
+    end, 'List workspace folders')
   end
 
   -- Inlay hints
@@ -49,48 +52,28 @@ M.setup = function()
     },
     float = {
       focusable = false,
-      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-      border = 'rounded',
-      source = 'always',
+      close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
+      source = true,
       prefix = ' ',
       scope = 'cursor',
     },
-    underline = true,
-    update_in_insert = false,
     severity_sort = true,
   })
 
-  -- Auto-show diagnostics on cursor hold
+  -- Show the diagnostics under the cursor after 'updatetime' in Normal mode.
+  -- The float takes its settings from vim.diagnostic.config().
   vim.api.nvim_create_autocmd('CursorHold', {
     group = vim.api.nvim_create_augroup('LspDiagnosticFloat', { clear = true }),
     callback = function()
       if vim.fn.mode() == 'n' then
-        vim.diagnostic.open_float(nil, {
-          focusable = false,
-          close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-          border = 'rounded',
-          source = 'always',
-          prefix = ' ',
-          scope = 'cursor',
-        })
+        vim.diagnostic.open_float()
       end
     end,
   })
 
-  -- Global LSP capabilities
+  -- Advertise the completion capabilities of blink.cmp to every server
   vim.lsp.config('*', {
-    capabilities = {
-      textDocument = {
-        completion = {
-          completionItem = {
-            snippetSupport = true,
-            resolveSupport = {
-              properties = { 'documentation', 'detail', 'additionalTextEdits' }
-            }
-          }
-        }
-      }
-    }
+    capabilities = require('blink.cmp').get_lsp_capabilities(),
   })
 
   vim.api.nvim_create_autocmd('LspAttach', {
@@ -102,6 +85,8 @@ M.setup = function()
       end
     end,
   })
+
+  vim.lsp.enable(servers)
 end
 
 return M

@@ -1,11 +1,9 @@
--- Official documentation: https://github.com/nvim-tree/nvim-tree.lua
+-- Official documentation: :h nvim-tree-quickstart-setup
+-- netrw is disabled through lazy.nvim's disabled_plugins list.
 return {
   "nvim-tree/nvim-tree.lua",
   version = "*",
-  lazy = true,
-  dependencies = {
-    "nvim-tree/nvim-web-devicons",
-  },
+  dependencies = { "nvim-tree/nvim-web-devicons" },
   cmd = {
     "NvimTreeOpen",
     "NvimTreeClose",
@@ -17,47 +15,25 @@ return {
     { "<leader>d", "<cmd>NvimTreeToggle<CR>", desc = "Toggle NvimTree" },
     { "<leader>f", "<cmd>NvimTreeFindFile<CR>", desc = "Find file in NvimTree" },
   },
-  init = function()
-    -- Disable netrw at the very start of init.lua (recommended)
-    vim.g.loaded_netrw = 1
-    vim.g.loaded_netrwPlugin = 1
-  end,
+  ---@type nvim_tree.config
   opts = {
     sort = {
       sorter = "case_sensitive",
     },
-    view = {
-      width = 30,
-    },
     renderer = {
       group_empty = true,
-      icons = {
-        show = {
-          git = true,
-          folder = true,
-          file = true,
-          folder_arrow = true,
-        },
-      },
     },
     filters = {
-      dotfiles = false,
       custom = { "^.git$" },
     },
     git = {
-      enable = true,
       ignore = false,
-    },
-    actions = {
-      open_file = {
-        quit_on_open = false,
-      },
     },
     on_attach = function(bufnr)
       local api = require('nvim-tree.api')
 
       local function opts(desc)
-        return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+        return { desc = 'nvim-tree: ' .. desc, buf = bufnr, nowait = true }
       end
 
       -- Default mappings

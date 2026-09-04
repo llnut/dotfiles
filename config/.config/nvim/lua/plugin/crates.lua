@@ -3,13 +3,9 @@ return {
   'saecki/crates.nvim',
   tag = 'stable',
   event = { "BufRead Cargo.toml" },
-  dependencies = { 'saghen/blink.cmp' },
   opts = {
-    completion = {
-      crates = {
-        enabled = true,
-      },
-    },
+    -- In-process language server: completion, hover and code actions reach
+    -- blink.cmp and the LSP keymaps without extra sources
     lsp = {
       enabled = true,
       actions = true,
@@ -18,15 +14,8 @@ return {
     },
     popup = {
       autofocus = true,
-      hide_on_select = false,
-      copy_register = '"',
-      style = "minimal",
       border = "rounded",
       show_version_date = true,
-      show_dependency_version = true,
-      max_height = 30,
-      min_width = 20,
-      padding = 1,
     },
   },
 }

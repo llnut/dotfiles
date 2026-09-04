@@ -1,17 +1,9 @@
 local M = {}
 
-M.return_last_pos = function()
-  local mark = vim.api.nvim_buf_get_mark(0, '"')
-  local line_count = vim.api.nvim_buf_line_count(0)
-  if mark[1] > 0 and mark[1] <= line_count then
-    vim.api.nvim_win_set_cursor(0, mark)
-  end
-end
-
 M.buf_close_it = function()
   local current_buf = vim.api.nvim_get_current_buf()
   local buffers = vim.fn.getbufinfo({ buflisted = 1 })
-  
+
   if #buffers <= 1 then
     vim.cmd('enew')
   else
@@ -22,7 +14,7 @@ M.buf_close_it = function()
       vim.cmd('bnext')
     end
   end
-  
+
   if vim.api.nvim_buf_is_valid(current_buf) and vim.fn.buflisted(current_buf) == 1 then
     vim.cmd('bdelete! ' .. current_buf)
   end
@@ -74,7 +66,7 @@ M.toggle_lsp_client = function()
   local clients = vim.lsp.get_clients({ bufnr = buf })
   if #clients > 0 then
     for _, client in ipairs(clients) do
-      vim.lsp.stop_client(client.id)
+      client:stop()
     end
   else
     vim.cmd.edit()
@@ -100,6 +92,3 @@ M.quick_fix_file_names = function()
 end
 
 return M
-
-
-
